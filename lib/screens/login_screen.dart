@@ -45,12 +45,16 @@ class _BuildBottomContainer extends StatelessWidget {
           children: <Widget>[
             'Welcome to $appName'.heading1(),
             'Live life with no excuses, travel with no regret'.regularTextStyle(14).padding(top: 6),
-            CustomButton.text(
-              color: kGoogleRedColor,
-              text: 'Continue with Google'.semiBoldTextStyle(15, kWhiteColor),
-            ).padding(top: 30),
-            CustomButton.text(
+            Center(
+              child: CustomButton(
+                color: kGoogleRedColor,
+                iconName: R.googleIcon,
+                text: 'Continue with Google'.semiBoldTextStyle(15, kWhiteColor),
+              ).padding(top: 30),
+            ),
+            CustomButton(
               color: kFacebookBlueColor,
+              iconName: R.facebookIcon,
               text: 'Continue with Facebook'.semiBoldTextStyle(15, kWhiteColor),
             ).padding(top: 10),
             Center(
@@ -62,17 +66,20 @@ class _BuildBottomContainer extends StatelessWidget {
                   .padding(top: 16, bottom: 17),
             ),
             const TextBetweenLine(text: 'Or'),
-            _buildSignButtons()
+            _buildSignButtons().padding(top: 20)
           ],
         ));
   }
 
   Row _buildSignButtons() {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        CustomButton.text(
-          color: kBlueColor,
-          text: 'Sign In'.semiBoldTextStyle(15),
+        Expanded(
+          child: CustomButton.text(
+            color: kBlueColor,
+            text: 'Sign In'.semiBoldTextStyle(15),
+          ),
         )
       ],
     );
