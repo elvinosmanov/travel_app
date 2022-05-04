@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:travel_app/core/colors.dart';
+import 'package:travel_app/core/extensions.dart';
 import 'package:travel_app/core/styles.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String? hintText;
-
+  final String? label;
+  final bool isMandatory;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final bool? obscureText;
@@ -13,10 +14,12 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
+  final Widget? suffixIcon;
   final Widget? suffix;
   const CustomTextField({
     Key? key,
-    this.hintText,
+    this.label,
+    this.isMandatory = false,
     this.controller,
     this.focusNode,
     this.obscureText,
@@ -24,6 +27,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.onChanged,
     this.onSubmitted,
+    this.suffixIcon,
     this.suffix,
   }) : super(key: key);
 
@@ -39,9 +43,15 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       onSubmitted: onSubmitted,
       decoration: InputDecoration(
+        suffixIcon: suffixIcon,
         suffix: suffix,
-        hintText: hintText,
-        hintStyle: kRegularTextStyle(15, kDarkGreyColor),
+        isCollapsed: true,
+        label: isMandatory
+            ? Text.rich(TextSpan(
+                text: label,
+                style: kRegularTextStyle(15, kDarkGreyColor),
+                children: [TextSpan(text: ' *', style: kRegularTextStyle(15, kRedColor))]))
+            : label.regularTextStyle(15, kDarkGreyColor),
         contentPadding: const EdgeInsets.all(16),
         enabledBorder: OutlineInputBorder(
           borderRadius: kRadius16,

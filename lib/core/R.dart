@@ -19,4 +19,5 @@ class R {
   static const home = 'assets/icons/home.svg';
   static const profile = 'assets/icons/profile.svg';
   static const settings = 'assets/icons/settings.svg';
+  static const check = 'assets/icons/check.svg';
 }

@@ -9,8 +9,8 @@ import 'package:travel_app/core/styles.dart';
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
 
-class LoginBottomContainer extends StatelessWidget {
-  const LoginBottomContainer({
+class RegisterBottomContainer extends StatelessWidget {
+  const RegisterBottomContainer({
     Key? key,
   }) : super(key: key);
 
@@ -25,18 +25,31 @@ class LoginBottomContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            'Welcome Back'.heading1(),
+            'Register new account'.heading1(),
             'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-            const EmailTextField(),
-            const PasswordTextField().padding(top: 10, bottom: 10),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>['Forgot Password?'.mediumTextStyle(13)]),
-            CustomButton.text(text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor), color: kBlueColor)
-                .padding(bottom: 20, top: 17),
-            _builNoAccountButton(),
-            const TextBetweenLine(text: 'Or continue with').padding(top: 17, bottom: 20),
+            const UsernameTextField().padding(bottom: 6),
+            const PasswordTextField(),
+            const EmailTextField().padding(top: 6, bottom: 6),
+            const PhoneNumberTextField(),
+            _buildTermAndConditions().padding(top: 16, bottom: 25),
+            CustomButton.text(text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor), color: kBlueColor),
+            const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
             _buildFacebookGoogleButtons()
           ],
         ));
+  }
+
+  Row _buildTermAndConditions() {
+    return Row(children: <Widget>[
+      SvgPicture.asset(
+        R.check,
+        fit: BoxFit.scaleDown,
+      ).padding(right: 12),
+      Text.rich(TextSpan(
+          text: 'By creating an account, you agree to our',
+          style: kMediumTextStyle(13, kDarkGreyColor),
+          children: [TextSpan(text: '\nTerm and Conditions', style: kSemiBoldTextStyle(13))]))
+    ]);
   }
 
   Center _builNoAccountButton() {
@@ -76,6 +89,28 @@ class LoginBottomContainer extends StatelessWidget {
   }
 }
 
+class PhoneNumberTextField extends StatelessWidget {
+  const PhoneNumberTextField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const CustomTextField(label: 'Phone Number', isMandatory: true);
+  }
+}
+
+class UsernameTextField extends StatelessWidget {
+  const UsernameTextField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const CustomTextField(label: 'Username', isMandatory: true);
+  }
+}
+
 class PasswordTextField extends StatelessWidget {
   const PasswordTextField({
     Key? key,
@@ -85,6 +120,7 @@ class PasswordTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomTextField(
       label: 'Password',
+      isMandatory: true,
       suffixIcon: SvgPicture.asset(
         R.openEye,
         fit: BoxFit.scaleDown,
@@ -101,7 +137,8 @@ class EmailTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CustomTextField(
-      label: 'Email or phone number',
+      label: 'Email',
+      isMandatory: true,
     );
   }
 }
