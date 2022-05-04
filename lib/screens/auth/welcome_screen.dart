@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/core/extensions.dart';
-import 'package:travel_app/screens/auth/widgets/login_bottom.dart';
 import 'package:travel_app/screens/auth/widgets/register_bottom.dart';
 
 import '../../core/constants.dart';
@@ -25,7 +24,10 @@ class WelcomeScreen extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[Image.asset(R.logo).padding(right: 16), appName.boldTextStyle(36, kWhiteColor)],
+                  children: <Widget>[
+                    Image.asset(R.logo).padding(right: 16),
+                    appName.boldTextStyle(36, kWhiteColor)
+                  ],
                 ),
               ).padding(top: 70),
               const Align(
