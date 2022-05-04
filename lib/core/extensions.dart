@@ -43,7 +43,7 @@ extension TextModifierStyle on String? {
   Text boldTextStyle(double fontSize, [Color? color]) {
     return Text(
       this ?? '',
-      style: kRegularTextStyle(fontSize, color),
+      style: kBoldTextStyle(fontSize, color),
     );
   }
 }

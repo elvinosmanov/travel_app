@@ -16,12 +16,33 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(R.loginBackground),
+          _buildBackgroundImage(context),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(R.logo).padding(right: 16),
+                appName.boldTextStyle(36, kWhiteColor)
+              ],
+            ),
+          ).padding(top: 70),
           const Align(
             alignment: Alignment.bottomCenter,
             child: _BuildBottomContainer(),
           )
         ],
+      ),
+    );
+  }
+
+  SizedBox _buildBackgroundImage(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: Image.asset(
+        R.loginBackground,
+        fit: BoxFit.fitHeight,
       ),
     );
   }
@@ -78,7 +99,14 @@ class _BuildBottomContainer extends StatelessWidget {
         Expanded(
           child: CustomButton.text(
             color: kBlueColor,
-            text: 'Sign In'.semiBoldTextStyle(15),
+            text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: CustomButton.text(
+            color: kBlackColor,
+            text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor),
           ),
         )
       ],

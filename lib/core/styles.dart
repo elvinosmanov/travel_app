@@ -66,4 +66,5 @@ TextStyle kRegularTextStyle(double fontSize, [Color? color]) {
   );
 }
 
-final BorderRadius kRadius16 =  BorderRadius.circular(16);
+final BorderRadius kRadius16 = BorderRadius.circular(16);
+final BorderRadius kRadius25 = BorderRadius.circular(25);
