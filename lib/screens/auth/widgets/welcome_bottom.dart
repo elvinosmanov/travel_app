@@ -1,13 +1,15 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/text_between_line.dart';
-import 'package:travel_app/core/extensions.dart';
+import 'package:travel_app/extensions.dart/extensions.dart';
 import 'package:travel_app/core/styles.dart';
+import 'package:travel_app/screens/auth/cubit/welcome_cubit.dart';
 
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
 import '../../../core/constants.dart';
+
 class WelcomeBottomContainer extends StatelessWidget {
   const WelcomeBottomContainer({
     Key? key,
@@ -30,7 +32,7 @@ class WelcomeBottomContainer extends StatelessWidget {
             _buildFacebookButton().padding(top: 10),
             _buildGuestButton(),
             const TextBetweenLine(text: 'Or'),
-            _buildSignButtons().padding(top: 20)
+            _buildSignButtons(context).padding(top: 20)
           ],
         ));
   }
@@ -65,12 +67,15 @@ class WelcomeBottomContainer extends StatelessWidget {
     );
   }
 
-  Row _buildSignButtons() {
+  Row _buildSignButtons(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Expanded(
           child: CustomButton.text(
+            onPressed: () {
+              context.read<WelcomeCubit>().changeStatus(WelcomeStatus.login);
+            },
             color: kBlueColor,
             text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor),
           ),
@@ -78,6 +83,9 @@ class WelcomeBottomContainer extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: CustomButton.text(
+            onPressed: () {
+              context.read<WelcomeCubit>().changeStatus(WelcomeStatus.register);
+            },
             color: kBlackColor,
             text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor),
           ),

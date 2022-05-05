@@ -1,4 +1,7 @@
+// ignore: duplicate_ignore
 // ignore: file_names
+// ignore_for_file: file_names
+
 class R {
   //Pictures | Images
   static const loginBackground = 'assets/images/login_background.jpg';

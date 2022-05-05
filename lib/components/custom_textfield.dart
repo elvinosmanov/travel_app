@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:travel_app/core/colors.dart';
-import 'package:travel_app/core/extensions.dart';
+import 'package:travel_app/extensions.dart/extensions.dart';
 import 'package:travel_app/core/styles.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -16,6 +16,9 @@ class CustomTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final Widget? suffixIcon;
   final Widget? suffix;
+  final void Function()? onEditingComplete;
+  final TextInputAction? textInputAction;
+  final String? Function(String?)? validator;
   const CustomTextField({
     Key? key,
     this.label,
@@ -29,19 +32,27 @@ class CustomTextField extends StatelessWidget {
     this.onSubmitted,
     this.suffixIcon,
     this.suffix,
+    this.onEditingComplete,
+    this.textInputAction,
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       style: kMediumTextStyle(15),
       controller: controller,
       focusNode: focusNode,
+      
       obscureText: obscureText ?? false,
       maxLines: maxLines,
       keyboardType: keyboardType,
+      textInputAction: textInputAction ?? TextInputAction.next,
       onChanged: onChanged,
-      onSubmitted: onSubmitted,
+      onFieldSubmitted: onSubmitted,
+      validator: validator,
+      // onSubmitted: onSubmitted,
+      onEditingComplete: onEditingComplete,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
         suffix: suffix,

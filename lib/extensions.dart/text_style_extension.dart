@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/core/styles.dart';
 
@@ -44,24 +45,6 @@ extension TextModifierStyle on String? {
     return Text(
       this ?? '',
       style: kBoldTextStyle(fontSize, color),
-    );
-  }
-}
-
-extension WidgetPadding on Widget {
-  Padding padding({double top = 0.0, double bottom = 0.0, double left = 0.0, double right = 0.0}) {
-    return Padding(
-      padding: EdgeInsets.only(top: top, left: left, right: right, bottom: bottom),
-      child: this,
-    );
-  }
-}
-
-extension CopyWithToText on Text {
-  Text copyWith(TextStyle textStyle) {
-    return Text(
-      data ?? '',
-      style: style == null ? const TextStyle() : style!.merge(textStyle),
     );
   }
 }

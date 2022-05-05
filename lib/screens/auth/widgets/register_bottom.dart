@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
-import 'package:travel_app/core/extensions.dart';
+import 'package:travel_app/extensions.dart/extensions.dart';
 import 'package:travel_app/core/styles.dart';
 
 import '../../../core/R.dart';
@@ -16,27 +16,33 @@ class RegisterBottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 150),
+      child: Container(
         width: double.infinity,
         decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16),
         margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
         padding: const EdgeInsets.all(25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            'Register new account'.heading1(),
-            'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-            const UsernameTextField().padding(bottom: 6),
-            const PasswordTextField(),
-            const EmailTextField().padding(top: 6, bottom: 6),
-            const PhoneNumberTextField(),
-            _buildTermAndConditions().padding(top: 16, bottom: 25),
-            CustomButton.text(text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor), color: kBlueColor),
-            const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
-            _buildFacebookGoogleButtons()
-          ],
-        ));
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              'Register new account'.heading1(),
+              'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
+              const UsernameTextField().padding(bottom: 6),
+              const PasswordTextField(),
+              const EmailTextField().padding(top: 6, bottom: 6),
+              const PhoneNumberTextField(),
+              _buildTermAndConditions().padding(top: 16, bottom: 25),
+              CustomButton.text(text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor), color: kBlueColor),
+              const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
+              _buildFacebookGoogleButtons()
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Row _buildTermAndConditions() {
@@ -50,23 +56,6 @@ class RegisterBottomContainer extends StatelessWidget {
           style: kMediumTextStyle(13, kDarkGreyColor),
           children: [TextSpan(text: '\nTerm and Conditions', style: kSemiBoldTextStyle(13))]))
     ]);
-  }
-
-  Center _builNoAccountButton() {
-    return Center(
-      child: Text.rich(
-        TextSpan(
-          text: 'Don’t have an account? ',
-          style: kSemiBoldTextStyle(14, kDarkGreyColor),
-          children: [
-            TextSpan(
-              text: 'Sign Up',
-              style: kSemiBoldTextStyle(15, kBlueColor),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Row _buildFacebookGoogleButtons() {
@@ -107,7 +96,11 @@ class UsernameTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomTextField(label: 'Username', isMandatory: true);
+    return const CustomTextField(
+      
+      label: 'Username',
+      isMandatory: true,
+    );
   }
 }
 

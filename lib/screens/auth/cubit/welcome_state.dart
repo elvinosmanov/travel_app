@@ -9,7 +9,6 @@ class WelcomeState extends Equatable {
   const WelcomeState.inittial():status=WelcomeStatus.welcome;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [status];
 
   WelcomeState copyWith({
