@@ -4,7 +4,7 @@ enum WelcomeStatus { welcome, login, register }
 
 class WelcomeState extends Equatable {
   final WelcomeStatus status;
-
+  
   const WelcomeState(this.status);
   const WelcomeState.inittial():status=WelcomeStatus.welcome;
 

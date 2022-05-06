@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
-import 'package:travel_app/extensions.dart/extensions.dart';
 import 'package:travel_app/core/styles.dart';
+import 'package:travel_app/extensions/extensions.dart';
 
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
@@ -13,37 +14,41 @@ class RegisterBottomContainer extends StatelessWidget {
   const RegisterBottomContainer({
     Key? key,
   }) : super(key: key);
-
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final double gap = 10.0;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 150),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16),
-        margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-        padding: const EdgeInsets.all(25),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              'Register new account'.heading1(),
-              'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-              const UsernameTextField().padding(bottom: 6),
-              const PasswordTextField(),
-              const EmailTextField().padding(top: 6, bottom: 6),
-              const PhoneNumberTextField(),
-              _buildTermAndConditions().padding(top: 16, bottom: 25),
-              CustomButton.text(text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor), color: kBlueColor),
-              const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
-              _buildFacebookGoogleButtons()
-            ],
-          ),
+      child: Form(
+        autovalidateMode: AutovalidateMode.always,
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            'Register new account'.heading1(),
+            'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
+            const FullNameTextField().padding(bottom: gap),
+            const UsernameTextField(),
+            const PasswordTextField().padding(top: gap, bottom: gap),
+            const EmailTextField(),
+            _buildTermAndConditions().padding(top: 16, bottom: 25),
+            _buildRegisterButton(),
+            const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
+            _buildFacebookGoogleButtons()
+          ],
         ),
       ),
     );
   }
+
+  CustomButton _buildRegisterButton() => CustomButton.text(
+        text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor),
+        color: kBlueColor,
+        onPressed: () {
+          _formKey.currentState!.validate();
+        },
+      );
 
   Row _buildTermAndConditions() {
     return Row(children: <Widget>[
@@ -78,17 +83,6 @@ class RegisterBottomContainer extends StatelessWidget {
   }
 }
 
-class PhoneNumberTextField extends StatelessWidget {
-  const PhoneNumberTextField({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const CustomTextField(label: 'Phone Number', isMandatory: true);
-  }
-}
-
 class UsernameTextField extends StatelessWidget {
   const UsernameTextField({
     Key? key,
@@ -96,11 +90,12 @@ class UsernameTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomTextField(
-      
-      label: 'Username',
-      isMandatory: true,
-    );
+    return CustomTextField(
+        label: 'Username',
+        isMandatory: true,
+        validator: (value) {
+          return value.isValidUsername;
+        });
   }
 }
 
@@ -114,6 +109,9 @@ class PasswordTextField extends StatelessWidget {
     return CustomTextField(
       label: 'Password',
       isMandatory: true,
+      validator: (String? value) {
+        return value.isValidPassword;
+      },
       suffixIcon: SvgPicture.asset(
         R.openEye,
         fit: BoxFit.scaleDown,
@@ -129,9 +127,37 @@ class EmailTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomTextField(
+    return CustomTextField(
       label: 'Email',
+      keyboardType: TextInputType.emailAddress,
+      validator: (String? value) {
+        return value.isValidEmail;
+      },
       isMandatory: true,
+    );
+  }
+}
+
+class FullNameTextField extends StatelessWidget {
+  const FullNameTextField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextField(
+      label: 'Full Name',
+      isMandatory: true,
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.name,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+          RegExp(r"[a-zA-Z]+|\s"),
+        )
+      ],
+      validator: (String? value) {
+        return value.isValidFullName;
+      },
     );
   }
 }

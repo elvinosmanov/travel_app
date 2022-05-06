@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
-import 'package:travel_app/extensions.dart/extensions.dart';
 import 'package:travel_app/core/styles.dart';
+import 'package:travel_app/extensions/extensions.dart';
 
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
@@ -16,28 +16,20 @@ class LoginBottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 150),
-      child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16),
-          margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-          padding: const EdgeInsets.all(25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              'Welcome Back'.heading1(),
-              'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-              const EmailTextField(),
-              const PasswordTextField().padding(top: 10, bottom: 10),
-              _buildForgetPasswordButton(),
-              _buildSignInButton().padding(bottom: 20, top: 17),
-              _builNoAccountButton(),
-              const TextBetweenLine(text: 'Or continue with').padding(top: 17, bottom: 20),
-              _buildFacebookGoogleButtons()
-            ],
-          )),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        'Welcome Back'.heading1(),
+        'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
+        const EmailTextField(),
+        const PasswordTextField().padding(top: 10, bottom: 10),
+        _buildForgetPasswordButton(),
+        _buildSignInButton().padding(bottom: 20, top: 17),
+        _builNoAccountButton(),
+        const TextBetweenLine(text: 'Or continue with').padding(top: 17, bottom: 20),
+        _buildFacebookGoogleButtons()
+      ],
     );
   }
 

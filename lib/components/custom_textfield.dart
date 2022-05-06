@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:travel_app/core/colors.dart';
-import 'package:travel_app/extensions.dart/extensions.dart';
 import 'package:travel_app/core/styles.dart';
+import 'package:travel_app/extensions/extensions.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? label;
@@ -16,9 +17,11 @@ class CustomTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final Widget? suffixIcon;
   final Widget? suffix;
+  final Widget? prefix;
   final void Function()? onEditingComplete;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
   const CustomTextField({
     Key? key,
     this.label,
@@ -32,18 +35,20 @@ class CustomTextField extends StatelessWidget {
     this.onSubmitted,
     this.suffixIcon,
     this.suffix,
+    this.prefix,
     this.onEditingComplete,
     this.textInputAction,
     this.validator,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: kMediumTextStyle(15),
+      style: kRegularTextStyle(15),
       controller: controller,
       focusNode: focusNode,
-      
+      inputFormatters: inputFormatters,
       obscureText: obscureText ?? false,
       maxLines: maxLines,
       keyboardType: keyboardType,
@@ -51,9 +56,10 @@ class CustomTextField extends StatelessWidget {
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
       validator: validator,
-      // onSubmitted: onSubmitted,
       onEditingComplete: onEditingComplete,
       decoration: InputDecoration(
+        errorMaxLines: 3,
+        prefix: prefix,
         suffixIcon: suffixIcon,
         suffix: suffix,
         isCollapsed: true,

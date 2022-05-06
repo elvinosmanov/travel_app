@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/text_between_line.dart';
-import 'package:travel_app/extensions.dart/extensions.dart';
 import 'package:travel_app/core/styles.dart';
+import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/auth/cubit/welcome_cubit.dart';
 
 import '../../../core/R.dart';
@@ -17,24 +17,19 @@ class WelcomeBottomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16),
-        margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-        padding: const EdgeInsets.all(25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            'Welcome to $appName'.heading1(),
-            'Live life with no excuses, travel with no regret'.regularTextStyle(14).padding(top: 6),
-            _buildGoogleButton(),
-            _buildFacebookButton().padding(top: 10),
-            _buildGuestButton(),
-            const TextBetweenLine(text: 'Or'),
-            _buildSignButtons(context).padding(top: 20)
-          ],
-        ));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        'Welcome to $appName'.heading1(),
+        'Live life with no excuses, travel with no regret'.regularTextStyle(14).padding(top: 6),
+        _buildGoogleButton(),
+        _buildFacebookButton().padding(top: 10),
+        _buildGuestButton(),
+        const TextBetweenLine(text: 'Or'),
+        _buildSignButtons(context).padding(top: 20)
+      ],
+    );
   }
 
   Center _buildGuestButton() {

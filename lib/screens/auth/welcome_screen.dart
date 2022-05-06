@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/colors.dart';
-import 'package:travel_app/extensions.dart/extensions.dart';
+import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/auth/cubit/welcome_cubit.dart';
 import 'package:travel_app/screens/auth/widgets/login_bottom.dart';
 import 'package:travel_app/screens/auth/widgets/register_bottom.dart';
 import 'package:travel_app/screens/auth/widgets/welcome_bottom.dart';
 import '../../core/constants.dart';
+import '../../core/styles.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -35,17 +36,27 @@ class WelcomeScreen extends StatelessWidget {
                 ).padding(top: 70),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: BlocBuilder<WelcomeCubit, WelcomeState>(
-                    builder: (context, state) {
-                      switch (state.status) {
-                        case WelcomeStatus.welcome:
-                          return const WelcomeBottomContainer();
-                        case WelcomeStatus.login:
-                          return const LoginBottomContainer();
-                        case WelcomeStatus.register:
-                          return const RegisterBottomContainer();
-                      }
-                    },
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(top: 150),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16),
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                      padding: const EdgeInsets.all(25),
+                      child: BlocBuilder<WelcomeCubit, WelcomeState>(
+                        buildWhen: (previous, current) => previous.status != current.status,
+                        builder: (context, state) {
+                          switch (state.status) {
+                            case WelcomeStatus.welcome:
+                              return const WelcomeBottomContainer();
+                            case WelcomeStatus.login:
+                              return const LoginBottomContainer();
+                            case WelcomeStatus.register:
+                              return RegisterBottomContainer();
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ],

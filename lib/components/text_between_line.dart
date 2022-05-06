@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/core/colors.dart';
-import 'package:travel_app/extensions.dart/extensions.dart';
+import 'package:travel_app/extensions/extensions.dart';
 
 class TextBetweenLine extends StatelessWidget {
   const TextBetweenLine({
