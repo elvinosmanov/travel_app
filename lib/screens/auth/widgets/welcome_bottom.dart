@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/text_between_line.dart';
-import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/auth/cubit/welcome_cubit.dart';
 

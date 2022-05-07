@@ -1,39 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:travel_app/components/custom_button.dart';
+import 'package:travel_app/components/custom_checkbox.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/screens/auth/cubit/welcome_cubit.dart';
 
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
 
-class RegisterBottomContainer extends StatelessWidget {
+class RegisterBottomContainer extends StatefulWidget {
   const RegisterBottomContainer({
     Key? key,
   }) : super(key: key);
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  State<RegisterBottomContainer> createState() => _RegisterBottomContainerState();
+}
+
+class _RegisterBottomContainerState extends State<RegisterBottomContainer> {
   final double gap = 10.0;
+  late final TextEditingController usernameController;
+  late final TextEditingController passwordController;
+  late final TextEditingController fullNameController;
+  late final TextEditingController emailController;
+  @override
+  void initState() {
+    super.initState();
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
+    fullNameController = TextEditingController();
+    emailController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Form(
-        autovalidateMode: AutovalidateMode.always,
-        key: _formKey,
+        autovalidateMode: AutovalidateMode.disabled,
+        key: context.read<WelcomeCubit>().formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             'Register new account'.heading1(),
-            'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-            const FullNameTextField().padding(bottom: gap),
-            const UsernameTextField(),
-            const PasswordTextField().padding(top: gap, bottom: gap),
-            const EmailTextField(),
+            'Please sign up to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
+            FullNameTextField(
+              controller: fullNameController,
+            ).padding(bottom: gap),
+            UsernameTextField(
+              controller: usernameController,
+            ),
+            PasswordTextField(
+              controller: passwordController,
+            ).padding(top: gap, bottom: gap),
+            EmailTextField(
+              controller: emailController,
+            ),
             _buildTermAndConditions().padding(top: 16, bottom: 25),
-            _buildRegisterButton(),
+            _buildSignUpButton(),
+            if (context.select((WelcomeCubit c) => !c.state.isRegisterValidated))
+              'Please read and accept Term and Conditions'.regularTextStyle(11, kRedColor),
             const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
             _buildFacebookGoogleButtons()
           ],
@@ -42,20 +74,27 @@ class RegisterBottomContainer extends StatelessWidget {
     );
   }
 
-  CustomButton _buildRegisterButton() => CustomButton.text(
+  CustomButton _buildSignUpButton() => CustomButton.text(
         text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor),
         color: kBlueColor,
         onPressed: () {
-          _formKey.currentState!.validate();
+          context.read<WelcomeCubit>().checkValidation();
         },
       );
 
   Row _buildTermAndConditions() {
-    return Row(children: <Widget>[
-      SvgPicture.asset(
-        R.check,
-        fit: BoxFit.scaleDown,
-      ).padding(right: 12),
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+      BlocBuilder<WelcomeCubit, WelcomeState>(
+        buildWhen: (previous, current) => previous.agreeTermsCheckBox != current.agreeTermsCheckBox,
+        builder: (context, state) {
+          return CustomCheckBox(
+                  onPressed: () {
+                    context.read<WelcomeCubit>().changeCheckBox();
+                  },
+                  value: state.agreeTermsCheckBox)
+              .padding(right: 12);
+        },
+      ),
       Text.rich(TextSpan(
           text: 'By creating an account, you agree to our',
           style: kMediumTextStyle(13, kDarkGreyColor),
@@ -86,12 +125,15 @@ class RegisterBottomContainer extends StatelessWidget {
 class UsernameTextField extends StatelessWidget {
   const UsernameTextField({
     Key? key,
+    required this.controller,
   }) : super(key: key);
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
         label: 'Username',
+        controller: controller,
         isMandatory: true,
         validator: (value) {
           return value.isValidUsername;
@@ -102,20 +144,36 @@ class UsernameTextField extends StatelessWidget {
 class PasswordTextField extends StatelessWidget {
   const PasswordTextField({
     Key? key,
+    required this.controller,
   }) : super(key: key);
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
-    return CustomTextField(
-      label: 'Password',
-      isMandatory: true,
-      validator: (String? value) {
-        return value.isValidPassword;
+    return BlocBuilder<WelcomeCubit, WelcomeState>(
+      builder: (context, state) {
+        return CustomTextField(
+            label: 'Password',
+            controller: controller,
+            isMandatory: true,
+            onChanged: (value) {
+              context.read<WelcomeCubit>().registerPasswordText(value);
+            },
+            obscureText: state.showPassword,
+            validator: (String? value) {
+              return value.isValidPassword;
+            },
+            suffixIcon: state.registerPassword.isNotEmpty
+                ? GestureDetector(
+                    onTap: () {
+                      context.read<WelcomeCubit>().changeShowPassword();
+                    },
+                    child: SvgPicture.asset(
+                      state.showPassword ? R.openEye : R.closedEye,
+                      fit: BoxFit.scaleDown,
+                    ),
+                  )
+                : null);
       },
-      suffixIcon: SvgPicture.asset(
-        R.openEye,
-        fit: BoxFit.scaleDown,
-      ),
     );
   }
 }
@@ -123,11 +181,13 @@ class PasswordTextField extends StatelessWidget {
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
     Key? key,
+    required this.controller,
   }) : super(key: key);
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
+      controller: controller,
       label: 'Email',
       keyboardType: TextInputType.emailAddress,
       validator: (String? value) {
@@ -141,11 +201,13 @@ class EmailTextField extends StatelessWidget {
 class FullNameTextField extends StatelessWidget {
   const FullNameTextField({
     Key? key,
+    required this.controller,
   }) : super(key: key);
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
+      controller: controller,
       label: 'Full Name',
       isMandatory: true,
       textInputAction: TextInputAction.done,

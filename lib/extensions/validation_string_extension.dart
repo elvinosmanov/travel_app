@@ -34,13 +34,15 @@ extension Validation on String? {
   }
 
   String? get isValidPassword {
-    final passwordRegExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&-_]{5,}$');
+    final passwordRegExp = RegExp(r'^((?!.*[\s])(?=.*\d).{5,15})');
 
     final s = this ?? '';
     if (s.isEmpty) {
       return noEmpty;
     }
-    return passwordRegExp.hasMatch(s) ? null : 'Password must has at least 5 characters that include at least 1 character,1 number, and 1 special character in (@\$!%*#?&-_)';
+    return passwordRegExp.hasMatch(s)
+        ? null
+        : 'Password must be at least 5 characters that include at least 1 character, 1 number and no whitespace';
   }
 
   // String? get isValidPhone {

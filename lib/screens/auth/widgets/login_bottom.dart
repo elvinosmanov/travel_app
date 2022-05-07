@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
@@ -9,10 +10,24 @@ import 'package:travel_app/extensions/extensions.dart';
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
 
-class LoginBottomContainer extends StatelessWidget {
+class LoginBottomContainer extends StatefulWidget {
   const LoginBottomContainer({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<LoginBottomContainer> createState() => _LoginBottomContainerState();
+}
+
+class _LoginBottomContainerState extends State<LoginBottomContainer> {
+  late final TextEditingController passwordController;
+  late final TextEditingController emailController;
+  @override
+  void initState() {
+    super.initState();
+    passwordController = TextEditingController();
+    emailController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +37,12 @@ class LoginBottomContainer extends StatelessWidget {
       children: <Widget>[
         'Welcome Back'.heading1(),
         'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-        const EmailTextField(),
-        const PasswordTextField().padding(top: 10, bottom: 10),
+        EmailTextField(
+          controller: emailController,
+        ),
+       PasswordTextField(
+          controller: passwordController,
+        ).padding(top: 10, bottom: 10),
         _buildForgetPasswordButton(),
         _buildSignInButton().padding(bottom: 20, top: 17),
         _builNoAccountButton(),
@@ -79,12 +98,14 @@ class LoginBottomContainer extends StatelessWidget {
 class PasswordTextField extends StatelessWidget {
   const PasswordTextField({
     Key? key,
+    required this.controller,
   }) : super(key: key);
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
       label: 'Password',
+      controller: controller,
       suffixIcon: SvgPicture.asset(
         R.openEye,
         fit: BoxFit.scaleDown,
@@ -96,12 +117,14 @@ class PasswordTextField extends StatelessWidget {
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
     Key? key,
+    required this.controller,
   }) : super(key: key);
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
-    return const CustomTextField(
+    return CustomTextField(
       label: 'Email or phone number',
+      controller: controller,
     );
   }
 }

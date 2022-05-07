@@ -52,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                             case WelcomeStatus.login:
                               return const LoginBottomContainer();
                             case WelcomeStatus.register:
-                              return RegisterBottomContainer();
+                              return const RegisterBottomContainer();
                           }
                         },
                       ),

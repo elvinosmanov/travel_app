@@ -23,4 +23,8 @@ class R {
   static const profile = 'assets/icons/profile.svg';
   static const settings = 'assets/icons/settings.svg';
   static const check = 'assets/icons/check.svg';
+  static const uncheck = 'assets/icons/uncheck.svg';
+  static const x_24 = 'assets/icons/x_24.svg';
+  static const x = 'assets/icons/x.svg';
+  static const mapOutliend = 'assets/icons/map_grey_outlined.svg';
 }

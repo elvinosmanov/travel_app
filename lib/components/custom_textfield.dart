@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_app/core/R.dart';
 
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
 
-class CustomTextField extends StatelessWidget {
+// ignore: must_be_immutable
+class CustomTextField extends StatefulWidget {
   final String? label;
   final bool isMandatory;
-  final TextEditingController? controller;
+  final TextEditingController controller;
   final FocusNode? focusNode;
   final bool? obscureText;
   final int? maxLines;
@@ -26,7 +30,7 @@ class CustomTextField extends StatelessWidget {
     Key? key,
     this.label,
     this.isMandatory = false,
-    this.controller,
+    required this.controller,
     this.focusNode,
     this.obscureText,
     this.maxLines,
@@ -43,38 +47,48 @@ class CustomTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       style: kRegularTextStyle(15),
-      controller: controller,
-      focusNode: focusNode,
-      inputFormatters: inputFormatters,
-      obscureText: obscureText ?? false,
-      maxLines: maxLines,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction ?? TextInputAction.next,
-      onChanged: onChanged,
-      onFieldSubmitted: onSubmitted,
-      validator: validator,
-      onEditingComplete: onEditingComplete,
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      inputFormatters: widget.inputFormatters,
+      obscureText: widget.obscureText ?? false,
+      maxLines: widget.obscureText ?? false ? 1 : widget.maxLines,
+      keyboardType: widget.keyboardType,
+      textInputAction: widget.textInputAction ?? TextInputAction.next,
+      onChanged: (value) {
+        if (widget.onChanged != null) {
+          widget.onChanged!(value);
+        }
+      },
+      onFieldSubmitted: widget.onSubmitted,
+      validator: widget.validator,
+      onEditingComplete: widget.onEditingComplete,
       decoration: InputDecoration(
+        errorStyle: kRegularTextStyle(11, kRedColor),
         errorMaxLines: 3,
-        prefix: prefix,
-        suffixIcon: suffixIcon,
-        suffix: suffix,
+        prefix: widget.prefix,
+        suffixIcon: widget.suffixIcon,
+        suffix: widget.suffix,
         isCollapsed: true,
-        label: isMandatory
+        label: widget.isMandatory
             ? Text.rich(TextSpan(
-                text: label,
+                text: widget.label,
                 style: kRegularTextStyle(15, kDarkGreyColor),
                 children: [TextSpan(text: ' *', style: kRegularTextStyle(15, kRedColor))]))
-            : label.regularTextStyle(15, kDarkGreyColor),
+            : widget.label.regularTextStyle(15, kDarkGreyColor),
         contentPadding: const EdgeInsets.all(16),
         enabledBorder: OutlineInputBorder(
           borderRadius: kRadius16,
           borderSide: const BorderSide(
             color: kLightGreyColor_4,
-            width: 1,
+            width: 0.5,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -84,18 +98,25 @@ class CustomTextField extends StatelessWidget {
             width: 1,
           ),
         ),
-        errorBorder: OutlineInputBorder(
+        focusedErrorBorder: OutlineInputBorder(
           borderRadius: kRadius16,
           borderSide: const BorderSide(
             color: kRedColor,
             width: 1,
           ),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: kRadius16,
+          borderSide: const BorderSide(
+            color: kRedColor,
+            width: 0.5,
+          ),
+        ),
         border: OutlineInputBorder(
           borderRadius: kRadius16,
           borderSide: const BorderSide(
             color: kLightGreyColor_4,
-            width: 1,
+            width: 0.5,
           ),
         ),
       ),
