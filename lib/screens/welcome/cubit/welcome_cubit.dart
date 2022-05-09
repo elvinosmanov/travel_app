@@ -15,23 +15,32 @@ class WelcomeCubit extends Cubit<WelcomeState> {
     emit(state.copyWith(agreeTermsCheckBox: !state.agreeTermsCheckBox));
   }
 
-  changeShowPassword() {
-    emit(state.copyWith(showPassword: !state.showPassword));
+  changeShowPassword({required bool isRegister}) {
+    if(isRegister) {
+      emit(state.copyWith(showRegisterPassword: !state.showRegisterPassword));
+    }else{
+      emit(state.copyWith(showLoginPassword: !state.showLoginPassword));
+    }
   }
 
-  registerPasswordText(String? value) {
-    emit(state.copyWith(registerPassword: value));
+  passwordText({String? value,required bool isRegister}) {
+    if(isRegister) {
+      emit(state.copyWith(registerPassword: value));
+    }else{
+      emit(state.copyWith(loginPassword: value));
+    }
   }
 
   checkValidation() {
     bool isVal = formKey.currentState!.validate();
     if (!state.agreeTermsCheckBox) {
       emit(state.copyWith(isTermsAccepted: false));
-    } else {
-      emit(state.copyWith(isTermsAccepted: true));
-      if (isVal) {
-        print('Everthing is okay');
-      }
+      return;
+    }
+    emit(state.copyWith(isTermsAccepted: true));
+    if (isVal) {
+      print('Everthing is okay');
+      return true;
     }
   }
 }

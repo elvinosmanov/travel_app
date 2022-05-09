@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_app/components/custom_back_button.dart';
 
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/custom_checkbox.dart';
@@ -9,7 +12,7 @@ import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/screens/auth/cubit/welcome_cubit.dart';
+import 'package:travel_app/screens/welcome/cubit/welcome_cubit.dart';
 
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
@@ -48,6 +51,11 @@ class _RegisterBottomContainerState extends State<RegisterBottomContainer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            CustomBackButton(
+              onPressed: () {
+                context.read<WelcomeCubit>().changeStatus(WelcomeStatus.welcome);
+              },
+            ).padding(bottom: 16),
             'Register new account'.heading1(),
             'Please sign up to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
             FullNameTextField(
@@ -63,9 +71,11 @@ class _RegisterBottomContainerState extends State<RegisterBottomContainer> {
               controller: emailController,
             ),
             _buildTermAndConditions().padding(top: 16, bottom: 25),
+            if (context.select((WelcomeCubit c) => !c.state.isTermsAccepted))
+              Center(
+                  child:
+                      'Please read and accept Term and Conditions'.regularTextStyle(11, kRedColor).padding(bottom: 5)),
             _buildSignUpButton(),
-            if (context.select((WelcomeCubit c) => !c.state.isRegisterValidated))
-              'Please read and accept Term and Conditions'.regularTextStyle(11, kRedColor),
             const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
             _buildFacebookGoogleButtons()
           ],
@@ -156,19 +166,19 @@ class PasswordTextField extends StatelessWidget {
             controller: controller,
             isMandatory: true,
             onChanged: (value) {
-              context.read<WelcomeCubit>().registerPasswordText(value);
+              context.read<WelcomeCubit>().passwordText(value: value,isRegister: true);
             },
-            obscureText: state.showPassword,
+            obscureText: state.showRegisterPassword,
             validator: (String? value) {
               return value.isValidPassword;
             },
             suffixIcon: state.registerPassword.isNotEmpty
                 ? GestureDetector(
                     onTap: () {
-                      context.read<WelcomeCubit>().changeShowPassword();
+                      context.read<WelcomeCubit>().changeShowPassword(isRegister: true);
                     },
                     child: SvgPicture.asset(
-                      state.showPassword ? R.openEye : R.closedEye,
+                      state.showRegisterPassword ? R.openEye : R.closedEye,
                       fit: BoxFit.scaleDown,
                     ),
                   )
@@ -189,6 +199,7 @@ class EmailTextField extends StatelessWidget {
     return CustomTextField(
       controller: controller,
       label: 'Email',
+      textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
       validator: (String? value) {
         return value.isValidEmail;

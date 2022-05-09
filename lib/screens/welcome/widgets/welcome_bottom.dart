@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/screens/auth/cubit/welcome_cubit.dart';
+import 'package:travel_app/screens/welcome/cubit/welcome_cubit.dart';
 
 import '../../../core/R.dart';
 import '../../../core/colors.dart';

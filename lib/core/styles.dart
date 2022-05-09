@@ -68,3 +68,4 @@ TextStyle kRegularTextStyle(double fontSize, [Color? color]) {
 
 final BorderRadius kRadius16 = BorderRadius.circular(16);
 final BorderRadius kRadius25 = BorderRadius.circular(25);
+final BoxShadow blackShadow = BoxShadow(blurRadius: 8,offset: const Offset(2,2),color: Colors.black.withOpacity(0.08));

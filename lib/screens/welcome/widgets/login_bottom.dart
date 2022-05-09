@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:travel_app/components/custom_button.dart';
@@ -6,7 +8,9 @@ import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/screens/welcome/cubit/welcome_cubit.dart';
 
+import '../../../components/custom_back_button.dart';
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
 
@@ -35,12 +39,17 @@ class _LoginBottomContainerState extends State<LoginBottomContainer> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        CustomBackButton(
+          onPressed: () {
+            context.read<WelcomeCubit>().changeStatus(WelcomeStatus.welcome);
+          },
+        ).padding(bottom: 16),
         'Welcome Back'.heading1(),
         'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
         EmailTextField(
           controller: emailController,
         ),
-       PasswordTextField(
+        PasswordTextField(
           controller: passwordController,
         ).padding(top: 10, bottom: 10),
         _buildForgetPasswordButton(),
@@ -66,9 +75,12 @@ class _LoginBottomContainerState extends State<LoginBottomContainer> {
           style: kSemiBoldTextStyle(14, kDarkGreyColor),
           children: [
             TextSpan(
-              text: 'Sign Up',
-              style: kSemiBoldTextStyle(15, kBlueColor),
-            ),
+                text: 'Sign Up',
+                style: kSemiBoldTextStyle(15, kBlueColor),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    context.read<WelcomeCubit>().changeStatus(WelcomeStatus.register);
+                  }),
           ],
         ),
       ),
@@ -103,13 +115,31 @@ class PasswordTextField extends StatelessWidget {
   final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
-    return CustomTextField(
-      label: 'Password',
-      controller: controller,
-      suffixIcon: SvgPicture.asset(
-        R.openEye,
-        fit: BoxFit.scaleDown,
-      ),
+    return BlocBuilder<WelcomeCubit, WelcomeState>(
+      builder: (context, state) {
+        return CustomTextField(
+            label: 'Password',
+            controller: controller,
+            isMandatory: true,
+            onChanged: (value) {
+              context.read<WelcomeCubit>().passwordText(value: value, isRegister: false);
+            },
+            obscureText: state.showLoginPassword,
+            validator: (String? value) {
+              return value.isValidPassword;
+            },
+            suffixIcon: state.loginPassword.isNotEmpty
+                ? GestureDetector(
+                    onTap: () {
+                      context.read<WelcomeCubit>().changeShowPassword(isRegister: false);
+                    },
+                    child: SvgPicture.asset(
+                      state.showLoginPassword ? R.openEye : R.closedEye,
+                      fit: BoxFit.scaleDown,
+                    ),
+                  )
+                : null);
+      },
     );
   }
 }
@@ -123,7 +153,8 @@ class EmailTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
-      label: 'Email or phone number',
+      label: 'Email address',
+      isMandatory: true,
       controller: controller,
     );
   }

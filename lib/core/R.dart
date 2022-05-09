@@ -4,7 +4,10 @@
 
 class R {
   //Pictures | Images
-  static const loginBackground = 'assets/images/login_background.jpg';
+  static const welcomeBackground = 'assets/images/login_background.jpg';
+  static const flagInterestImage = 'assets/images/flag_interest_image.jpg';
+  static const mateImage = 'assets/images/mate_image.jpg';
+  static const tripImage = 'assets/images/trip_image.jpg';
   static const logo = 'assets/images/logo.png';
 
   //Icons
@@ -19,6 +22,7 @@ class R {
   static const attach = 'assets/icons/attach.svg';
   static const star = 'assets/icons/star.svg';
   static const backArrow = 'assets/icons/back_arrow.svg';
+  static const backArrowWithBackground = 'assets/icons/back_with_background.svg';
   static const home = 'assets/icons/home.svg';
   static const profile = 'assets/icons/profile.svg';
   static const settings = 'assets/icons/settings.svg';
@@ -27,4 +31,6 @@ class R {
   static const x_24 = 'assets/icons/x_24.svg';
   static const x = 'assets/icons/x.svg';
   static const mapOutliend = 'assets/icons/map_grey_outlined.svg';
+  static const goRightButton = 'assets/icons/go_right.svg';
+  static const doneButton = 'assets/icons/done_button.svg';
 }
