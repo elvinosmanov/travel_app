@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/colors.dart';
+import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/welcome/welcome_screen.dart';
 import 'package:travel_app/utils/onboarding_preferences.dart';
@@ -49,7 +50,7 @@ class _OnboardingState extends State<Onboarding> {
       child: InkWell(
         onTap: () {
           if (_pageIndex != data.length - 1) {
-            _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease); 
+            _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
           } else {
             OnboardingPreferences.setOnceShowOnboarding();
             debugPrint('This is last page');
@@ -60,8 +61,29 @@ class _OnboardingState extends State<Onboarding> {
                 ));
           }
         },
-        child: SvgPicture.asset(_pageIndex == data.length - 1 ? R.doneButton : R.goRightButton)
-            .padding(right: 20, bottom: 100),
+        child: Container(
+          width: 76,
+          height: 76,
+          margin: const EdgeInsets.only(right: 20, bottom: 100),
+          decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: kRadius16, boxShadow: [
+            BoxShadow(blurRadius: 20, color: Colors.white.withOpacity(0.1), spreadRadius: 8, offset: Offset(0.0, 0.0))
+          ]),
+          child: Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: kBlueColor,
+                borderRadius: kRadius16,
+              ),
+              child: SvgPicture.asset(
+                _pageIndex == data.length - 1 ? R.goRight : R.done,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

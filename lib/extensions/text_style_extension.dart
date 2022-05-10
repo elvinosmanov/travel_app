@@ -40,7 +40,8 @@ extension TextModifierStyle on String? {
       style: kSemiBoldTextStyle(fontSize, color),
     );
   }
-
+  ///fontsize, color
+  ///| default black color
   Text boldTextStyle(double fontSize, [Color? color]) {
     return Text(
       this ?? '',

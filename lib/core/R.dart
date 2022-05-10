@@ -31,6 +31,7 @@ class R {
   static const x_24 = 'assets/icons/x_24.svg';
   static const x = 'assets/icons/x.svg';
   static const mapOutliend = 'assets/icons/map_grey_outlined.svg';
-  static const goRightButton = 'assets/icons/go_right.svg';
-  static const doneButton = 'assets/icons/done_button.svg';
+  static const goRight = 'assets/icons/go_right.svg';
+  static const done = 'assets/icons/done.svg';
+  static const notification = 'assets/icons/notification.svg';
 }
