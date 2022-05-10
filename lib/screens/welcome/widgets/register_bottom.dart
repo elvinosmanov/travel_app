@@ -1,19 +1,15 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/custom_back_button.dart';
-
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/custom_checkbox.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/screens/welcome/cubit/welcome_cubit.dart';
-
+import 'package:travel_app/cubit/welcome_cubit.dart';
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
 
@@ -43,43 +39,41 @@ class _RegisterBottomContainerState extends State<RegisterBottomContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Form(
-        autovalidateMode: AutovalidateMode.disabled,
-        key: context.read<WelcomeCubit>().formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            CustomBackButton(
-              onPressed: () {
-                context.read<WelcomeCubit>().changeStatus(WelcomeStatus.welcome);
-              },
-            ).padding(bottom: 16),
-            'Register new account'.heading1(),
-            'Please sign up to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-            FullNameTextField(
-              controller: fullNameController,
-            ).padding(bottom: gap),
-            UsernameTextField(
-              controller: usernameController,
-            ),
-            PasswordTextField(
-              controller: passwordController,
-            ).padding(top: gap, bottom: gap),
-            EmailTextField(
-              controller: emailController,
-            ),
-            _buildTermAndConditions().padding(top: 16, bottom: 25),
-            if (context.select((WelcomeCubit c) => !c.state.isTermsAccepted))
-              Center(
-                  child:
-                      'Please read and accept Term and Conditions'.regularTextStyle(11, kRedColor).padding(bottom: 5)),
-            _buildSignUpButton(),
-            const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
-            _buildFacebookGoogleButtons()
-          ],
-        ),
+    return Form(
+      autovalidateMode: AutovalidateMode.disabled,
+      key: context.read<WelcomeCubit>().registerFormKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CustomBackButton(
+            onPressed: () {
+              context.read<WelcomeCubit>().changeStatus(WelcomeStatus.welcome);
+            },
+          ).padding(bottom: 16),
+          'Register new account'.heading1(),
+          'Please sign up to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
+          FullNameTextField(
+            controller: fullNameController,
+          ).padding(bottom: gap),
+          UsernameTextField(
+            controller: usernameController,
+          ),
+          PasswordTextField(
+            controller: passwordController,
+          ).padding(top: gap, bottom: gap),
+          EmailTextField(
+            controller: emailController,
+          ),
+          _buildTermAndConditions().padding(top: 16, bottom: 25),
+          if (context.select((WelcomeCubit c) => !c.state.isTermsAccepted))
+            Center(
+                child:
+                    'Please read and accept Term and Conditions'.regularTextStyle(11, kRedColor).padding(bottom: 5)),
+          _buildSignUpButton(),
+          const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
+          _buildFacebookGoogleButtons()
+        ],
       ),
     );
   }
@@ -88,7 +82,7 @@ class _RegisterBottomContainerState extends State<RegisterBottomContainer> {
         text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor),
         color: kBlueColor,
         onPressed: () {
-          context.read<WelcomeCubit>().checkValidation();
+          context.read<WelcomeCubit>().checkRegisterValidation();
         },
       );
 

@@ -6,7 +6,8 @@ part 'welcome_state.dart';
 
 class WelcomeCubit extends Cubit<WelcomeState> {
   WelcomeCubit() : super(WelcomeState.initial());
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   changeStatus(WelcomeStatus value) {
     emit(state.copyWith(status: value));
   }
@@ -31,13 +32,20 @@ class WelcomeCubit extends Cubit<WelcomeState> {
     }
   }
 
-  checkValidation() {
-    bool isVal = formKey.currentState!.validate();
+  checkRegisterValidation() {
+    bool isVal = registerFormKey.currentState!.validate();
     if (!state.agreeTermsCheckBox) {
       emit(state.copyWith(isTermsAccepted: false));
       return;
     }
     emit(state.copyWith(isTermsAccepted: true));
+    if (isVal) {
+      print('Everthing is okay');
+      return true;
+    }
+  }
+  checkLoginValidation(){
+    bool isVal = loginFormKey.currentState!.validate();
     if (isVal) {
       print('Everthing is okay');
       return true;

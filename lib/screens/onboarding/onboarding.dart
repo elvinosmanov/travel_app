@@ -4,6 +4,7 @@ import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/welcome/welcome_screen.dart';
+import 'package:travel_app/utils/onboarding_preferences.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({Key? key}) : super(key: key);
@@ -48,8 +49,9 @@ class _OnboardingState extends State<Onboarding> {
       child: InkWell(
         onTap: () {
           if (_pageIndex != data.length - 1) {
-            _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease); 
           } else {
+            OnboardingPreferences.setOnceShowOnboarding();
             debugPrint('This is last page');
             Navigator.push(
                 context,

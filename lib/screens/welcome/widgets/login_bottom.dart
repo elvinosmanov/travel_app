@@ -2,14 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:travel_app/components/custom_button.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
+import 'package:travel_app/cubit/welcome_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/screens/welcome/cubit/welcome_cubit.dart';
-
 import '../../../components/custom_back_button.dart';
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
@@ -35,37 +33,46 @@ class _LoginBottomContainerState extends State<LoginBottomContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        CustomBackButton(
-          onPressed: () {
-            context.read<WelcomeCubit>().changeStatus(WelcomeStatus.welcome);
-          },
-        ).padding(bottom: 16),
-        'Welcome Back'.heading1(),
-        'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
-        EmailTextField(
-          controller: emailController,
-        ),
-        PasswordTextField(
-          controller: passwordController,
-        ).padding(top: 10, bottom: 10),
-        _buildForgetPasswordButton(),
-        _buildSignInButton().padding(bottom: 20, top: 17),
-        _builNoAccountButton(),
-        const TextBetweenLine(text: 'Or continue with').padding(top: 17, bottom: 20),
-        _buildFacebookGoogleButtons()
-      ],
+    return Form(
+      autovalidateMode: AutovalidateMode.disabled,
+      key: context.read<WelcomeCubit>().loginFormKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CustomBackButton(
+            onPressed: () {
+              context.read<WelcomeCubit>().changeStatus(WelcomeStatus.welcome);
+            },
+          ).padding(bottom: 16),
+          'Welcome Back'.heading1(),
+          'Please log in to your account'.regularTextStyle(14).padding(top: 6, bottom: 20),
+          EmailTextField(
+            controller: emailController,
+          ),
+          PasswordTextField(
+            controller: passwordController,
+          ).padding(top: 10, bottom: 10),
+          _buildForgetPasswordButton(),
+          _buildSignInButton().padding(bottom: 20, top: 17),
+          _builNoAccountButton(),
+          const TextBetweenLine(text: 'Or continue with').padding(top: 17, bottom: 20),
+          _buildFacebookGoogleButtons()
+        ],
+      ),
     );
   }
 
   Row _buildForgetPasswordButton() =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>['Forgot Password?'.mediumTextStyle(13)]);
 
-  CustomButton _buildSignInButton() =>
-      CustomButton.text(text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor), color: kBlueColor);
+  CustomButton _buildSignInButton() => CustomButton.text(
+        text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor),
+        color: kBlueColor,
+        onPressed: () {
+          context.read<WelcomeCubit>().checkLoginValidation();
+        },
+      );
 
   Center _builNoAccountButton() {
     return Center(
@@ -156,6 +163,9 @@ class EmailTextField extends StatelessWidget {
       label: 'Email address',
       isMandatory: true,
       controller: controller,
+      validator: (String? value) {
+        return value.isValidEmail;
+      },
     );
   }
 }

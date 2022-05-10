@@ -35,6 +35,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_screenutil: ^5.5.1
   flutter_svg: ^1.0.3
+  shared_preferences: ^2.0.13
   transparent_image: ^2.0.0
 dev_dependencies:
   flutter_lints: ^1.0.0
