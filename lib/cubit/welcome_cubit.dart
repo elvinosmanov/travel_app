@@ -9,6 +9,10 @@ class WelcomeCubit extends Cubit<WelcomeState> {
   final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   changeStatus(WelcomeStatus value) {
+    if (value == WelcomeStatus.welcome) {
+      emit(state.copyWith(status: value, showLoginPassword: false, showRegisterPassword: false));
+      return;
+    }
     emit(state.copyWith(status: value));
   }
 
@@ -17,17 +21,17 @@ class WelcomeCubit extends Cubit<WelcomeState> {
   }
 
   changeShowPassword({required bool isRegister}) {
-    if(isRegister) {
+    if (isRegister) {
       emit(state.copyWith(showRegisterPassword: !state.showRegisterPassword));
-    }else{
+    } else {
       emit(state.copyWith(showLoginPassword: !state.showLoginPassword));
     }
   }
 
-  passwordText({String? value,required bool isRegister}) {
-    if(isRegister) {
+  passwordText({String? value, required bool isRegister}) {
+    if (isRegister) {
       emit(state.copyWith(registerPassword: value));
-    }else{
+    } else {
       emit(state.copyWith(loginPassword: value));
     }
   }
@@ -40,6 +44,7 @@ class WelcomeCubit extends Cubit<WelcomeState> {
     }
     emit(state.copyWith(isTermsAccepted: true));
     if (isVal) {
+      // ignore: avoid_print
       print('Everthing is okay');
       return true;
     }

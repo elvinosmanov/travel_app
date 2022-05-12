@@ -26,7 +26,7 @@ class WelcomeState extends Equatable {
       registerPassword: '',
       loginPassword: '',
       showLoginPassword: false,
-      showRegisterPassword: true);
+      showRegisterPassword: false);
 
   @override
   List<Object> get props => [

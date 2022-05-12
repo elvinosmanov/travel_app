@@ -160,9 +160,9 @@ class PasswordTextField extends StatelessWidget {
             controller: controller,
             isMandatory: true,
             onChanged: (value) {
-              context.read<WelcomeCubit>().passwordText(value: value,isRegister: true);
+              context.read<WelcomeCubit>().passwordText(value: value, isRegister: true);
             },
-            obscureText: state.showRegisterPassword,
+            obscureText: !state.showRegisterPassword,
             validator: (String? value) {
               return value.isValidPassword;
             },
@@ -172,7 +172,7 @@ class PasswordTextField extends StatelessWidget {
                       context.read<WelcomeCubit>().changeShowPassword(isRegister: true);
                     },
                     child: SvgPicture.asset(
-                      state.showRegisterPassword ? R.openEye : R.closedEye,
+                      state.showRegisterPassword ? R.closedEye : R.openEye,
                       fit: BoxFit.scaleDown,
                     ),
                   )

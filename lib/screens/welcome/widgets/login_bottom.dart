@@ -131,7 +131,7 @@ class PasswordTextField extends StatelessWidget {
             onChanged: (value) {
               context.read<WelcomeCubit>().passwordText(value: value, isRegister: false);
             },
-            obscureText: state.showLoginPassword,
+            obscureText: !state.showLoginPassword,
             validator: (String? value) {
               return value.isValidPassword;
             },
@@ -141,7 +141,7 @@ class PasswordTextField extends StatelessWidget {
                       context.read<WelcomeCubit>().changeShowPassword(isRegister: false);
                     },
                     child: SvgPicture.asset(
-                      state.showLoginPassword ? R.openEye : R.closedEye,
+                      state.showLoginPassword ? R.closedEye:R.openEye ,
                       fit: BoxFit.scaleDown,
                     ),
                   )
