@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(scaffoldBackgroundColor: kLightGreyColor_1),
+      theme: ThemeData(scaffoldBackgroundColor: kLightGreyColor_1,),
       title: 'Material App',
-      home: const MainScreen(),
+      home:  MainScreen(),
     );
   }
 }
@@ -33,3 +33,6 @@ Widget navigationPage(BuildContext context) {
     return const WelcomeScreen();
   }
 }
+
+
+//TODO: Main Screende New added de ac ve listview ama bu defe vertical olsun

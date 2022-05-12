@@ -1,6 +1,8 @@
 import 'package:flutter/painting.dart';
 
 const Color kBlueColor = Color(0xFF0191EE);
+const Color kNavigationBlueColor = Color(0xFFD9EFFC);
+
 const Color kLightBlueColor = Color(0xFFECF9FF);
 const Color kFacebookBlueColor = Color(0xFF3C66C3);
 

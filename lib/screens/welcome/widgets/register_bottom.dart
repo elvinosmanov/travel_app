@@ -140,7 +140,7 @@ class UsernameTextField extends StatelessWidget {
         controller: controller,
         isMandatory: true,
         validator: (value) {
-          return value.isValidUsername;
+          return value?.isValidUsername;
         });
   }
 }
@@ -164,7 +164,7 @@ class PasswordTextField extends StatelessWidget {
             },
             obscureText: !state.showRegisterPassword,
             validator: (String? value) {
-              return value.isValidPassword;
+              return value?.isValidPassword;
             },
             suffixIcon: state.registerPassword.isNotEmpty
                 ? GestureDetector(
@@ -196,7 +196,7 @@ class EmailTextField extends StatelessWidget {
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
       validator: (String? value) {
-        return value.isValidEmail;
+        return value?.isValidEmail;
       },
       isMandatory: true,
     );
@@ -223,7 +223,7 @@ class FullNameTextField extends StatelessWidget {
         )
       ],
       validator: (String? value) {
-        return value.isValidFullName;
+        return value?.isValidFullName;
       },
     );
   }

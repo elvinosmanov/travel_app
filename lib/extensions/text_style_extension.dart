@@ -48,4 +48,5 @@ extension TextModifierStyle on String? {
       style: kBoldTextStyle(fontSize, color),
     );
   }
+  
 }

@@ -17,6 +17,7 @@ class R {
   static const closedEye = 'assets/icons/closed_eye.svg';
   static const delete = 'assets/icons/delete.svg';
   static const search = 'assets/icons/search.svg';
+  static const searchDarkGrey = 'assets/icons/search_darkgrey.svg';
   static const map = 'assets/icons/map.svg';
   static const worldMap = 'assets/icons/world_map.svg';
   static const attach = 'assets/icons/attach.svg';

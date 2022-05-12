@@ -133,7 +133,7 @@ class PasswordTextField extends StatelessWidget {
             },
             obscureText: !state.showLoginPassword,
             validator: (String? value) {
-              return value.isValidPassword;
+              return value?.isValidPassword;
             },
             suffixIcon: state.loginPassword.isNotEmpty
                 ? GestureDetector(
@@ -164,7 +164,7 @@ class EmailTextField extends StatelessWidget {
       isMandatory: true,
       controller: controller,
       validator: (String? value) {
-        return value.isValidEmail;
+        return value?.isValidEmail;
       },
     );
   }
