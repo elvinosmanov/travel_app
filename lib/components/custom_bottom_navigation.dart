@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:travel_app/screens/main/main_screen.dart';
 
 import '../core/cores.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
-  static const List<Widget> _pages = <Widget>[];
-  static int _selectedIndex = 0;
+  const CustomBottomNavigationBar({
+    Key? key,
+    required this.onItemTapped,
+  }) : super(key: key);
+
+  static int selectedIndex = 0;
+  final Function(int index) onItemTapped;
   @override
   State<CustomBottomNavigationBar> createState() => _CustomBottomNavigationBarState();
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  void _onItemTapped(int index) {
-    setState(() {
-      CustomBottomNavigationBar._selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,10 +33,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          CustomBottomNavigationIcon(iconName: R.home, index: 0, onTap: () => _onItemTapped(0)),
-          CustomBottomNavigationIcon(iconName: R.searchDarkGrey, index: 1, onTap: () => _onItemTapped(1)),
-          CustomBottomNavigationIcon(iconName: R.profile, index: 2, onTap: () => _onItemTapped(2)),
-          CustomBottomNavigationIcon(iconName: R.settings, index: 3, onTap: () => _onItemTapped(3)),
+          CustomBottomNavigationIcon(iconName: R.home, index: 0, onTap: () => widget.onItemTapped(0)),
+          CustomBottomNavigationIcon(iconName: R.searchDarkGrey, index: 1, onTap: () => widget.onItemTapped(1)),
+          CustomBottomNavigationIcon(iconName: R.profile, index: 2, onTap: () => widget.onItemTapped(2)),
+          CustomBottomNavigationIcon(iconName: R.settings, index: 3, onTap: () => widget.onItemTapped(3)),
         ],
       ),
     );
@@ -68,9 +65,9 @@ class _CustomBottomNavigationIconState extends State<CustomBottomNavigationIcon>
         borderRadius: BorderRadius.circular(10),
         onTap: widget.onTap,
         child: SizedBox(
-          width: 70,
+          width: MediaQuery.of(context).size.width / 4,
           height: 60,
-          child: CustomBottomNavigationBar._selectedIndex == widget.index
+          child: CustomBottomNavigationBar.selectedIndex == widget.index
               ? Align(
                   alignment: Alignment.center,
                   child: Container(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/core/colors.dart';
-import 'package:travel_app/screens/main/main_screen.dart';
+import 'package:travel_app/screens/navigation/navigation_screen.dart';
 import 'package:travel_app/screens/onboarding/onboarding.dart';
 import 'package:travel_app/screens/welcome/welcome_screen.dart';
 import 'package:travel_app/utils/onboarding_preferences.dart';
@@ -18,9 +18,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(scaffoldBackgroundColor: kLightGreyColor_1,),
+      theme: ThemeData(
+        scaffoldBackgroundColor: kLightGreyColor_1,
+        pageTransitionsTheme: const PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+        }),
+      ),
       title: 'Material App',
-      home:  MainScreen(),
+      home: const NavigationScreen(),
     );
   }
 }
@@ -33,6 +39,3 @@ Widget navigationPage(BuildContext context) {
     return const WelcomeScreen();
   }
 }
-
-
-//TODO: Main Screende New added de ac ve listview ama bu defe vertical olsun

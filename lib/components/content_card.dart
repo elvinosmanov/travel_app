@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
 
@@ -10,19 +11,25 @@ class ContentCard extends StatelessWidget {
     required this.image,
     required this.name,
     required this.place,
+    this.isHorizontal = true,
+    this.width,
+    this.height,
   }) : super(key: key);
   final double starValue;
   final String image;
   final String name;
   final String place;
+  final bool isHorizontal;
+  final double? width;
+  final double? height;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 230,
+      width: width,
+      height: height,
       child: Container(
-        decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16),
+        decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
         padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
-        margin: const EdgeInsets.only(right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,10 +40,10 @@ class ContentCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    name,
-                    maxLines: 2,
+                    isHorizontal ? name : name.useCorrectEllipsis(),
+                    maxLines: isHorizontal ? 2 : 1,
                     overflow: TextOverflow.ellipsis,
-                    style: kSemiBoldTextStyle(18),
+                    style: kSemiBoldTextStyle(isHorizontal ? 14 : 18),
                   ).padding(top: 6),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +54,7 @@ class ContentCard extends StatelessWidget {
                           place.useCorrectEllipsis(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: kSemiBoldTextStyle(15, kDarkGreyColor),
+                          style: kSemiBoldTextStyle(isHorizontal ? 12 : 14, kDarkGreyColor),
                         ),
                       )
                     ],
@@ -64,11 +71,14 @@ class ContentCard extends StatelessWidget {
   Align _buildImageContainer() {
     return Align(
       alignment: Alignment.topCenter,
-      child: Container(
-        height: 210,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+      child: AspectRatio(
+        aspectRatio: isHorizontal ? 206 / 210 : 6 / 5,
+        child: Container(
+          // height: 210,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+          ),
         ),
       ),
     );

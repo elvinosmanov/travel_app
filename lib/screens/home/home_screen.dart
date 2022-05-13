@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/components/search_textfield.dart';
+import 'package:travel_app/extensions/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:travel_app/components/category_card.dart';
 import 'package:travel_app/components/content_card.dart';
 import 'package:travel_app/components/mini_card.dart';
-import 'package:travel_app/components/search_textfield.dart';
 import 'package:travel_app/core/cores.dart';
-import 'package:travel_app/extensions/extensions.dart';
-
 import '../../components/category_bar.dart';
-import '../../components/custom_bottom_navigation.dart';
 import '../../components/sort_list.dart';
 
-class MainScreen extends StatefulWidget {
-  MainScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
   static const _categories = [
     'All',
     'Popular',
@@ -30,32 +22,26 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: kLightGreyColor_1,
-        bottomNavigationBar: const CustomBottomNavigationBar(),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: ListView(
-              padding: const EdgeInsets.only(bottom: 20),
-              physics: const BouncingScrollPhysics(),
-              children: [
-                const TitleBar().padding(top: 40, bottom: 59),
-                'Where do\nyou want to go?'.boldTextStyle(40),
-                const SearchTextField().padding(top: 32, bottom: 32),
-                const CategoryBar(categoryName: 'Categories'),
-                CategoryList().padding(top: 16, bottom: 32),
-                const CategoryBar(categoryName: 'Explore'),
-                const SortList(
-                  categoryNames: _categories,
-                ).padding(top: 16, bottom: 16),
-                const ExploreList(),
-                const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 16),
-                const TravelGuideList()
-              ],
-            ),
-          ),
-        ));
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 20),
+      physics: const BouncingScrollPhysics(),
+      children: [
+        const TitleBar().padding(top: 40, bottom: 59),
+        'Where do\nyou want to go?'.boldTextStyle(40),
+        const SearchTextField().padding(top: 32, bottom: 32),
+        const CategoryBar(categoryName: 'Categories'),
+        CategoryList().padding(top: 16, bottom: 32),
+        const CategoryBar(categoryName: 'Explore'),
+        const SortList(
+          categoryNames: _categories,
+        ).padding(top: 16, bottom: 6), //bottom: 16-6
+        const ExploreList(),
+        const CategoryBar(categoryName: 'New Added').padding(top: 22, bottom: 16), //bottom: 32-10 22
+        const NewAddedList(),
+        const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
+        const TravelGuideList(),
+      ],
+    );
   }
 }
 
@@ -67,8 +53,9 @@ class TravelGuideList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 84,
+      height: 104,
       child: ListView.builder(
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: 4,
@@ -91,15 +78,52 @@ class ExploreList extends StatelessWidget {
     return SizedBox(
       height: 300,
       child: ListView.builder(
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: 4,
         itemBuilder: (context, index) {
           return const ContentCard(
-              starValue: 4.6, image: R.tripImage, name: "Gobustan milli parkı", place: 'Karadagh, Baku');
+                  width: 230,
+                  height: 280,
+                  starValue: 4.6,
+                  image: R.tripImage,
+                  name: "Gobustan milli parkı",
+                  place: 'Karadagh, Baku')
+              .padding(right: 16);
         },
       ),
+    );
+  }
+}
+
+class NewAddedList extends StatelessWidget {
+  const NewAddedList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return ListView.builder(
+      padding: EdgeInsets.only(left: width * 0.04, right: width * 0.04),
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      physics: const ClampingScrollPhysics(),
+      itemCount: 4,
+      itemBuilder: (context, index) {
+        return AspectRatio(
+          aspectRatio: 1 / 1.05,
+          child: const ContentCard(
+            starValue: 4.6,
+            image: R.tripImage,
+            name: "Gobustan milli parkı",
+            place: 'Karadagh, Baku',
+            isHorizontal: false,
+          ).padding(bottom: 16),
+        );
+      },
     );
   }
 }
