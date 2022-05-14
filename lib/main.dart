@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/core/colors.dart';
-import 'package:travel_app/screens/navigation/navigation_screen.dart';
+import 'package:travel_app/cubit/navigation/navigation_cubit.dart';
+import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/screens/onboarding/onboarding.dart';
 import 'package:travel_app/screens/welcome/welcome_screen.dart';
 import 'package:travel_app/utils/onboarding_preferences.dart';
@@ -16,8 +18,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final appRouter = AppRouter();
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      title: 'Travel App',
+      routerDelegate: appRouter.delegate(),
+      routeInformationParser: appRouter.defaultRouteParser(),
       theme: ThemeData(
         scaffoldBackgroundColor: kLightGreyColor_1,
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
@@ -25,8 +31,7 @@ class MyApp extends StatelessWidget {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
         }),
       ),
-      title: 'Material App',
-      home: const NavigationScreen(),
+      
     );
   }
 }
@@ -39,3 +44,8 @@ Widget navigationPage(BuildContext context) {
     return const WelcomeScreen();
   }
 }
+
+// home: BlocProvider(
+//         create: (context) => NavigationCubit(),
+//         child:  CategoriesScreen(),
+//       ),

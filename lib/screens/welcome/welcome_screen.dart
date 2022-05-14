@@ -4,7 +4,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/cubit/welcome_cubit.dart';
+import 'package:travel_app/cubit/welcome/welcome_cubit.dart';
 import 'package:travel_app/screens/welcome/widgets/login_bottom.dart';
 import 'package:travel_app/screens/welcome/widgets/register_bottom.dart';
 import 'package:travel_app/screens/welcome/widgets/welcome_bottom.dart';

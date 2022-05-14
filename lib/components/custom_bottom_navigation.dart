@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:travel_app/cubit/navigation/navigation_cubit.dart';
 
 import '../core/cores.dart';
 
@@ -7,10 +10,11 @@ class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({
     Key? key,
     required this.onItemTapped,
+    required this.currentIndex,
   }) : super(key: key);
 
-  static int selectedIndex = 0;
   final Function(int index) onItemTapped;
+  final int currentIndex;
   @override
   State<CustomBottomNavigationBar> createState() => _CustomBottomNavigationBarState();
 }
@@ -60,35 +64,40 @@ class CustomBottomNavigationIcon extends StatefulWidget {
 class _CustomBottomNavigationIconState extends State<CustomBottomNavigationIcon> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        splashColor: Colors.transparent,
-        borderRadius: BorderRadius.circular(10),
-        onTap: widget.onTap,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width / 4,
-          height: 60,
-          child: CustomBottomNavigationBar.selectedIndex == widget.index
-              ? Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: kNavigationBlueColor,
-                        boxShadow: [kNavigationBarShadow],
-                      ),
-                      child: SvgPicture.asset(
-                        widget.iconName,
-                        color: kBlueColor,
-                        fit: BoxFit.scaleDown,
-                      )),
-                )
-              : SvgPicture.asset(
-                  widget.iconName,
-                  color: kDarkGreyColor,
-                  fit: BoxFit.scaleDown,
-                ),
-        ));
+    return BlocBuilder<NavigationCubit, NavigationState>(
+      buildWhen: (previous, current) => previous.selectedPageIndex != current.selectedPageIndex,
+      builder: (context, state) {
+        return InkWell(
+            splashColor: Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            onTap: widget.onTap,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width / 4,
+              height: 60,
+              child: state.selectedPageIndex == widget.index
+                  ? Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: kNavigationBlueColor,
+                            boxShadow: [kNavigationBarShadow],
+                          ),
+                          child: SvgPicture.asset(
+                            widget.iconName,
+                            color: kBlueColor,
+                            fit: BoxFit.scaleDown,
+                          )),
+                    )
+                  : SvgPicture.asset(
+                      widget.iconName,
+                      color: kDarkGreyColor,
+                      fit: BoxFit.scaleDown,
+                    ),
+            ));
+      },
+    );
   }
 }

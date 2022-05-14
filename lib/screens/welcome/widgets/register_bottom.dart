@@ -9,7 +9,7 @@ import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/cubit/welcome_cubit.dart';
+import 'package:travel_app/cubit/welcome/welcome_cubit.dart';
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
 

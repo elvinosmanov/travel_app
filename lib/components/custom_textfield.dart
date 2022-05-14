@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/extensions/extensions.dart';
@@ -26,6 +27,10 @@ class CustomTextField extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
   final TextStyle? hintStyle;
   final String? hintText;
+  final Function()? onTap;
+
+  final bool? enabled;
+
   const CustomTextField({
     Key? key,
     this.label,
@@ -33,6 +38,7 @@ class CustomTextField extends StatefulWidget {
     required this.controller,
     this.focusNode,
     this.obscureText,
+    this.filled,
     this.maxLines,
     this.keyboardType,
     this.onChanged,
@@ -44,10 +50,11 @@ class CustomTextField extends StatefulWidget {
     this.textInputAction,
     this.validator,
     this.inputFormatters,
-    this.filled,
     this.contentPadding,
     this.hintStyle,
     this.hintText,
+    this.onTap,
+    this.enabled,
   }) : super(key: key);
 
   @override
@@ -63,9 +70,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
       focusNode: widget.focusNode,
       inputFormatters: widget.inputFormatters,
       obscureText: widget.obscureText ?? false,
+      enabled: widget.enabled,
       maxLines: widget.obscureText ?? false ? 1 : widget.maxLines,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction ?? TextInputAction.next,
+      onTap: widget.onTap,
       onChanged: (value) {
         if (widget.onChanged != null) {
           widget.onChanged!(value);

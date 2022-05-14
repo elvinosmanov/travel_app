@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/components/search_textfield.dart';
+import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/category_card.dart';
@@ -26,7 +27,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       physics: const BouncingScrollPhysics(),
       children: [
-        const TitleBar().padding(top: 40, bottom: 59),
+        const TitleBar().padding(top: defaultTopPadding, bottom: 59),
         'Where do\nyou want to go?'.boldTextStyle(40),
         const SearchTextField().padding(top: 32, bottom: 32),
         const CategoryBar(categoryName: 'Categories'),
