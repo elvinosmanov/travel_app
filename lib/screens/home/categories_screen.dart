@@ -1,34 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/core/constants.dart';
+import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/screens/home/home_screen.dart';
 
 import '../../components/category_card.dart';
 import '../../core/cores.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  CategoriesScreen({Key? key}) : super(key: key);
+  const CategoriesScreen({Key? key}) : super(key: key);
 
-  final _data = [
-    Category('History and Culture', R.mateImage),
-    Category('Museum and Art', R.mateImage),
-    Category('Accommodation', R.mateImage),
-    Category('Shopping', R.mateImage),
-    Category('Gastronomy', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +19,10 @@ class CategoriesScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CustomBackButton(
-              onPressed: () => Navigator.maybePop(context),
-            ).padding(top: defaultTopPadding, bottom: 32, left: 16),
+              onPressed: () => context.router.pop(),
+            ).padding(top: defaultTopPadding, left: 16, bottom: 32),
             'Categories'.heading2().padding(left: 16, bottom: 8),
-            CategoryGridView(data: _data),
+            const CategoryGridView(data: Category.data),
           ],
         ),
       ),

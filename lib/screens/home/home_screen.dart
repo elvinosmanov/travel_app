@@ -1,25 +1,21 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/components/search_textfield.dart';
 import 'package:travel_app/core/constants.dart';
+import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/category_card.dart';
 import 'package:travel_app/components/content_card.dart';
 import 'package:travel_app/components/mini_card.dart';
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/routes/router.gr.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  static const _categories = [
-    'All',
-    'Popular',
-    'Recommended',
-    'Most Viewed',
-    'Most Rated',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +23,21 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       physics: const BouncingScrollPhysics(),
       children: [
-        const TitleBar().padding(top: defaultTopPadding, bottom: 59),
-        'Where do\nyou want to go?'.boldTextStyle(40),
+        const TitleBar().padding(top: defaultTopPadding, bottom: 59, left: 16, right: 16),
+        'Where do\nyou want to go?'.boldTextStyle(40).padding(left: 16),
         const SearchTextField().padding(top: 32, bottom: 32),
-        const CategoryBar(categoryName: 'Categories'),
-        CategoryList().padding(top: 16, bottom: 32),
+        CategoryBar(
+          categoryName: 'Categories',
+          onPressed: () {
+            // ignore: avoid_print
+            print('object');
+            context.router.push(CategoriesRoute());
+          },
+        ),
+        const CategoryList().padding(top: 16, bottom: 32),
         const CategoryBar(categoryName: 'Explore'),
         const SortList(
-          categoryNames: _categories,
+          categoryNames: categoriesSorts,
         ).padding(top: 16, bottom: 6), //bottom: 16-6
         const ExploreList(),
         const CategoryBar(categoryName: 'New Added').padding(top: 22, bottom: 16), //bottom: 32-10 22
@@ -54,9 +57,9 @@ class TravelGuideList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 104,
+      height: 124,
       child: ListView.builder(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 16),
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: 4,
@@ -79,7 +82,7 @@ class ExploreList extends StatelessWidget {
     return SizedBox(
       height: 300,
       child: ListView.builder(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 16),
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
@@ -130,21 +133,15 @@ class NewAddedList extends StatelessWidget {
 }
 
 class CategoryList extends StatelessWidget {
-  CategoryList({Key? key}) : super(key: key);
+  const CategoryList({Key? key}) : super(key: key);
 
-  final _data = [
-    Category('History and Culture', R.mateImage),
-    Category('Museum and Art', R.mateImage),
-    Category('Accommodation', R.mateImage),
-    Category('Shopping', R.mateImage),
-    Category('Gastronomy', R.mateImage),
-    Category('Nature and Agro', R.mateImage),
-  ];
+  final _data = Category.data;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 170,
       child: ListView.builder(
+        padding: const EdgeInsets.only(left: 16.0),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: _data.length,
@@ -159,12 +156,6 @@ class CategoryList extends StatelessWidget {
   }
 }
 
-class Category {
-  final String name;
-  final String image;
-
-  Category(this.name, this.image);
-}
 
 class TitleBar extends StatelessWidget {
   const TitleBar({

@@ -23,6 +23,7 @@ class _SortListState extends State<SortList> {
     return SizedBox(
       height: 30,
       child: ListView.builder(
+        padding: const EdgeInsets.only(left: 16.0),
         scrollDirection: Axis.horizontal,
         itemCount: widget.categoryNames.length,
         physics: const BouncingScrollPhysics(),

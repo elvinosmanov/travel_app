@@ -17,6 +17,7 @@ class CustomBackButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SvgPicture.asset(R.backArrow),
           'Back'.boldTextStyle(15).padding(

@@ -49,11 +49,17 @@ class WelcomeCubit extends Cubit<WelcomeState> {
       return true;
     }
   }
-  checkLoginValidation(){
+
+  checkLoginValidation() async {
+    if (state.loginStatus == LoginStatus.loading) return;
+    emit(state.copyWith(loginStatus: LoginStatus.loading));
     bool isVal = loginFormKey.currentState!.validate();
     if (isVal) {
-      print('Everthing is okay');
-      return true;
+      await Future.delayed(const Duration(seconds: 2));
+      emit(state.copyWith(loginStatus: LoginStatus.success));
+    } else {
+      emit(state.copyWith(loginStatus: LoginStatus.noValidation));
+      return false;
     }
   }
 }

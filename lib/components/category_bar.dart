@@ -13,16 +13,19 @@ class CategoryBar extends StatelessWidget {
   final Function()? onPressed;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        categoryName.semiBoldTextStyle(24),
-        InkWell(
-            onTap: onPressed,
-            splashColor: kLightGreyColor_1,
-            borderRadius: BorderRadius.circular(4),
-            child: 'See all'.semiBoldTextStyle(15, kDarkGreyColor).padding(all: 4)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          categoryName.semiBoldTextStyle(24),
+          InkWell(
+              onTap: onPressed,
+              splashColor: kLightGreyColor_1,
+              borderRadius: BorderRadius.circular(4),
+              child: 'See all'.semiBoldTextStyle(15, kDarkGreyColor).padding(all: 4)),
+        ],
+      ),
     );
   }
 }

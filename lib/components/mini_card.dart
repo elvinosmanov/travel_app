@@ -17,7 +17,7 @@ class MiniCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 170,
-      height: 84,
+      height: 100,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(color: kWhiteColor, borderRadius: _radius, boxShadow: [kBlackBoxShadow]),
       child: Stack(

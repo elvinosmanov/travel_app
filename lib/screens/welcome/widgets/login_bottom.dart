@@ -8,9 +8,11 @@ import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
 import 'package:travel_app/cubit/welcome/welcome_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/routes/router.gr.dart';
 import '../../../components/custom_back_button.dart';
 import '../../../core/R.dart';
 import '../../../core/colors.dart';
+import 'package:auto_route/auto_route.dart';
 
 class LoginBottomContainer extends StatefulWidget {
   const LoginBottomContainer({
@@ -66,11 +68,22 @@ class _LoginBottomContainerState extends State<LoginBottomContainer> {
   Row _buildForgetPasswordButton() =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>['Forgot Password?'.mediumTextStyle(13)]);
 
-  CustomButton _buildSignInButton() => CustomButton.text(
-        text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor),
-        color: kBlueColor,
-        onPressed: () {
-          context.read<WelcomeCubit>().checkLoginValidation();
+  Widget _buildSignInButton() => BlocConsumer<WelcomeCubit, WelcomeState>(
+    listener: (context, state) {
+      if(state.loginStatus==LoginStatus.success){
+        context.router.push(const NavigationRoute());
+      }
+    },
+        builder: (context, state) {
+          return CustomButton.text(
+            isLoading: state.loginStatus == LoginStatus.loading,
+            text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor),
+            color: kBlueColor,
+            onPressed: () {
+              context.read<WelcomeCubit>().checkLoginValidation();
+              
+            },
+          );
         },
       );
 
@@ -141,7 +154,7 @@ class PasswordTextField extends StatelessWidget {
                       context.read<WelcomeCubit>().changeShowPassword(isRegister: false);
                     },
                     child: SvgPicture.asset(
-                      state.showLoginPassword ? R.closedEye:R.openEye ,
+                      state.showLoginPassword ? R.closedEye : R.openEye,
                       fit: BoxFit.scaleDown,
                     ),
                   )

@@ -2,8 +2,11 @@ part of 'welcome_cubit.dart';
 
 enum WelcomeStatus { welcome, login, register }
 
+enum LoginStatus { initial, loading, success, noValidation, error }
+
 class WelcomeState extends Equatable {
   final WelcomeStatus status;
+  final LoginStatus loginStatus;
   final bool agreeTermsCheckBox;
   final bool showRegisterPassword;
   final bool showLoginPassword;
@@ -11,16 +14,18 @@ class WelcomeState extends Equatable {
   final String registerPassword;
   final String loginPassword;
   const WelcomeState({
-    required this.showLoginPassword,
-    required this.loginPassword,
     required this.status,
+    required this.loginStatus,
     required this.agreeTermsCheckBox,
     required this.showRegisterPassword,
-    required this.registerPassword,
+    required this.showLoginPassword,
     required this.isTermsAccepted,
+    required this.registerPassword,
+    required this.loginPassword,
   });
   factory WelcomeState.initial() => const WelcomeState(
       status: WelcomeStatus.welcome,
+      loginStatus: LoginStatus.initial,
       agreeTermsCheckBox: false,
       isTermsAccepted: true,
       registerPassword: '',
@@ -36,11 +41,13 @@ class WelcomeState extends Equatable {
         isTermsAccepted,
         registerPassword,
         loginPassword,
-        showLoginPassword
+        showLoginPassword,
+        loginStatus
       ];
 
   WelcomeState copyWith({
     WelcomeStatus? status,
+    LoginStatus? loginStatus,
     bool? agreeTermsCheckBox,
     bool? showRegisterPassword,
     bool? showLoginPassword,
@@ -50,6 +57,7 @@ class WelcomeState extends Equatable {
   }) {
     return WelcomeState(
       status: status ?? this.status,
+      loginStatus: loginStatus ?? this.loginStatus,
       agreeTermsCheckBox: agreeTermsCheckBox ?? this.agreeTermsCheckBox,
       showRegisterPassword: showRegisterPassword ?? this.showRegisterPassword,
       showLoginPassword: showLoginPassword ?? this.showLoginPassword,
