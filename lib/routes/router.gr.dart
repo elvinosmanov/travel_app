@@ -35,11 +35,17 @@ class AppRouter extends _i6.RootStackRouter {
           routeData: routeData, child: const _i1.AllCategoriesScreen());
     },
     DetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<DetailsRouteArgs>(
-          orElse: () => const DetailsRouteArgs());
+      final args = routeData.argsAs<DetailsRouteArgs>();
       return _i6.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i2.DetailsScreen(key: args.key, isLiked: args.isLiked));
+          child: _i2.DetailsScreen(
+              key: args.key,
+              isLiked: args.isLiked,
+              images: args.images,
+              viewCount: args.viewCount,
+              commentCount: args.messageCount,
+              likeCount: args.likeCount,
+              rate: args.rate));
     },
     OnboardingRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
@@ -117,24 +123,55 @@ class AllCategoriesRoute extends _i6.PageRouteInfo<void> {
 /// generated route for
 /// [_i2.DetailsScreen]
 class DetailsRoute extends _i6.PageRouteInfo<DetailsRouteArgs> {
-  DetailsRoute({_i12.Key? key, bool isLiked = false})
+  DetailsRoute(
+      {_i12.Key? key,
+      bool isLiked = false,
+      required List<String> images,
+      required int viewCount,
+      required int messageCount,
+      required int likeCount,
+      required double rate})
       : super(DetailsRoute.name,
             path: 'details',
-            args: DetailsRouteArgs(key: key, isLiked: isLiked));
+            args: DetailsRouteArgs(
+                key: key,
+                isLiked: isLiked,
+                images: images,
+                viewCount: viewCount,
+                messageCount: messageCount,
+                likeCount: likeCount,
+                rate: rate));
 
   static const String name = 'DetailsRoute';
 }
 
 class DetailsRouteArgs {
-  const DetailsRouteArgs({this.key, this.isLiked = false});
+  const DetailsRouteArgs(
+      {this.key,
+      this.isLiked = false,
+      required this.images,
+      required this.viewCount,
+      required this.messageCount,
+      required this.likeCount,
+      required this.rate});
 
   final _i12.Key? key;
 
   final bool isLiked;
 
+  final List<String> images;
+
+  final int viewCount;
+
+  final int messageCount;
+
+  final int likeCount;
+
+  final double rate;
+
   @override
   String toString() {
-    return 'DetailsRouteArgs{key: $key, isLiked: $isLiked}';
+    return 'DetailsRouteArgs{key: $key, isLiked: $isLiked, images: $images, viewCount: $viewCount, messageCount: $messageCount, likeCount: $likeCount, rate: $rate}';
   }
 }
 

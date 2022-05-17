@@ -9,12 +9,12 @@ class R {
   static const mateImage = 'assets/images/mate_image.jpg';
   static const tripImage = 'assets/images/trip_image.jpg';
   static const logo = 'assets/images/logo.png';
-  static const accomodation = 'assets/images/accomodation.jpg';
-  static const shopping = 'assets/images/shopping.jpg';
-  static const gastronomy = 'assets/images/gastronomy.jpg';
-  static const natureAndAgro = 'assets/images/nature_and_agro.jpg';
-  static const museumAndArt = 'assets/images/museum_and_art.jpg';
-  static const historyAndCulture = 'assets/images/history_and_culture.jpg';
+  static const accomodationImage = 'assets/images/accomodation.jpg';
+  static const shoppingImage = 'assets/images/shopping.jpg';
+  static const gastronomyImage = 'assets/images/gastronomy.jpg';
+  static const natureAndAgroImage = 'assets/images/nature_and_agro.jpg';
+  static const museumAndArtImage = 'assets/images/museum_and_art.jpg';
+  static const historyAndCultureImage = 'assets/images/history_and_culture.jpg';
 
   //Icons
   static const facebookIcon = 'assets/icons/facebook.svg';
@@ -45,4 +45,7 @@ class R {
   static const downArrow = 'assets/icons/down_arrow.svg';
   static const heartOutlined = 'assets/icons/heart_outlined.svg';
   static const heartFilled = 'assets/icons/heart_filled.svg';
+  static const heartFilledBlack = 'assets/icons/heart _filled_black.svg';
+  static const comment = 'assets/icons/comment.svg';
+  static const eyeBlack = 'assets/icons/eye_black.svg';
 }

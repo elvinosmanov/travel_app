@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/screens/home/details_screen.dart';
@@ -29,7 +30,14 @@ class MyApp extends StatelessWidget {
       routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: _appRouter.delegate(
         initialRoutes: [
-           DetailsRoute()
+          DetailsRoute(
+            images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+            likeCount: 350,
+            messageCount: 12,
+            rate: 3.8,
+            viewCount: 450,
+            isLiked: false,
+          )
           // const AllCategoriesRoute(),
           // navigationPage(),
         ],

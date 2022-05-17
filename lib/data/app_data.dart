@@ -2,12 +2,12 @@ import 'package:travel_app/core/R.dart';
 
 class Category {
   static const data = [
-    Category('History and Culture', R.historyAndCulture),
-    Category('Museum and Art', R.museumAndArt),
-    Category('Accommodation', R.accomodation),
-    Category('Shopping', R.shopping),
-    Category('Gastronomy', R.gastronomy),
-    Category('Nature and Agro', R.natureAndAgro),
+    Category('History and Culture', R.historyAndCultureImage),
+    Category('Museum and Art', R.museumAndArtImage),
+    Category('Accommodation', R.accomodationImage),
+    Category('Shopping', R.shoppingImage),
+    Category('Gastronomy', R.gastronomyImage),
+    Category('Nature and Agro', R.natureAndAgroImage),
   ];
 
   final String name;
@@ -18,15 +18,15 @@ class Category {
 
 class Category2 {
   static final data = [
-    Category2(text: 'The Romanian – Solo Exhibition', imageName: R.accomodation, place: "Baku", isLiked: false),
-    Category2(text: 'a good view of the lower', imageName: R.gastronomy, place: "Gobustan", isLiked: false),
-    Category2(text: 'The Romanian', imageName: R.museumAndArt, place: "Baku", isLiked: false),
+    Category2(text: 'The Romanian – Solo Exhibition', imageName: R.accomodationImage, place: "Baku", isLiked: false),
+    Category2(text: 'a good view of the lower', imageName: R.gastronomyImage, place: "Gobustan", isLiked: false),
+    Category2(text: 'The Romanian', imageName: R.museumAndArtImage, place: "Baku", isLiked: false),
     Category2(
         text: 'The Romanian – Solo Exhibition',
-        imageName: R.museumAndArt,
+        imageName: R.museumAndArtImage,
         place: " keep guests company",
         isLiked: false),
-    Category2(text: 'Solo', imageName: R.natureAndAgro, place: "Baku", isLiked: false),
+    Category2(text: 'Solo', imageName: R.natureAndAgroImage, place: "Baku", isLiked: false),
     Category2(text: 'Cahid Suleymanov', imageName: R.tripImage, place: "Bakuf ssdf sadfdfsdfdssa", isLiked: false),
   ];
 
