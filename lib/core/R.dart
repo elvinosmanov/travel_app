@@ -43,4 +43,6 @@ class R {
   static const notification = 'assets/icons/notification.svg';
   static const upArrow = 'assets/icons/up_arrow.svg';
   static const downArrow = 'assets/icons/down_arrow.svg';
+  static const heartOutlined = 'assets/icons/heart_outlined.svg';
+  static const heartFilled = 'assets/icons/heart_filled.svg';
 }

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/routes/router.gr.dart';
+import 'package:travel_app/screens/home/details_screen.dart';
 import 'package:travel_app/utils/onboarding_preferences.dart';
 
 Future<void> main() async {
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
       routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: _appRouter.delegate(
         initialRoutes: [
-          const AllCategoriesRoute(),
+           DetailsRoute()
+          // const AllCategoriesRoute(),
           // navigationPage(),
         ],
       ),

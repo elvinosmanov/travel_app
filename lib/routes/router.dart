@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:travel_app/screens/home/all_categories.dart';
 import 'package:travel_app/screens/home/categories_screen.dart';
+import 'package:travel_app/screens/home/details_screen.dart';
 import 'package:travel_app/screens/home/home_screen.dart';
 import 'package:travel_app/screens/navigation/navigation_screen.dart';
 import 'package:travel_app/screens/onboarding/onboarding_screen.dart';
@@ -10,9 +11,11 @@ import 'package:travel_app/screens/settings/settings_screen.dart';
 import 'package:travel_app/screens/welcome/welcome_screen.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Screen,Route', routes: [
-  //TODO: FOR NOW CHANGE PLACE
+  //TODO: FOR NOW CHANGED PLACE
   AutoRoute(path: 'all_categories', page: AllCategoriesScreen),
-  AutoRoute(path: 'onboarding', page: OnboardingScreen, initial: true),
+  AutoRoute(path: 'details', page: DetailsScreen),
+
+  AutoRoute(path: 'onboarding', page: OnboardingScreen),
   AutoRoute(path: 'welcome', page: WelcomeScreen),
   AutoRoute(path: '/', page: NavigationScreen, children: [
     AutoRoute(
