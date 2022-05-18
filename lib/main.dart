@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             likeCount: 350,
             messageCount: 12,
             rate: 3.8,
-            viewCount: 450,
+            viewCount: 14000000,
             isLiked: false,
           )
           // const AllCategoriesRoute(),

@@ -44,8 +44,9 @@ extension Validation on String {
         ? null
         : 'Password must be at least 5 characters that include at least 1 character, 1 number and no whitespace';
   }
-
-  String useCorrectEllipsis() {
+ String useCorrectEllipsis() {
     return replaceAll('', '\u200B');
   }
+
+  
 }
