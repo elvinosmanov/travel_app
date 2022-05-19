@@ -24,9 +24,10 @@ class CustomOpacityButton extends StatelessWidget {
         width: width ?? 44,
         height: height ?? 44,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: kWhiteColor.withOpacity(opacity ?? 0.9),
-            boxShadow: [kBlackBoxShadow]),
+          borderRadius: BorderRadius.circular(16),
+          color: kWhiteColor.withOpacity(opacity ?? 0.9),
+          // boxShadow: [kBlackBoxShadow],
+        ),
         child: SvgPicture.asset(
           imageName,
           color: kBlackColor,

@@ -8,9 +8,11 @@ class CategoryBar extends StatelessWidget {
     Key? key,
     required this.categoryName,
     this.onPressed,
+    this.color,
   }) : super(key: key);
   final String categoryName;
   final Function()? onPressed;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +25,7 @@ class CategoryBar extends StatelessWidget {
               onTap: onPressed,
               splashColor: kLightGreyColor_1,
               borderRadius: BorderRadius.circular(4),
-              child: 'See all'.semiBoldTextStyle(15, kDarkGreyColor).padding(all: 4)),
+              child: 'See all'.semiBoldTextStyle(15, color ?? kDarkGreyColor).padding(all: 4)),
         ],
       ),
     );
