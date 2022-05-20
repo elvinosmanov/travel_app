@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
 import 'package:travel_app/extensions/extensions.dart';
 
 import '../core/R.dart';
 
 class CustomBackButton extends StatelessWidget {
   final Function()? onPressed;
-
+  final String? label;
   const CustomBackButton({
     Key? key,
     this.onPressed,
+    this.label,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class CustomBackButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SvgPicture.asset(R.backArrow),
-          'Back'.boldTextStyle(15).padding(
+          (label??'Back').boldTextStyle(15).padding(
                 left: 8,
               )
         ],

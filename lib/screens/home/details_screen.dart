@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/category_bar.dart';
 import 'package:travel_app/components/category_card2.dart';
-import 'package:travel_app/components/content_card.dart';
 import 'package:travel_app/components/custom_comment.dart';
 
 import 'package:travel_app/components/custom_divider.dart';
@@ -11,7 +10,6 @@ import 'package:travel_app/components/custom_opacity_button.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
 
-import '../../components/category_card.dart';
 import '../../components/custom_rating_bar.dart';
 
 //TODO: After finishing Routing Delete Scaffold and SafeArea widgets
@@ -73,7 +71,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               _buildTwoChildrenRow(
                   widget.rate.toStringAsFixed(1).mediumTextStyle(15),
                   CustomRatingBar(
-                    rating: widget.rate,
+                    initialRating: widget.rate,
                   )),
               _buildTwoChildrenRow(widget.commentCount.toString().mediumTextStyle(15), SvgPicture.asset(R.comment)),
               _buildTwoChildrenRow(
@@ -160,14 +158,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   ListView _buildCommentList() {
     return ListView.builder(
-        cacheExtent: 10,
+        cacheExtent: 3,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: 10,
+        itemCount: 3,
         itemBuilder: (context, index) {
           return const CustomComment(
             comment:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
             imageName: R.flagInterestImage,
             name: 'Elvin',
             rating: 3.1,
@@ -332,7 +330,6 @@ class CustomVisitButton extends StatefulWidget {
   const CustomVisitButton({
     Key? key,
   }) : super(key: key);
-
   @override
   State<CustomVisitButton> createState() => _CustomVisitButtonState();
 }
@@ -350,11 +347,9 @@ class _CustomVisitButtonState extends State<CustomVisitButton> {
           child: InkWell(
             borderRadius: BorderRadius.circular(4),
             onTap: () {
-              () {
-                setState(() {
-                  willVisit = !willVisit;
-                });
-              };
+              setState(() {
+                willVisit = !willVisit;
+              });
             },
             child: Container(
               padding: const EdgeInsets.all(5),

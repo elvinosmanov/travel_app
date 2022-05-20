@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:travel_app/screens/home/all_categories.dart';
+import 'package:travel_app/screens/home/all_comments_screen.dart';
 import 'package:travel_app/screens/home/categories_screen.dart';
 import 'package:travel_app/screens/home/details_screen.dart';
 import 'package:travel_app/screens/home/home_screen.dart';
@@ -14,6 +15,7 @@ import 'package:travel_app/screens/welcome/welcome_screen.dart';
   //TODO: FOR NOW CHANGED PLACE
   AutoRoute(path: 'all_categories', page: AllCategoriesScreen),
   AutoRoute(path: 'details', page: DetailsScreen),
+  AutoRoute(path: 'all_comments', page: AllCommentsScreen),
 
   AutoRoute(path: 'onboarding', page: OnboardingScreen),
   AutoRoute(path: 'welcome', page: WelcomeScreen),

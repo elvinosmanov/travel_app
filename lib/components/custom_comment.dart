@@ -13,14 +13,14 @@ class CustomComment extends StatelessWidget {
     required this.time,
     required this.name,
     required this.surname,
-    required this.comment,
+    this.comment,
   }) : super(key: key);
   final String imageName;
   final double rating;
   final String time;
   final String name;
   final String surname;
-  final String comment;
+  final String? comment;
   final double circleAvatarRadius = 26;
   final double padding = 16;
   @override
@@ -37,7 +37,7 @@ class CustomComment extends StatelessWidget {
             ).padding(right: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>['$name $surname'.semiBoldTextStyle(15), CustomRatingBar(rating: rating)],
+              children: <Widget>['$name $surname'.semiBoldTextStyle(15), CustomRatingBar(initialRating: rating)],
             ),
             const Spacer(),
             //TODO Convert time to correct format
@@ -49,19 +49,14 @@ class CustomComment extends StatelessWidget {
           ],
         ).padding(left: padding, right: padding),
         const SizedBox(height: 12),
-        Column(
-          children: [
-            Text(
-              comment,
-              textAlign: TextAlign.start,
-              style: kRegularTextStyle(14),
-            ).padding(bottom: padding, right: padding),
-            CustomDivider(
-              margin: EdgeInsets.only(bottom: padding),
-            )
-          ],
-        ).padding(
-          left: (padding + 12) + circleAvatarRadius * 2,
+        if (comment != null)
+          Text(
+            comment!,
+            textAlign: TextAlign.start,
+            style: kRegularTextStyle(14),
+          ).padding(left: (padding + 12) + circleAvatarRadius * 2, bottom: padding, right: padding),
+        CustomDivider(
+          margin: EdgeInsets.only(left: (padding + 12) + circleAvatarRadius * 2, bottom: padding),
         )
       ],
     );
