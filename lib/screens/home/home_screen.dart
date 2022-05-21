@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/search_textfield.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/data/app_data.dart';
@@ -12,10 +13,10 @@ import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
+import '../../cubit/navigation/navigation_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,12 @@ class HomeScreen extends StatelessWidget {
       children: [
         const TitleBar().padding(top: defaultTopPadding, bottom: 59, left: 16, right: 16),
         'Where do\nyou want to go?'.boldTextStyle(40).padding(left: 16),
-        const SearchTextField().padding(top: 32, bottom: 32),
+        SearchTextField(
+          enabled: false,
+          onPressed: () {
+            context.read<NavigationCubit>().onItemTapped(1);
+          },
+        ).padding(top: 32, bottom: 32, left: 16, right: 16),
         CategoryBar(
           categoryName: 'Categories',
           onPressed: () {
@@ -155,7 +161,6 @@ class CategoryList extends StatelessWidget {
     );
   }
 }
-
 
 class TitleBar extends StatelessWidget {
   const TitleBar({

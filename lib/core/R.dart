@@ -50,6 +50,8 @@ class R {
   static const eyeBlack = 'assets/icons/eye_black.svg';
   static const sendNavigation = 'assets/icons/send_navigation.svg';
   static const send = 'assets/icons/send.svg';
+  static const noComments = 'assets/icons/no_comments.svg';
+  static const searchThin = 'assets/icons/search_grey.svg';
   // static const starBlue = 'assets/icons/star_blue.svg';
   // static const starGrey = 'assets/icons/star_grey.svg';
   // static const starHalfBlue = 'assets/icons/star_half_blue.svg';

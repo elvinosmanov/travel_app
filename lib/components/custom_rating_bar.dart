@@ -38,7 +38,11 @@ class CustomRatingBar extends StatelessWidget {
             Icons.star_outline,
             color: kDarkGreyColor,
           )),
-      onRatingUpdate: (double value) {},
+      onRatingUpdate: (double value) {
+        if (onPressed != null) {
+          onPressed!(value);
+        }
+      },
     );
   }
 }

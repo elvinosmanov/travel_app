@@ -31,7 +31,12 @@ import 'package:travel_app/screens/welcome/welcome_screen.dart';
       ],
     ),
     AutoRoute(path: 'search', name: 'SearchRouter', page: SearchScreen),
-    AutoRoute(path: 'profile', name: 'ProfileRouter', page: ProfileScreen),
+    AutoRoute(path: 'profile', name: 'ProfileRouter', page: ProfileScreen, children: [
+      // AutoRoute(path: '', page: ProfileScreen),
+      AutoRoute(path: 'my-favorites', name: 'MyFavoritesTabViewRoute', page: MyFavoritesTabView),
+      AutoRoute(path: 'ratings',name: 'RatingsTabViewRoute', page: RatingsTabView),
+      AutoRoute(path: 'will-visit', name: 'WillVisitTabViewRoute',page: WillVisitTabView),
+    ]),
     AutoRoute(path: 'settings', name: 'SettingsRouter', page: SettingsScreen),
   ]),
 ])

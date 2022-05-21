@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Travel App',
       theme: ThemeData(
         scaffoldBackgroundColor: kLightGreyColor_1,
+        colorScheme: ColorScheme.fromSwatch(accentColor: kDarkGreyColor),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
@@ -29,7 +30,10 @@ class MyApp extends StatelessWidget {
       routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: _appRouter.delegate(
         initialRoutes: [
-          const AllCommentsRoute()
+          NavigationRoute()
+          // const SearchRouter()
+
+          // const AllCommentsRoute()
 
           // DetailsRoute(
           //   images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],

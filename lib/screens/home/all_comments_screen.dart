@@ -22,73 +22,77 @@ class AllCommentsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomBackButton(
+              label: '$commentsNumber Comments',
+            ).padding(top: 20, bottom: 20, left: 16),
+            const CustomDivider(),
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  const ReviewList(),
+                  _buildCommentList(),
+                ],
+              ),
+            ),
+            _buildSendMessage()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Align _buildSendMessage() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        // height: 140,
+        decoration: BoxDecoration(
+          color: kLightGreyColor_1,
+          boxShadow: [
+            BoxShadow(blurRadius: 3, spreadRadius: 3, offset: const Offset(0, 2), color: Colors.black.withOpacity(0.2))
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomBackButton(
-                  label: '$commentsNumber Comments',
-                ).padding(top: 20, bottom: 20, left: 16),
-                const CustomDivider(),
-                Expanded(
-                  child: ListView(
-                    children: <Widget>[const ReviewList(), _buildCommentList()],
-                  ),
-                ),
+              children: <Widget>[
+                'Rate us'.mediumTextStyle(15),
+                'Your likes are important to us'.regularTextStyle(11, kDarkGreyColor),
+                CustomRatingBar(
+                    initialRating: 0,
+                    itemSize: 26,
+                    ignoreGestures: false,
+                    onPressed: (value) {
+                      print(value);
+                    }).padding(top: 8, bottom: 8),
               ],
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                height: 140,
-                decoration: BoxDecoration(
-                  color: kLightGreyColor_1,
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 3,
-                        spreadRadius: 3,
-                        offset: const Offset(0, 2),
-                        color: Colors.black.withOpacity(0.2))
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: <Widget>[
-                        'Rate us'.mediumTextStyle(15),
-                        'Your likes are important to us'.regularTextStyle(12),
-                        CustomRatingBar(
-                            initialRating: 5,
-                            itemSize: 26,
-                            ignoreGestures: false,
-                            onPressed: (value) {
-                              print(value);
-                            }).padding(top: 8, bottom: 8),
-                      ],
+            Container(
+              constraints: BoxConstraints(maxHeight: 120),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: CustomTextField(
+                      // maxLines: 4,
+                      textInputAction: TextInputAction.newline,
+                      controller: TextEditingController(),
+                      hintText: 'Write a comment',
                     ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: CustomTextField(
-                            controller: TextEditingController(),
-                            hintText: 'Write a comment',
-                          ),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              print('context');
-                            },
-                            icon: SvgPicture.asset(R.send))
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        print('context');
+                      },
+                      icon: SvgPicture.asset(R.send))
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -186,22 +190,29 @@ class ReviewListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
-            borderRadius: kRadius8, color: isActive ? kLightBlueColor : kWhiteColor, boxShadow: [kBlackBoxShadow]),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            if (hasStar)
-              SvgPicture.asset(
-                R.star,
-                fit: BoxFit.scaleDown,
-              ).padding(right: 8),
-            itemName.semiBoldTextStyle(15, isActive ? kBlueColor : kDarkGreyColor),
-          ],
+    return Material(
+      elevation: 3,
+      color: isActive ? kLightBlueColor : kWhiteColor,
+      borderRadius: kRadius8,
+      child: InkWell(
+        borderRadius: kRadius8,
+        onTap: onPressed,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+            borderRadius: kRadius8,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              if (hasStar)
+                SvgPicture.asset(
+                  R.star,
+                  fit: BoxFit.scaleDown,
+                ).padding(right: 8),
+              itemName.semiBoldTextStyle(15, isActive ? kBlueColor : kDarkGreyColor),
+            ],
+          ),
         ),
       ),
     );

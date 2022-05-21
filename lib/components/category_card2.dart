@@ -60,32 +60,36 @@ class CategoryCard2 extends StatelessWidget {
 
   Container _buildImageContainer() {
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [kBlackBoxShadow],
-      ),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              imageName,
-              width: width,
-              height: width,
-              fit: width != null ? BoxFit.cover : BoxFit.fitWidth,
-            ),
-          ),
-          Positioned(
-            top: 13,
-            right: 12,
-            child: GestureDetector(
-              onTap: onPressed,
-              child: SvgPicture.asset(
-                isLiked ? R.heartFilled : R.heartOutlined,
-                fit: BoxFit.cover,
+      // decoration: BoxDecoration(
+      //   boxShadow: [kBlackBoxShadow],
+      // ),
+      child: Material(
+        borderRadius: BorderRadius.circular(10),
+        elevation: 4,
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                imageName,
+                width: width,
+                height: width,
+                fit: width != null ? BoxFit.cover : BoxFit.fitWidth,
               ),
             ),
-          ),
-        ],
+            Positioned(
+              top: 13,
+              right: 12,
+              child: GestureDetector(
+                onTap: onPressed,
+                child: SvgPicture.asset(
+                  isLiked ? R.heartFilled : R.heartOutlined,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

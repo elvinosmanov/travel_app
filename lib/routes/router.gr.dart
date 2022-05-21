@@ -87,6 +87,18 @@ class AppRouter extends _i7.RootStackRouter {
     CategoriesRoute.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i12.CategoriesScreen());
+    },
+    MyFavoritesTabViewRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i9.MyFavoritesTabView());
+    },
+    RatingsTabViewRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i9.RatingsTabView());
+    },
+    WillVisitTabViewRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i9.WillVisitTabView());
     }
   };
 
@@ -110,7 +122,16 @@ class AppRouter extends _i7.RootStackRouter {
           _i7.RouteConfig(SearchRouter.name,
               path: 'search', parent: NavigationRoute.name),
           _i7.RouteConfig(ProfileRouter.name,
-              path: 'profile', parent: NavigationRoute.name),
+              path: 'profile',
+              parent: NavigationRoute.name,
+              children: [
+                _i7.RouteConfig(MyFavoritesTabViewRoute.name,
+                    path: 'my-favorites', parent: ProfileRouter.name),
+                _i7.RouteConfig(RatingsTabViewRoute.name,
+                    path: 'ratings', parent: ProfileRouter.name),
+                _i7.RouteConfig(WillVisitTabViewRoute.name,
+                    path: 'will-visit', parent: ProfileRouter.name)
+              ]),
           _i7.RouteConfig(SettingsRouter.name,
               path: 'settings', parent: NavigationRoute.name)
         ])
@@ -234,7 +255,8 @@ class SearchRouter extends _i7.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.ProfileScreen]
 class ProfileRouter extends _i7.PageRouteInfo<void> {
-  const ProfileRouter() : super(ProfileRouter.name, path: 'profile');
+  const ProfileRouter({List<_i7.PageRouteInfo>? children})
+      : super(ProfileRouter.name, path: 'profile', initialChildren: children);
 
   static const String name = 'ProfileRouter';
 }
@@ -261,4 +283,31 @@ class CategoriesRoute extends _i7.PageRouteInfo<void> {
   const CategoriesRoute() : super(CategoriesRoute.name, path: 'categories');
 
   static const String name = 'CategoriesRoute';
+}
+
+/// generated route for
+/// [_i9.MyFavoritesTabView]
+class MyFavoritesTabViewRoute extends _i7.PageRouteInfo<void> {
+  const MyFavoritesTabViewRoute()
+      : super(MyFavoritesTabViewRoute.name, path: 'my-favorites');
+
+  static const String name = 'MyFavoritesTabViewRoute';
+}
+
+/// generated route for
+/// [_i9.RatingsTabView]
+class RatingsTabViewRoute extends _i7.PageRouteInfo<void> {
+  const RatingsTabViewRoute()
+      : super(RatingsTabViewRoute.name, path: 'ratings');
+
+  static const String name = 'RatingsTabViewRoute';
+}
+
+/// generated route for
+/// [_i9.WillVisitTabView]
+class WillVisitTabViewRoute extends _i7.PageRouteInfo<void> {
+  const WillVisitTabViewRoute()
+      : super(WillVisitTabViewRoute.name, path: 'will-visit');
+
+  static const String name = 'WillVisitTabViewRoute';
 }

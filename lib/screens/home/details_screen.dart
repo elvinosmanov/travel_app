@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:travel_app/components/category_bar.dart';
 import 'package:travel_app/components/category_card2.dart';
 import 'package:travel_app/components/custom_comment.dart';
@@ -40,6 +41,8 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   bool isReadmore = false;
+  //TODO: Should Delete
+  final commentCount = 0;
   final _controller = ScrollController();
   @override
   void initState() {
@@ -113,35 +116,54 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ],
                 ).padding(top: 16, bottom: 10),
                 _buildMap(),
-                'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: 16),
+                'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: commentCount == 0 ? 0 : 16),
               ],
             ),
           ),
           _buildCommentList(),
-          _buildSeeAllReviewsButton().padding(bottom: 32),
+          commentCount == 0
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(
+                      R.noComments,
+                      height: 160,
+                    ),
+                    FittedBox(
+                            child: 'There are no comments yet. Would you like to write a comment?'
+                                .regularTextStyle(12, kGoogleRedColor)
+                                .padding(top: 8))
+                        .padding(left: 16, right: 16)
+                  ],
+                ).padding(bottom: 32)
+              : _buildSeeAllReviewsButton().padding(bottom: 32),
           const CategoryBar(
             categoryName: 'Places May You Like',
             color: kBlueColor,
           ).padding(bottom: 16),
-          SizedBox(
-            height: 240,
-            child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(left: 16),
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return const CategoryCard2(
-                    width: 150,
-                    text: 'Gobustan Stones',
-                    place: 'Gobustan, Azerbaijan',
-                    isLiked: false,
-                    imageName: R.shoppingImage,
-                  ).padding(right: 16);
-                }),
-          )
+          _buildCardList()
         ],
       ),
+    );
+  }
+
+  SizedBox _buildCardList() {
+    return SizedBox(
+      height: 240,
+      child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.only(left: 16),
+          scrollDirection: Axis.horizontal,
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return const CategoryCard2(
+              width: 150,
+              text: 'Gobustan Stones',
+              place: 'Gobustan, Azerbaijan',
+              isLiked: false,
+              imageName: R.shoppingImage,
+            ).padding(right: 16);
+          }),
     );
   }
 
@@ -158,10 +180,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   ListView _buildCommentList() {
     return ListView.builder(
-        cacheExtent: 3,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: 3,
+        itemCount: commentCount,
         itemBuilder: (context, index) {
           return const CustomComment(
             comment:
@@ -248,7 +269,13 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
     return Stack(
       children: [
         CarouselSlider(
-          items: widget.images.map((item) => Image.asset(item, fit: BoxFit.cover, width: 1000.0)).toList(),
+          items: widget.images
+              .map((item) => FadeInImage(
+                  placeholder: MemoryImage(kTransparentImage),
+                  fit: BoxFit.cover,
+                  width: 1000.0,
+                  image: AssetImage(item)))
+              .toList(),
           carouselController: _controller,
           options: CarouselOptions(
               height: MediaQuery.of(context).size.height * 0.4,
@@ -341,26 +368,22 @@ class _CustomVisitButtonState extends State<CustomVisitButton> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Material(
-          borderRadius: BorderRadius.circular(4),
-          color: willVisit ? kLightBlueColor : kWhiteColor,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(4),
-            onTap: () {
-              setState(() {
-                willVisit = !willVisit;
-              });
-            },
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), boxShadow: [kBlackBoxShadow]),
-              child: Row(
-                children: <Widget>[
-                  SvgPicture.asset(R.worldMap).padding(right: 4),
-                  (willVisit ? 'Will visit' : 'Will not visit').semiBoldTextStyle(14, kBlueColor)
-                ],
-              ),
-            ),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(willVisit ? kLightBlueColor : kWhiteColor),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+            padding: MaterialStateProperty.all(EdgeInsets.all(5)),
+          ),
+          onPressed: () {
+            setState(() {
+              willVisit = !willVisit;
+            });
+          },
+          child: Row(
+            children: <Widget>[
+              SvgPicture.asset(R.worldMap).padding(right: 4),
+              (willVisit ? 'Will visit' : 'Will not visit').semiBoldTextStyle(14, kBlueColor)
+            ],
           ),
         ),
       ],
