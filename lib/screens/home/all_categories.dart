@@ -47,6 +47,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
             itemCount: data.length,
             itemBuilder: (context, index) {
               return CategoryCard2(
+                textSize: 14,
                 imageName: data[index].imageName,
                 isLiked: data[index].isLiked,
                 place: data[index].place,

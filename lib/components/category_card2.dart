@@ -40,7 +40,7 @@ class CategoryCard2 extends StatelessWidget {
               text,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: kSemiBoldTextStyle(textSize ?? 18),
+              style: kSemiBoldTextStyle(textSize ?? 16),
             ).padding(top: 8, bottom: 6),
           ),
           Row(
@@ -72,9 +72,10 @@ class CategoryCard2 extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: Image.asset(
               imageName,
-              width: width,
+              width: width ?? double.infinity,
               height: height,
-              fit: width == null ? BoxFit.cover : BoxFit.fitWidth,
+              fit: BoxFit.cover,
+              // fit: width == null ? BoxFit.cover : BoxFit.fitWidth,
             ),
           ),
           Positioned(
