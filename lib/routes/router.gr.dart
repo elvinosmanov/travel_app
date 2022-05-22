@@ -88,15 +88,15 @@ class AppRouter extends _i7.RootStackRouter {
       return _i7.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i12.CategoriesScreen());
     },
-    MyFavoritesTabViewRoute.name: (routeData) {
+    MyFavoritesTab.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i9.MyFavoritesTabView());
     },
-    RatingsTabViewRoute.name: (routeData) {
+    RatingsTab.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i9.RatingsTabView());
     },
-    WillVisitTabViewRoute.name: (routeData) {
+    WillVisitTab.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i9.WillVisitTabView());
     }
@@ -125,11 +125,11 @@ class AppRouter extends _i7.RootStackRouter {
               path: 'profile',
               parent: NavigationRoute.name,
               children: [
-                _i7.RouteConfig(MyFavoritesTabViewRoute.name,
+                _i7.RouteConfig(MyFavoritesTab.name,
                     path: 'my-favorites', parent: ProfileRouter.name),
-                _i7.RouteConfig(RatingsTabViewRoute.name,
+                _i7.RouteConfig(RatingsTab.name,
                     path: 'ratings', parent: ProfileRouter.name),
-                _i7.RouteConfig(WillVisitTabViewRoute.name,
+                _i7.RouteConfig(WillVisitTab.name,
                     path: 'will-visit', parent: ProfileRouter.name)
               ]),
           _i7.RouteConfig(SettingsRouter.name,
@@ -287,27 +287,24 @@ class CategoriesRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i9.MyFavoritesTabView]
-class MyFavoritesTabViewRoute extends _i7.PageRouteInfo<void> {
-  const MyFavoritesTabViewRoute()
-      : super(MyFavoritesTabViewRoute.name, path: 'my-favorites');
+class MyFavoritesTab extends _i7.PageRouteInfo<void> {
+  const MyFavoritesTab() : super(MyFavoritesTab.name, path: 'my-favorites');
 
-  static const String name = 'MyFavoritesTabViewRoute';
+  static const String name = 'MyFavoritesTab';
 }
 
 /// generated route for
 /// [_i9.RatingsTabView]
-class RatingsTabViewRoute extends _i7.PageRouteInfo<void> {
-  const RatingsTabViewRoute()
-      : super(RatingsTabViewRoute.name, path: 'ratings');
+class RatingsTab extends _i7.PageRouteInfo<void> {
+  const RatingsTab() : super(RatingsTab.name, path: 'ratings');
 
-  static const String name = 'RatingsTabViewRoute';
+  static const String name = 'RatingsTab';
 }
 
 /// generated route for
 /// [_i9.WillVisitTabView]
-class WillVisitTabViewRoute extends _i7.PageRouteInfo<void> {
-  const WillVisitTabViewRoute()
-      : super(WillVisitTabViewRoute.name, path: 'will-visit');
+class WillVisitTab extends _i7.PageRouteInfo<void> {
+  const WillVisitTab() : super(WillVisitTab.name, path: 'will-visit');
 
-  static const String name = 'WillVisitTabViewRoute';
+  static const String name = 'WillVisitTab';
 }

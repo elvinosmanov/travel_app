@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             // ignore: avoid_print
             print('object');
-            context.router.push(CategoriesRoute());
+            context.router.push(const CategoriesRoute());
           },
         ),
         const CategoryList().padding(top: 16, bottom: 32),
@@ -154,7 +154,7 @@ class CategoryList extends StatelessWidget {
         itemBuilder: (context, index) {
           return CategoryCard(
             image: _data[index].image,
-            name: _data[index].name,
+            title: _data[index].name,
           ).padding(right: 8);
         },
       ),

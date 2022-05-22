@@ -18,8 +18,16 @@ class Category {
 
 class Category2 {
   static final data = [
-    Category2(text: 'The Romanian – Solo Exhibition', imageName: R.accomodationImage, place: "Baku", isLiked: false),
-    Category2(text: 'a good view of the lower', imageName: R.gastronomyImage, place: "Gobustan", isLiked: false),
+    Category2(
+        text: 'The Romanian – Solo Exhibition',
+        imageName: R.accomodationImage,
+        place: "Baku",
+        isLiked: false),
+    Category2(
+        text: 'Good view of the lower',
+        imageName: R.gastronomyImage,
+        place: "Gobustan",
+        isLiked: false),
     Category2(text: 'The Romanian', imageName: R.museumAndArtImage, place: "Baku", isLiked: false),
     Category2(
         text: 'The Romanian – Solo Exhibition',
@@ -27,7 +35,16 @@ class Category2 {
         place: " keep guests company",
         isLiked: false),
     Category2(text: 'Solo', imageName: R.natureAndAgroImage, place: "Baku", isLiked: false),
-    Category2(text: 'Cahid Suleymanov', imageName: R.tripImage, place: "Bakuf ssdf sadfdfsdfdssa", isLiked: false),
+    Category2(
+        text: 'Cahid Suleymanov',
+        imageName: R.tripImage,
+        place: "Bakuf ssdf sadfdfsdfdssa",
+        isLiked: false),
+    Category2(
+        text: 'Good view of the lower',
+        imageName: R.gastronomyImage,
+        place: "Gobustan",
+        isLiked: false),
   ];
 
   final String text;

@@ -8,24 +8,28 @@ class CategoryCard2 extends StatelessWidget {
   const CategoryCard2({
     Key? key,
     required this.text,
+    this.textSize,
     required this.place,
+    this.placeSize,
     required this.isLiked,
     required this.imageName,
     this.onPressed,
     this.width,
+    this.height,
   }) : super(key: key);
   final String text;
+  final double? textSize;
   final String place;
+  final double? placeSize;
   final bool isLiked;
   final String imageName;
   final Function()? onPressed;
   final double? width;
+  final double? height;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // width: 230,
-      // height: 300,
-      width: width, // height: 150,
+      width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -36,7 +40,7 @@ class CategoryCard2 extends StatelessWidget {
               text,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: kSemiBoldTextStyle(18),
+              style: kSemiBoldTextStyle(textSize ?? 18),
             ).padding(top: 8, bottom: 6),
           ),
           Row(
@@ -48,7 +52,7 @@ class CategoryCard2 extends StatelessWidget {
                   place.useCorrectEllipsis(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: kRegularTextStyle(12, kDarkGreyColor),
+                  style: kRegularTextStyle(placeSize ?? 12, kDarkGreyColor),
                 ).padding(left: 4),
               )
             ],
@@ -58,38 +62,33 @@ class CategoryCard2 extends StatelessWidget {
     );
   }
 
-  Container _buildImageContainer() {
-    return Container(
-      // decoration: BoxDecoration(
-      //   boxShadow: [kBlackBoxShadow],
-      // ),
-      child: Material(
-        borderRadius: BorderRadius.circular(10),
-        elevation: 4,
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                imageName,
-                width: width,
-                height: width,
-                fit: width != null ? BoxFit.cover : BoxFit.fitWidth,
+  Material _buildImageContainer() {
+    return Material(
+      borderRadius: BorderRadius.circular(10),
+      elevation: 4,
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              imageName,
+              width: width,
+              height: height,
+              fit: width == null ? BoxFit.cover : BoxFit.fitWidth,
+            ),
+          ),
+          Positioned(
+            top: 13,
+            right: 12,
+            child: GestureDetector(
+              onTap: onPressed,
+              child: SvgPicture.asset(
+                isLiked ? R.heartFilled : R.heartOutlined,
+                fit: BoxFit.cover,
               ),
             ),
-            Positioned(
-              top: 13,
-              right: 12,
-              child: GestureDetector(
-                onTap: onPressed,
-                child: SvgPicture.asset(
-                  isLiked ? R.heartFilled : R.heartOutlined,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

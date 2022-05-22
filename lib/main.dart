@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/utils/onboarding_preferences.dart';
@@ -20,6 +19,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Travel App',
       theme: ThemeData(
+        splashColor: kDarkGreyColor.withOpacity(0.2),
+        highlightColor: kDarkGreyColor.withOpacity(0.2),
         scaffoldBackgroundColor: kLightGreyColor_1,
         colorScheme: ColorScheme.fromSwatch(accentColor: kDarkGreyColor),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
       routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: _appRouter.delegate(
         initialRoutes: [
-          NavigationRoute()
+          const NavigationRoute()
           // const SearchRouter()
 
           // const AllCommentsRoute()

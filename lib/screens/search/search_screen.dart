@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:travel_app/components/custom_back_button.dart';
@@ -6,6 +7,7 @@ import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import '../../components/search_textfield.dart';
+
 //TODO: search etmeyin isleri coxdu. Bu hisseni yarimciq qoyuram bura diqqet et
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -33,7 +35,13 @@ class _SearchScreenState extends State<SearchScreen> {
         children: <Widget>[
           const CustomBackButton().padding(top: defaultTopPadding, bottom: 16),
           const SearchTextField(),
-          'Recent'.semiBoldTextStyle(18).padding(top: 24, bottom: 8, left: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              'Recent'.semiBoldTextStyle(18),
+              TextButton(onPressed: () {}, child: 'Clear all'.regularTextStyle(12, kDarkGreyColor))
+            ],
+          ).padding(top: 24, bottom: 8, left: 16),
           Expanded(
             child: ListView.builder(
               controller: _controller,

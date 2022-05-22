@@ -58,7 +58,7 @@ class CategoryGridView extends StatelessWidget {
                 return CategoryCard(
                   textSize: 14,
                   image: _data[index].image,
-                  name: _data[index].name,
+                  title: _data[index].name,
                 );
               }),
           Container(

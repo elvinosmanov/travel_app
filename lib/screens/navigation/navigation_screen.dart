@@ -27,29 +27,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
         SettingsRouter(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
-        return CustomBottomNavigationBar(currentIndex: tabsRouter.activeIndex, onItemTapped: tabsRouter.setActiveIndex);
+        return CustomBottomNavigationBar(
+            currentIndex: tabsRouter.activeIndex,
+            onItemTapped: (value) {
+              tabsRouter.setActiveIndex(value);
+            });
       },
     );
   }
-
-  // final PageStorageBucket bucket = PageStorageBucket();
-  // Widget currentScreen = _pages[CustomBottomNavigationBar.selectedIndex];
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: kLightGreyColor_1,
-  //     bottomNavigationBar: CustomBottomNavigationBar(onItemTapped: context.read<NavigationCubit>().onItemTapped),
-  //     body: SafeArea(
-  //         child: Padding(
-  //             padding: const EdgeInsets.only(left: 16, right: 16),
-  //             child: BlocBuilder<NavigationCubit, NavigationState>(
-  //               builder: (context, state) {
-  //                 return IndexedStack(
-  //                   index: state.selectedPageIndex,
-  //                   children: _pages,
-  //                 );
-  //               },
-  //             ))),
-  //   );
-  // }
 }
