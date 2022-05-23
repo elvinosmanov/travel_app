@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: _appRouter.delegate(
         initialRoutes: [
-          // const NavigationRoute()
+          const NavigationRoute()
           // const SearchRouter()
 
           // const AllCommentsRoute()
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           //   isLiked: false,
           // )
 
-          const AllCategoriesRoute(),
+          // const AllCategoriesRoute(),
 
           // navigationPage(),
         ],

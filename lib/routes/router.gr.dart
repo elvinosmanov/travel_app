@@ -11,22 +11,30 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i7;
-import 'package:flutter/material.dart' as _i13;
+import 'package:flutter/material.dart' as _i21;
 
 import '../screens/home/all_categories.dart' as _i1;
 import '../screens/home/all_comments_screen.dart' as _i3;
-import '../screens/home/categories_screen.dart' as _i12;
+import '../screens/home/categories_screen.dart' as _i11;
 import '../screens/home/details_screen.dart' as _i2;
-import '../screens/home/home_screen.dart' as _i11;
+import '../screens/home/home_screen.dart' as _i10;
 import '../screens/navigation/navigation_screen.dart' as _i6;
 import '../screens/onboarding/onboarding_screen.dart' as _i4;
 import '../screens/profile/profile_screen.dart' as _i9;
+import '../screens/profile/widgets/my_favorites_tab_view.dart' as _i12;
+import '../screens/profile/widgets/ratings_tab_view.dart' as _i13;
+import '../screens/profile/widgets/will_visit_tab_view.dart' as _i14;
 import '../screens/search/search_screen.dart' as _i8;
-import '../screens/settings/settings_screen.dart' as _i10;
+import '../screens/settings/change_password_screen.dart' as _i19;
+import '../screens/settings/languages_screen.dart' as _i17;
+import '../screens/settings/personal_informations_scren.dart' as _i16;
+import '../screens/settings/privacy_policy_screen.dart' as _i20;
+import '../screens/settings/report_bug_screen.dart' as _i18;
+import '../screens/settings/settings_screen.dart' as _i15;
 import '../screens/welcome/welcome_screen.dart' as _i5;
 
 class AppRouter extends _i7.RootStackRouter {
-  AppRouter([_i13.GlobalKey<_i13.NavigatorState>? navigatorKey])
+  AppRouter([_i21.GlobalKey<_i21.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -78,27 +86,51 @@ class AppRouter extends _i7.RootStackRouter {
     },
     SettingsRouter.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i10.SettingsScreen());
+          routeData: routeData, child: const _i7.EmptyRouterPage());
     },
     HomeRoute.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i11.HomeScreen());
+          routeData: routeData, child: const _i10.HomeScreen());
     },
     CategoriesRoute.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i12.CategoriesScreen());
+          routeData: routeData, child: const _i11.CategoriesScreen());
     },
     MyFavoritesTab.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i9.MyFavoritesTabView());
+          routeData: routeData, child: const _i12.MyFavoritesTabView());
     },
     RatingsTab.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i9.RatingsTabView());
+          routeData: routeData, child: const _i13.RatingsTabView());
     },
     WillVisitTab.name: (routeData) {
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i9.WillVisitTabView());
+          routeData: routeData, child: const _i14.WillVisitTabView());
+    },
+    SettingsRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i15.SettingsScreen());
+    },
+    PersonalInformationsRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i16.PersonalInformationsScreen());
+    },
+    LanguagesRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i17.LanguagesScreen());
+    },
+    ReportBugRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i18.ReportBugScreen());
+    },
+    ChangePasswordRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i19.ChangePasswordScreen());
+    },
+    PrivacyPolicyRoute.name: (routeData) {
+      return _i7.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i20.PrivacyPolicyScreen());
     }
   };
 
@@ -133,7 +165,22 @@ class AppRouter extends _i7.RootStackRouter {
                     path: 'will-visit', parent: ProfileRouter.name)
               ]),
           _i7.RouteConfig(SettingsRouter.name,
-              path: 'settings', parent: NavigationRoute.name)
+              path: 'settings',
+              parent: NavigationRoute.name,
+              children: [
+                _i7.RouteConfig(SettingsRoute.name,
+                    path: '', parent: SettingsRouter.name),
+                _i7.RouteConfig(PersonalInformationsRoute.name,
+                    path: 'personal-informations', parent: SettingsRouter.name),
+                _i7.RouteConfig(LanguagesRoute.name,
+                    path: 'languages', parent: SettingsRouter.name),
+                _i7.RouteConfig(ReportBugRoute.name,
+                    path: 'report-a-bug', parent: SettingsRouter.name),
+                _i7.RouteConfig(ChangePasswordRoute.name,
+                    path: 'change-password', parent: SettingsRouter.name),
+                _i7.RouteConfig(PrivacyPolicyRoute.name,
+                    path: 'privacy-policy', parent: SettingsRouter.name)
+              ])
         ])
       ];
 }
@@ -151,7 +198,7 @@ class AllCategoriesRoute extends _i7.PageRouteInfo<void> {
 /// [_i2.DetailsScreen]
 class DetailsRoute extends _i7.PageRouteInfo<DetailsRouteArgs> {
   DetailsRoute(
-      {_i13.Key? key,
+      {_i21.Key? key,
       bool isLiked = false,
       required List<String> images,
       required int viewCount,
@@ -182,7 +229,7 @@ class DetailsRouteArgs {
       required this.likeCount,
       required this.rate});
 
-  final _i13.Key? key;
+  final _i21.Key? key;
 
   final bool isLiked;
 
@@ -262,15 +309,16 @@ class ProfileRouter extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i10.SettingsScreen]
+/// [_i7.EmptyRouterPage]
 class SettingsRouter extends _i7.PageRouteInfo<void> {
-  const SettingsRouter() : super(SettingsRouter.name, path: 'settings');
+  const SettingsRouter({List<_i7.PageRouteInfo>? children})
+      : super(SettingsRouter.name, path: 'settings', initialChildren: children);
 
   static const String name = 'SettingsRouter';
 }
 
 /// generated route for
-/// [_i11.HomeScreen]
+/// [_i10.HomeScreen]
 class HomeRoute extends _i7.PageRouteInfo<void> {
   const HomeRoute() : super(HomeRoute.name, path: '');
 
@@ -278,7 +326,7 @@ class HomeRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.CategoriesScreen]
+/// [_i11.CategoriesScreen]
 class CategoriesRoute extends _i7.PageRouteInfo<void> {
   const CategoriesRoute() : super(CategoriesRoute.name, path: 'categories');
 
@@ -286,7 +334,7 @@ class CategoriesRoute extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.MyFavoritesTabView]
+/// [_i12.MyFavoritesTabView]
 class MyFavoritesTab extends _i7.PageRouteInfo<void> {
   const MyFavoritesTab() : super(MyFavoritesTab.name, path: 'my-favorites');
 
@@ -294,7 +342,7 @@ class MyFavoritesTab extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.RatingsTabView]
+/// [_i13.RatingsTabView]
 class RatingsTab extends _i7.PageRouteInfo<void> {
   const RatingsTab() : super(RatingsTab.name, path: 'ratings');
 
@@ -302,9 +350,60 @@ class RatingsTab extends _i7.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.WillVisitTabView]
+/// [_i14.WillVisitTabView]
 class WillVisitTab extends _i7.PageRouteInfo<void> {
   const WillVisitTab() : super(WillVisitTab.name, path: 'will-visit');
 
   static const String name = 'WillVisitTab';
+}
+
+/// generated route for
+/// [_i15.SettingsScreen]
+class SettingsRoute extends _i7.PageRouteInfo<void> {
+  const SettingsRoute() : super(SettingsRoute.name, path: '');
+
+  static const String name = 'SettingsRoute';
+}
+
+/// generated route for
+/// [_i16.PersonalInformationsScreen]
+class PersonalInformationsRoute extends _i7.PageRouteInfo<void> {
+  const PersonalInformationsRoute()
+      : super(PersonalInformationsRoute.name, path: 'personal-informations');
+
+  static const String name = 'PersonalInformationsRoute';
+}
+
+/// generated route for
+/// [_i17.LanguagesScreen]
+class LanguagesRoute extends _i7.PageRouteInfo<void> {
+  const LanguagesRoute() : super(LanguagesRoute.name, path: 'languages');
+
+  static const String name = 'LanguagesRoute';
+}
+
+/// generated route for
+/// [_i18.ReportBugScreen]
+class ReportBugRoute extends _i7.PageRouteInfo<void> {
+  const ReportBugRoute() : super(ReportBugRoute.name, path: 'report-a-bug');
+
+  static const String name = 'ReportBugRoute';
+}
+
+/// generated route for
+/// [_i19.ChangePasswordScreen]
+class ChangePasswordRoute extends _i7.PageRouteInfo<void> {
+  const ChangePasswordRoute()
+      : super(ChangePasswordRoute.name, path: 'change-password');
+
+  static const String name = 'ChangePasswordRoute';
+}
+
+/// generated route for
+/// [_i20.PrivacyPolicyScreen]
+class PrivacyPolicyRoute extends _i7.PageRouteInfo<void> {
+  const PrivacyPolicyRoute()
+      : super(PrivacyPolicyRoute.name, path: 'privacy-policy');
+
+  static const String name = 'PrivacyPolicyRoute';
 }

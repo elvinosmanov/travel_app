@@ -28,7 +28,6 @@ class R {
   static const worldMap = 'assets/icons/world_map.svg';
   static const attach = 'assets/icons/attach.svg';
   static const star = 'assets/icons/star.svg';
-  static const backArrow = 'assets/icons/back_arrow.svg';
   static const backArrowWithBackground = 'assets/icons/back_with_background.svg';
   static const home = 'assets/icons/home.svg';
   static const profile = 'assets/icons/profile.svg';
@@ -41,8 +40,10 @@ class R {
   static const goRight = 'assets/icons/go_right.svg';
   static const done = 'assets/icons/done.svg';
   static const notification = 'assets/icons/notification.svg';
+  static const backArrow = 'assets/icons/back_arrow.svg';
   static const upArrow = 'assets/icons/up_arrow.svg';
   static const downArrow = 'assets/icons/down_arrow.svg';
+  static const rightArrow = 'assets/icons/right_arrow.svg';
   static const heartOutlined = 'assets/icons/heart_outlined.svg';
   static const heartFilled = 'assets/icons/heart_filled.svg';
   static const heartFilledBlack = 'assets/icons/heart _filled_black.svg';
@@ -52,6 +53,10 @@ class R {
   static const send = 'assets/icons/send.svg';
   static const noComments = 'assets/icons/no_comments.svg';
   static const searchThin = 'assets/icons/search_grey.svg';
+  static const ruFlag = 'assets/icons/ru.svg';
+  static const azFlag = 'assets/icons/az.svg';
+  static const usFlag = 'assets/icons/us.svg';
+  static const trFlag = 'assets/icons/tr.svg';
   // static const starBlue = 'assets/icons/star_blue.svg';
   // static const starGrey = 'assets/icons/star_grey.svg';
   // static const starHalfBlue = 'assets/icons/star_half_blue.svg';

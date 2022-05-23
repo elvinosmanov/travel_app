@@ -1,15 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/routes/router.gr.dart';
-
-import '../../components/category_card.dart';
-import '../../components/category_card2.dart';
-import '../../data/app_data.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -109,83 +104,6 @@ class ProfileScreen extends StatelessWidget {
           ).padding(top: 20, left: 4),
         ],
       ),
-    );
-  }
-}
-
-class MyFavoritesTabView extends StatefulWidget {
-  const MyFavoritesTabView({Key? key}) : super(key: key);
-
-  @override
-  State<MyFavoritesTabView> createState() => _MyFavoritesTabViewState();
-}
-
-class _MyFavoritesTabViewState extends State<MyFavoritesTabView> {
-  final data = Category2.data;
-  bool isLiked = false;
-  @override
-  Widget build(BuildContext context) {
-    return AlignedGridView.count(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(16),
-      crossAxisCount: 3,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 8,
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        return CategoryCard2(
-          imageName: data[index].imageName,
-          isLiked: data[index].isLiked,
-          place: data[index].place,
-          text: data[index].text,
-          onPressed: () {
-            setState(() {
-              data[index].isLiked = !data[index].isLiked;
-            });
-          },
-          textSize: 14,
-          placeSize: 10,
-          height: 160,
-        );
-      },
-    );
-  }
-}
-
-class RatingsTabView extends StatelessWidget {
-  const RatingsTabView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlignedGridView.count(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(16),
-      crossAxisCount: 3,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 8,
-      itemCount: Category.data.length,
-      itemBuilder: (context, index) {
-        return CategoryCard.star(
-          textSize: 12,
-          starValue: 4.5,
-          image: Category.data[index].image,
-          title: Category.data[index].name,
-        );
-      },
-    );
-  }
-}
-
-class WillVisitTabView extends StatelessWidget {
-  const WillVisitTabView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      physics: const ClampingScrollPhysics(),
-      children: [
-        Center(child: const Text('Will Visit TabView').padding(top: 100)),
-      ],
     );
   }
 }

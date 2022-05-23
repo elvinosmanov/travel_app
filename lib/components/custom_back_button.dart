@@ -8,10 +8,12 @@ import '../core/R.dart';
 class CustomBackButton extends StatelessWidget {
   final Function()? onPressed;
   final String? label;
+  final bool hasLabel;
   const CustomBackButton({
     Key? key,
     this.onPressed,
     this.label,
+     this.hasLabel = true,
   }) : super(key: key);
 
   @override
@@ -22,9 +24,10 @@ class CustomBackButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SvgPicture.asset(R.backArrow),
-          (label??'Back').boldTextStyle(15).padding(
-                left: 8,
-              )
+          if (hasLabel)
+            (label ?? 'Back').boldTextStyle(15).padding(
+                  left: 8,
+                )
         ],
       ),
     );
