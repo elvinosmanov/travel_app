@@ -36,9 +36,9 @@ class CategoryCard extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            clipBehavior: Clip.hardEdge,
+            clipBehavior: Clip.none,
             decoration: BoxDecoration(
-                boxShadow: [kBlackBoxShadow],
+                boxShadow: [kBlueBoxShadow],
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
           ),

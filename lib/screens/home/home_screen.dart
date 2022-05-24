@@ -46,7 +46,8 @@ class HomeScreen extends StatelessWidget {
           categoryNames: categoriesSorts,
         ).padding(top: 16, bottom: 6), //bottom: 16-6
         const ExploreList(),
-        const CategoryBar(categoryName: 'New Added').padding(top: 22, bottom: 16), //bottom: 32-10 22
+        const CategoryBar(categoryName: 'New Added')
+            .padding(top: 22, bottom: 16), //bottom: 32-10 22
         const NewAddedList(),
         const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
         const TravelGuideList(),
@@ -147,6 +148,7 @@ class CategoryList extends StatelessWidget {
     return SizedBox(
       height: 170,
       child: ListView.builder(
+        clipBehavior: Clip.none,
         padding: const EdgeInsets.only(left: 16.0),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
@@ -184,7 +186,8 @@ class TitleBar extends StatelessWidget {
         Container(
           width: 44,
           height: 44,
-          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
+          decoration: BoxDecoration(
+              color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
           child: SvgPicture.asset(
             R.notification,
             fit: BoxFit.scaleDown,
