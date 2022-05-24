@@ -57,6 +57,8 @@ class R {
   static const azFlag = 'assets/icons/az.svg';
   static const usFlag = 'assets/icons/us.svg';
   static const trFlag = 'assets/icons/tr.svg';
+  static const image = 'assets/icons/image.svg';
+  static const camera = 'assets/icons/camera.svg';
   // static const starBlue = 'assets/icons/star_blue.svg';
   // static const starGrey = 'assets/icons/star_grey.svg';
   // static const starHalfBlue = 'assets/icons/star_half_blue.svg';
