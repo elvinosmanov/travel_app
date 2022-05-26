@@ -10,7 +10,7 @@ import 'package:travel_app/screens/profile/profile_screen.dart';
 import 'package:travel_app/screens/search/search_screen.dart';
 import 'package:travel_app/screens/settings/change_password_screen.dart';
 import 'package:travel_app/screens/settings/languages_screen.dart';
-import 'package:travel_app/screens/settings/personal_informations_scren.dart';
+import 'package:travel_app/screens/settings/personal_informations_screen.dart';
 import 'package:travel_app/screens/settings/privacy_policy_screen.dart';
 import 'package:travel_app/screens/settings/report_bug_screen.dart';
 import 'package:travel_app/screens/settings/settings_screen.dart';
@@ -43,16 +43,16 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
     AutoRoute(path: 'profile', name: 'ProfileRouter', page: ProfileScreen, children: [
       // AutoRoute(path: '', page: ProfileScreen),
       AutoRoute(path: 'my-favorites', name: 'MyFavoritesTab', page: MyFavoritesTabView),
-      AutoRoute(path: 'ratings',name: 'RatingsTab', page: RatingsTabView),
-      AutoRoute(path: 'will-visit', name: 'WillVisitTab',page: WillVisitTabView),
+      AutoRoute(path: 'ratings', name: 'RatingsTab', page: RatingsTabView),
+      AutoRoute(path: 'will-visit', name: 'WillVisitTab', page: WillVisitTabView),
     ]),
-    AutoRoute(path: 'settings', name: 'SettingsRouter', page: EmptyRouterPage,children: [
-        AutoRoute(path: '', page: SettingsScreen),
-      AutoRoute(path: 'personal-informations',  page: PersonalInformationsScreen),
-      AutoRoute(path: 'languages',  page: LanguagesScreen),
-      AutoRoute(path: 'report-a-bug',  page: ReportBugScreen),
-      AutoRoute(path: 'change-password',  page: ChangePasswordScreen),
-      AutoRoute(path: 'privacy-policy',  page: PrivacyPolicyScreen),
+    AutoRoute(path: 'settings', name: 'SettingsRouter', page: EmptyRouterPage, children: [
+      AutoRoute(path: '', page: SettingsScreen),
+      AutoRoute(path: 'personal-informations', page: PersonalInformationsScreen),
+      AutoRoute(path: 'languages', page: LanguagesScreen),
+      AutoRoute(path: 'report-a-bug', page: ReportBugScreen),
+      AutoRoute(path: 'change-password', page: ChangePasswordScreen),
+      AutoRoute(path: 'privacy-policy', page: PrivacyPolicyScreen),
     ]),
   ]),
 ])

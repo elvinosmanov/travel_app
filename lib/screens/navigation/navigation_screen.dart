@@ -30,6 +30,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
         return CustomBottomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
             onItemTapped: (value) {
+              if (value == tabsRouter.activeIndex) {
+                print('Eynidi girdi');
+                context.router.popTop();
+              }
               tabsRouter.setActiveIndex(value);
             });
       },

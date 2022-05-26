@@ -14,7 +14,7 @@ class ReportBugScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: defaultTopPadding / 2),
+      padding: const EdgeInsets.only(top: defaultTopPadding),
       child: Column(
         children: [
           Container(

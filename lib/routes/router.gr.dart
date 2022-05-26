@@ -27,7 +27,7 @@ import '../screens/profile/widgets/will_visit_tab_view.dart' as _i14;
 import '../screens/search/search_screen.dart' as _i8;
 import '../screens/settings/change_password_screen.dart' as _i19;
 import '../screens/settings/languages_screen.dart' as _i17;
-import '../screens/settings/personal_informations_scren.dart' as _i16;
+import '../screens/settings/personal_informations_screen.dart' as _i16;
 import '../screens/settings/privacy_policy_screen.dart' as _i20;
 import '../screens/settings/report_bug_screen.dart' as _i18;
 import '../screens/settings/settings_screen.dart' as _i15;

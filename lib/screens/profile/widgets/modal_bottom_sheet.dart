@@ -41,7 +41,7 @@ class CustomModalBottomSheet extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 splashRadius: 20,
-                onPressed: () {},
+                onPressed: deleteOnPressed,
                 icon: SvgPicture.asset(R.delete))
           ],
         ).padding(left: 32, right: 32, bottom: 4, top: 8),
@@ -54,18 +54,24 @@ class CustomModalBottomSheet extends StatelessWidget {
             children: <Widget>[
               GestureDetector(
                 onTap: galleryOnPressed,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>['Add from Photo Library'.mediumTextStyle(14), SvgPicture.asset(R.image)],
-                ).padding(all: 16),
+                child: Container(
+                  decoration: BoxDecoration(color: kLightGreyColor_1, borderRadius: BorderRadius.circular(16)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>['Add from Photo Library'.mediumTextStyle(14), SvgPicture.asset(R.image)],
+                  ).padding(all: 16),
+                ),
               ),
               CustomDivider(color: Colors.black.withOpacity(0.1)),
               GestureDetector(
                 onTap: cameraOnPressed,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>['Take a photo'.mediumTextStyle(14), SvgPicture.asset(R.camera)],
-                ).padding(all: 16),
+                child: Container(
+                  decoration: BoxDecoration(color: kLightGreyColor_1, borderRadius: BorderRadius.circular(16)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>['Take a photo'.mediumTextStyle(14), SvgPicture.asset(R.camera)],
+                  ).padding(all: 16),
+                ),
               ),
             ],
           ),

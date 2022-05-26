@@ -11,6 +11,8 @@ import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/screens/profile/widgets/modal_bottom_sheet.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+enum ImageType { cover, profile }
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -19,19 +21,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  CroppedFile? _croppedImage;
+  CroppedFile? _croppedProfileImage;
+  CroppedFile? _croppedCoverImage;
 
-  void showBottomSheet() {
+  void showBottomSheet(ImageType imageType) {
     showModalBottomSheet(
       context: context,
       backgroundColor: kWhiteColor,
-      elevation: 2,
-      barrierColor: Colors.black54,
+      elevation: 4,
+      barrierColor: Colors.black.withOpacity(0.8),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) {
         return CustomModalBottomSheet(
-          title: 'Profile Photo',
-          galleryOnPressed: _getFromGallery,
+          title: imageType == ImageType.cover ? 'Choose background photo' : 'Choose profile photo',
+          galleryOnPressed: () => _getFromGallery(imageType),
         );
       },
     );
@@ -54,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 120),
+          const SizedBox(height: 24),
           Expanded(
             child: AutoTabsRouter.tabBar(
               routes: const [
@@ -63,25 +66,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 WillVisitTab(),
               ],
               builder: (context, child, tabController) {
-                return Container(
-                  color: Colors.red,
-                  child: Scaffold(
-                    appBar: PreferredSize(
-                      preferredSize: const Size.fromHeight(kToolbarHeight),
-                      child: TabBar(
-                        labelStyle: kMediumTextStyle(13, kDarkGreyColor),
-                        labelColor: kBlueColor,
-                        unselectedLabelColor: kDarkGreyColor,
-                        controller: tabController,
-                        tabs: const [
-                          Tab(text: 'My Favorites'),
-                          Tab(text: 'Ratings'),
-                          Tab(text: 'Will Visit'),
-                        ],
-                      ),
+                return Scaffold(
+                  appBar: PreferredSize(
+                    preferredSize: const Size.fromHeight(kToolbarHeight),
+                    child: TabBar(
+                      labelStyle: kMediumTextStyle(13, kDarkGreyColor),
+                      labelColor: kBlueColor,
+                      unselectedLabelColor: kDarkGreyColor,
+                      controller: tabController,
+                      tabs: const [
+                        Tab(text: 'My Favorites'),
+                        Tab(text: 'Ratings'),
+                        Tab(text: 'Will Visit'),
+                      ],
                     ),
-                    body: child,
                   ),
+                  body: child,
                 );
               },
             ),
@@ -91,14 +91,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  ClipRRect _buildCoverPhoto() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Image.asset(
-        R.museumAndArtImage,
-        width: 1000,
-        height: 200,
-        fit: BoxFit.cover,
+  Widget _buildCoverPhoto() {
+    return GestureDetector(
+      onTap: () => showBottomSheet(ImageType.cover),
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        // width: 1000,
+        // height: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: AspectRatio(
+          aspectRatio: 6 / 2.85,
+          child: _croppedCoverImage != null
+              ? Image.file(
+                  File(_croppedCoverImage!.path),
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  R.museumAndArtImage,
+                  fit: BoxFit.cover,
+                ),
+        ),
       ),
     );
   }
@@ -122,8 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       left: 24,
       child: Row(
         children: [
-          InkWell(
-            onTap: () => showBottomSheet(),
+          GestureDetector(
+            onTap: () => showBottomSheet(ImageType.profile),
             child: Stack(
               children: [
                 CircleAvatar(
@@ -131,7 +145,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundColor: kLightGreyColor_1,
                   child: CircleAvatar(
                       radius: 66,
-                      backgroundImage: AssetImage(_croppedImage != null ? _croppedImage!.path : R.accomodationImage)),
+                      backgroundImage: _croppedProfileImage != null
+                          ? FileImage(File(_croppedProfileImage!.path)) as ImageProvider
+                          : const AssetImage(R.accomodationImage)),
                 ),
                 const Positioned(
                     bottom: 0,
@@ -165,18 +181,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _getFromGallery() async {
-    ImagePicker _imagePicker = ImagePicker();
-    XFile? pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery, maxHeight: 1080, maxWidth: 1080);
-    _cropImage(pickedImage!.path);
+  void _getFromGallery(ImageType imageType) async {
+    ImagePicker imagePicker = ImagePicker();
+    XFile? pickedImage = await imagePicker.pickImage(source: ImageSource.gallery, maxHeight: 1080, maxWidth: 1080);
+    if (imageType == ImageType.profile) {
+      _cropProfileImage(pickedImage!.path);
+    } else if (imageType == ImageType.cover) {
+      _cropCoverImage(pickedImage!.path);
+    }
     context.router.pop();
   }
 
-  void _cropImage(String path) async {
-    CroppedFile? croppedImage = await ImageCropper().cropImage(sourcePath: path, maxHeight: 1080, maxWidth: 1080);
+  void _cropProfileImage(String path) async {
+    CroppedFile? croppedImage = await ImageCropper().cropImage(
+        sourcePath: path,
+        maxHeight: 1080,
+        maxWidth: 1080,
+        compressQuality: 100,
+        cropStyle: CropStyle.circle,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1));
     if (croppedImage != null) {
       setState(() {
-        _croppedImage = croppedImage;
+        _croppedProfileImage = croppedImage;
+      });
+    }
+  }
+
+  void _cropCoverImage(String path) async {
+    CroppedFile? croppedImage = await ImageCropper().cropImage(
+        sourcePath: path,
+        maxHeight: 1080,
+        maxWidth: 1080,
+        compressQuality: 100,
+        aspectRatio: const CropAspectRatio(ratioX: 6, ratioY: 2.85));
+    if (croppedImage != null) {
+      setState(() {
+        _croppedCoverImage = croppedImage;
       });
     }
   }

@@ -36,7 +36,7 @@ class LanguagesScreen extends StatelessWidget {
           text: 'Save Changes',
           textColor: kWhiteColor,
           onPressed: () {},
-        ).padding(top: 32, right: 16)
+        ).padding(top: 32, right: 16,left: 16)
       ],
     );
   }
