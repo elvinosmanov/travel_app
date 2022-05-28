@@ -3,26 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
 
+///There is padding top and bottom 8px
 class SortList extends StatefulWidget {
   const SortList({
     Key? key,
     this.onPressed,
     required this.categoryNames,
+    required this.initialValue,
+    this.onChanged,
+    this.controller,
   }) : super(key: key);
   final Function(int value)? onPressed;
   final List<String> categoryNames;
+  final int initialValue;
+  final Function(int value)? onChanged;
+  final ScrollController? controller;
   @override
   State<SortList> createState() => _SortListState();
 }
 
 class _SortListState extends State<SortList> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 30,
+      height: 46,
       child: ListView.builder(
+        controller: widget.controller,
         padding: const EdgeInsets.only(left: 16.0),
         scrollDirection: Axis.horizontal,
         itemCount: widget.categoryNames.length,
@@ -32,6 +45,9 @@ class _SortListState extends State<SortList> {
               isActive: _selectedIndex == index,
               itemName: widget.categoryNames[index],
               onPressed: () {
+                if (widget.onChanged != null) {
+                  widget.onChanged!(index);
+                }
                 setState(() {
                   _selectedIndex = index;
                 });
@@ -69,7 +85,7 @@ class FilterItem extends StatelessWidget {
               decoration: const BoxDecoration(color: kBlueColor, shape: BoxShape.circle),
             )
         ],
-      ).padding(right: 24),
+      ).padding(right: 24, top: 8, bottom: 8),
     );
   }
 }

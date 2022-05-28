@@ -74,7 +74,7 @@ class AllCommentsScreen extends StatelessWidget {
               ],
             ),
             Container(
-              constraints: BoxConstraints(maxHeight: 120),
+              constraints: const BoxConstraints(maxHeight: 120),
               child: Row(
                 children: <Widget>[
                   Expanded(

@@ -22,9 +22,9 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Screen,Route', routes: [
   //TODO: FOR NOW CHANGED PLACE
-  AutoRoute(path: 'all_categories', page: AllCategoriesScreen),
-  AutoRoute(path: 'details', page: DetailsScreen),
-  AutoRoute(path: 'all_comments', page: AllCommentsScreen),
+  // AutoRoute(path: 'all_categories', page: AllCategoriesScreen),
+  // AutoRoute(path: 'details', page: DetailsScreen),
+  // AutoRoute(path: 'all_comments', page: AllCommentsScreen),
 
   AutoRoute(path: 'onboarding', page: OnboardingScreen),
   AutoRoute(path: 'welcome', page: WelcomeScreen),
@@ -36,6 +36,9 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
       children: [
         AutoRoute(path: '', page: HomeScreen),
         AutoRoute(path: 'categories', page: CategoriesScreen),
+        // AutoRoute(path: 'all-categories', page: AllCategoriesScreen),
+        AutoRoute(path: 'all-categories/:id/:sortId', page: AllCategoriesScreen),
+        AutoRoute(path: 'search',  page: SearchScreen),
         // AutoRoute(path: 'all_categories', page: AllCategoriesScreen),
       ],
     ),

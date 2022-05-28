@@ -15,9 +15,15 @@ import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
 import '../../cubit/navigation/navigation_cubit.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _exploreSortValue = 0;
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -41,13 +47,25 @@ class HomeScreen extends StatelessWidget {
           },
         ),
         const CategoryList().padding(top: 16, bottom: 32),
-        const CategoryBar(categoryName: 'Explore'),
-        const SortList(
+        CategoryBar(
+          categoryName: 'Explore',
+          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
+        ),
+        SortList(
+          initialValue: _exploreSortValue,
+          onChanged: (value) {
+            setState(() {
+              _exploreSortValue = value;
+            });
+          },
           categoryNames: categoriesSorts,
-        ).padding(top: 16, bottom: 6), //bottom: 16-6
+        ).padding(top: 8), //bottom: 16-6
         const ExploreList(),
-        const CategoryBar(categoryName: 'New Added')
-            .padding(top: 22, bottom: 16), //bottom: 32-10 22
+        CategoryBar(
+          categoryName: 'New Added',
+          onPressed: () => context.router.push(
+              AllCategoriesRoute(initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
+        ).padding(top: 22, bottom: 16), //bottom: 32-10 22
         const NewAddedList(),
         const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
         const TravelGuideList(),
@@ -155,6 +173,7 @@ class CategoryList extends StatelessWidget {
         itemCount: _data.length,
         itemBuilder: (context, index) {
           return CategoryCard(
+            onPressed: () => context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
             image: _data[index].image,
             title: _data[index].name,
           ).padding(right: 8);
@@ -186,8 +205,7 @@ class TitleBar extends StatelessWidget {
         Container(
           width: 44,
           height: 44,
-          decoration: BoxDecoration(
-              color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
+          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
           child: SvgPicture.asset(
             R.notification,
             fit: BoxFit.scaleDown,

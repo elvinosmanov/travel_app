@@ -14,30 +14,34 @@ class LanguagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        CustomBackButton(
-          onPressed: () {
-            context.router.pop();
-          },
-        ).padding(left: 16.0, right: 16, top: defaultTopPadding),
-        'Choose Language'.semiBoldTextStyle(18).padding(
-              top: 32,
-              bottom: 4,
-              left: 16.0,
-              right: 16,
-            ),
-        const SettingsBar(title: 'Azerbaijani', flagIconName: R.azFlag, hasSelected: false),
-        const SettingsBar(title: 'English', flagIconName: R.usFlag),
-        const SettingsBar(title: 'Russian', flagIconName: R.ruFlag, hasSelected: false),
-        const SettingsBar(title: 'Turkish', flagIconName: R.trFlag, hasSelected: false),
-        CustomSubmitButton(
-          text: 'Save Changes',
-          textColor: kWhiteColor,
-          onPressed: () {},
-        ).padding(top: 32, right: 16,left: 16)
-      ],
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CustomBackButton(
+              onPressed: () {
+                context.router.pop();
+              },
+            ).padding(left: 16.0, right: 16, top: defaultTopPadding),
+            'Choose Language'.semiBoldTextStyle(18).padding(
+                  top: 32,
+                  bottom: 4,
+                  left: 16.0,
+                  right: 16,
+                ),
+            const SettingsBar(title: 'Azerbaijani', flagIconName: R.azFlag, hasSelected: false),
+            const SettingsBar(title: 'English', flagIconName: R.usFlag),
+            const SettingsBar(title: 'Russian', flagIconName: R.ruFlag, hasSelected: false),
+            const SettingsBar(title: 'Turkish', flagIconName: R.trFlag, hasSelected: false),
+            CustomSubmitButton(
+              text: 'Save Changes',
+              textColor: kWhiteColor,
+              onPressed: () {},
+            ).padding(top: 32, right: 16,left: 16)
+          ],
+        ),
+      ),
     );
   }
 }

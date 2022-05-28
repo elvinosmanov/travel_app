@@ -13,54 +13,58 @@ class ReportBugScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: defaultTopPadding),
-      child: Column(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-                color: kLightGreyColor_1, border: Border(bottom: BorderSide(color: Colors.black12, width: 0.5))),
-            padding: const EdgeInsets.only(bottom: defaultTopPadding / 2),
-            child: Row(
-              children: [
-                CustomBackButton(
-                  onPressed: () {
-                    context.router.pop();
-                  },
-                ).padding(left: 16),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.only(left: 16.0, right: 16, top: 32),
-              physics: const ClampingScrollPhysics(),
-              children: <Widget>[
-                'Title'.mediumTextStyle(15).padding(bottom: 6),
-                CustomTextField(
-                  controller: TextEditingController(),
-                  hintText: 'Title...',
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: defaultTopPadding),
+          child: Column(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                    color: kLightGreyColor_1, border: Border(bottom: BorderSide(color: Colors.black12, width: 0.5))),
+                padding: const EdgeInsets.only(bottom: defaultTopPadding / 2),
+                child: Row(
+                  children: [
+                    CustomBackButton(
+                      onPressed: () {
+                        context.router.pop();
+                      },
+                    ).padding(left: 16),
+                  ],
                 ),
-                'Problem'.mediumTextStyle(15).padding(top: 16, bottom: 8),
-                CustomTextField(
-                  controller: TextEditingController(),
-                  hintText: 'Please write problem detailed...',
-                  textInputAction: TextInputAction.newline,
-                  maxLines: 10,
+              ),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16, top: 32),
+                  physics: const ClampingScrollPhysics(),
+                  children: <Widget>[
+                    'Title'.mediumTextStyle(15).padding(bottom: 6),
+                    CustomTextField(
+                      controller: TextEditingController(),
+                      hintText: 'Title...',
+                    ),
+                    'Problem'.mediumTextStyle(15).padding(top: 16, bottom: 8),
+                    CustomTextField(
+                      controller: TextEditingController(),
+                      hintText: 'Please write problem detailed...',
+                      textInputAction: TextInputAction.newline,
+                      maxLines: 10,
+                    ),
+                    'Screenshot'.mediumTextStyle(15).padding(top: 16, bottom: 8),
+                    _buildAttachFileButton(),
+                    'Thanks for helping us!'.mediumTextStyle(15).padding(top: 16, bottom: 8),
+                    Text(reportText, textAlign: TextAlign.justify, style: kRegularTextStyle(14)),
+                    const CustomSubmitButton(
+                      text: 'Submit Report',
+                      textColor: kWhiteColor,
+                      backgroundColor: kBlueColor,
+                    ).padding(top: 32, bottom: 16)
+                  ],
                 ),
-                'Screenshot'.mediumTextStyle(15).padding(top: 16, bottom: 8),
-                _buildAttachFileButton(),
-                'Thanks for helping us!'.mediumTextStyle(15).padding(top: 16, bottom: 8),
-                Text(reportText, textAlign: TextAlign.justify, style: kRegularTextStyle(14)),
-                const CustomSubmitButton(
-                  text: 'Submit Report',
-                  textColor: kWhiteColor,
-                  backgroundColor: kBlueColor,
-                ).padding(top: 32, bottom: 16)
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

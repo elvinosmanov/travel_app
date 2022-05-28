@@ -33,8 +33,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
               if (value == tabsRouter.activeIndex) {
                 print('Eynidi girdi');
                 context.router.popTop();
+              } else {
+                tabsRouter.setActiveIndex(value);
               }
-              tabsRouter.setActiveIndex(value);
             });
       },
     );

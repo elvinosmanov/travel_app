@@ -4,6 +4,7 @@ import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/routes/router.gr.dart';
 
 import '../../components/category_card.dart';
 import '../../core/cores.dart';
@@ -56,6 +57,7 @@ class CategoryGridView extends StatelessWidget {
               itemCount: _data.length,
               itemBuilder: (BuildContext ctx, index) {
                 return CategoryCard(
+                  onPressed: () => context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
                   textSize: 14,
                   image: _data[index].image,
                   title: _data[index].name,

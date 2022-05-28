@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -10,24 +11,37 @@ import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/home/widgets/custom_drop_down_button.dart';
 
 class AllCategoriesScreen extends StatefulWidget {
-  const AllCategoriesScreen({Key? key}) : super(key: key);
-
+  const AllCategoriesScreen({
+    Key? key,
+    @PathParam('id') this.selectedValue,
+    @PathParam('sortId') this.initialSortValue,
+  }) : super(key: key);
+  final String? selectedValue;
+  final int? initialSortValue;
   @override
   State<AllCategoriesScreen> createState() => _AllCategoriesScreenState();
 }
 
-//TODO: After finishing Routing Delete Scaffold and SafeArea widgets
 class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
-  String? selectedValue;
   final data = Category2.data;
+  String? selectedValue;
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.selectedValue;
+  }
+
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
         body: SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomBackButton().padding(left: 16, top: 40, bottom: 16),
+          CustomBackButton(
+            onPressed: () => context.router.pop(),
+          ).padding(left: 16, top: defaultTopPadding, bottom: 16),
           CustomDropDownButton(
             selectedValue: selectedValue,
             onChanged: (String? value) {
@@ -36,7 +50,10 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
               });
             },
           ).padding(left: 16),
-          const SortList(categoryNames: categoriesSorts).padding(top: 16, bottom: 16),
+          SortList(
+            categoryNames: categoriesSorts,
+            initialValue: widget.initialSortValue ?? 0,
+          ).padding(top: 8, bottom: 8),
           Expanded(
               child: MasonryGridView.count(
             physics: const BouncingScrollPhysics(),

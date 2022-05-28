@@ -25,7 +25,9 @@ class CategoryBar extends StatelessWidget {
               onTap: onPressed,
               splashColor: kLightGreyColor_1,
               borderRadius: BorderRadius.circular(4),
-              child: 'See all'.semiBoldTextStyle(15, color ?? kDarkGreyColor).padding(all: 4)),
+              child: 'See all'
+                  .semiBoldTextStyle(15, color ?? kDarkGreyColor)
+                  .padding(left: 4, right: 4, top: 8, bottom: 8)),
         ],
       ),
     );

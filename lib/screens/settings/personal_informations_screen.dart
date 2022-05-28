@@ -12,26 +12,33 @@ class PersonalInformationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16, top: defaultTopPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          CustomBackButton(
-            onPressed: () {
-              context.router.pop();
-            },
-          ).padding(bottom: 16),
-          _buildNameTextField(name: 'Name', textFieldText: 'Elvin'),
-          _buildNameTextField(name: 'Surname', textFieldText: 'Osmanov'),
-          _buildNameTextField(name: 'Phone number', textFieldText: '+994 55 426 19 98'),
-          _buildNameTextField(name: 'Location', textFieldText: 'Baku, Azerbaijan'),
-          CustomSubmitButton(
-            text: 'Save Changes',
-            textColor: kWhiteColor,
-            onPressed: () {},
-          ).padding(top: 32)
-        ],
+    return Scaffold(
+      
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16, top: defaultTopPadding),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CustomBackButton(
+                  onPressed: () {
+                    context.router.pop();
+                  },
+                ).padding(bottom: 16),
+                _buildNameTextField(name: 'Name', textFieldText: 'Elvin'),
+                _buildNameTextField(name: 'Surname', textFieldText: 'Osmanov'),
+                _buildNameTextField(name: 'Phone number', textFieldText: '+994 55 426 19 98'),
+                _buildNameTextField(name: 'Location', textFieldText: 'Baku, Azerbaijan'),
+                CustomSubmitButton(
+                  text: 'Save Changes',
+                  textColor: kWhiteColor,
+                  onPressed: () {},
+                ).padding(top: 32)
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

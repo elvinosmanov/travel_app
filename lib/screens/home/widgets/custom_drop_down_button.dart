@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
+
 class CustomDropDownButton extends StatefulWidget {
   final String? selectedValue;
   final Function(String?)? onChanged;
@@ -25,7 +26,8 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
-        value: widget.selectedValue,
+        value: widget.selectedValue??categoryNames[0],
+        
         isExpanded: true,
         items: categoryNames
             .map((item) => DropdownMenuItem<String>(value: item, child: item.semiBoldTextStyle(13)))
@@ -36,7 +38,7 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
             isMenuOpen = value;
           });
         },
-        hint: Row(children: [Expanded(child: 'Categories'.mediumTextStyle(16, kDarkGreyColor))]),
+        // hint: Row(children: [Expanded(child: 'Categories'.mediumTextStyle(16, kDarkGreyColor))]),
         icon: SvgPicture.asset(isMenuOpen ? R.upArrow : R.downArrow, fit: BoxFit.scaleDown),
         buttonHeight: 40,
         buttonWidth: 200,

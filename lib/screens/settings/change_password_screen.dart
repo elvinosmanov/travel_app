@@ -12,25 +12,29 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16, top: defaultTopPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          CustomBackButton(
-            onPressed: () {
-              context.router.pop();
-            },
-          ).padding(bottom: 16),
-          _buildNameTextField(name: 'Current Password', hintText: 'xxxxxxxxx'),
-          _buildNameTextField(name: 'New Password', hintText: 'New Password'),
-          _buildNameTextField(name: 'New Password, again', hintText: 'New Password, again'),
-          CustomSubmitButton(
-            text: 'Save Changes',
-            textColor: kWhiteColor,
-            onPressed: () {},
-          ).padding(top: 32)
-        ],
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16, top: defaultTopPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CustomBackButton(
+                onPressed: () {
+                  context.router.pop();
+                },
+              ).padding(bottom: 16),
+              _buildNameTextField(name: 'Current Password', hintText: 'xxxxxxxxx'),
+              _buildNameTextField(name: 'New Password', hintText: 'New Password'),
+              _buildNameTextField(name: 'New Password, again', hintText: 'New Password, again'),
+              CustomSubmitButton(
+                text: 'Save Changes',
+                textColor: kWhiteColor,
+                onPressed: () {},
+              ).padding(top: 32)
+            ],
+          ),
+        ),
       ),
     );
   }
