@@ -49,7 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
         const CategoryList().padding(top: 16, bottom: 32),
         CategoryBar(
           categoryName: 'Explore',
-          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
+          onPressed: () =>
+              context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
         ),
         SortList(
           initialValue: _exploreSortValue,
@@ -63,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
         const ExploreList(),
         CategoryBar(
           categoryName: 'New Added',
-          onPressed: () => context.router.push(
-              AllCategoriesRoute(initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
+          onPressed: () => context.router.push(AllCategoriesRoute(
+              initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
         const NewAddedList(),
         const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
@@ -113,14 +114,24 @@ class ExploreList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: 4,
         itemBuilder: (context, index) {
-          return const ContentCard(
-                  width: 230,
-                  height: 280,
-                  starValue: 4.6,
-                  image: R.tripImage,
-                  name: "Gobustan milli parkı",
-                  place: 'Karadagh, Baku')
-              .padding(right: 16);
+          return ContentCard(
+            width: 230,
+            height: 280,
+            starValue: 4.6,
+            image: R.tripImage,
+            name: "Gobustan milli parkı",
+            place: 'Karadagh, Baku',
+            onPressed: () => context.router.push(
+              DetailsRoute(
+                images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+                likeCount: 350,
+                commentCount: 30,
+                rate: 3.8,
+                viewCount: 14000000,
+                isLiked: false,
+              ),
+            ),
+          ).padding(right: 16);
         },
       ),
     );
@@ -144,12 +155,22 @@ class NewAddedList extends StatelessWidget {
       itemBuilder: (context, index) {
         return AspectRatio(
           aspectRatio: 1 / 1.05,
-          child: const ContentCard(
+          child: ContentCard(
             starValue: 4.6,
             image: R.tripImage,
             name: "Gobustan milli parkı",
             place: 'Karadagh, Baku',
             isHorizontal: false,
+            onPressed: () => context.router.push(
+              DetailsRoute(
+                images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+                likeCount: 350,
+                commentCount: 30,
+                rate: 3.8,
+                viewCount: 14000000,
+                isLiked: false,
+              ),
+            ),
           ).padding(bottom: 16),
         );
       },
@@ -173,7 +194,8 @@ class CategoryList extends StatelessWidget {
         itemCount: _data.length,
         itemBuilder: (context, index) {
           return CategoryCard(
-            onPressed: () => context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
+            onPressed: () =>
+                context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
             image: _data[index].image,
             title: _data[index].name,
           ).padding(right: 8);
@@ -205,7 +227,8 @@ class TitleBar extends StatelessWidget {
         Container(
           width: 44,
           height: 44,
-          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
+          decoration: BoxDecoration(
+              color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
           child: SvgPicture.asset(
             R.notification,
             fit: BoxFit.scaleDown,

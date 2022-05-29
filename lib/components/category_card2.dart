@@ -28,36 +28,39 @@ class CategoryCard2 extends StatelessWidget {
   final double? height;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          _buildImageContainer(),
-          Flexible(
-            child: Text(
-              text,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: kSemiBoldTextStyle(textSize ?? 16),
-            ).padding(top: 8, bottom: 6),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SvgPicture.asset(R.mapOutliend),
-              Flexible(
-                child: Text(
-                  place.useCorrectEllipsis(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: kRegularTextStyle(placeSize ?? 12, kDarkGreyColor),
-                ).padding(left: 4),
-              )
-            ],
-          )
-        ],
+    return GestureDetector(
+      onTap: onPressed,
+      child: SizedBox(
+        width: width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            _buildImageContainer(),
+            Flexible(
+              child: Text(
+                text,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: kSemiBoldTextStyle(textSize ?? 16),
+              ).padding(top: 8, bottom: 6),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SvgPicture.asset(R.mapOutliend),
+                Flexible(
+                  child: Text(
+                    place.useCorrectEllipsis(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: kRegularTextStyle(placeSize ?? 12, kDarkGreyColor),
+                  ).padding(left: 4),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -81,12 +84,9 @@ class CategoryCard2 extends StatelessWidget {
           Positioned(
             top: 13,
             right: 12,
-            child: GestureDetector(
-              onTap: onPressed,
-              child: SvgPicture.asset(
-                isLiked ? R.heartFilled : R.heartOutlined,
-                fit: BoxFit.cover,
-              ),
+            child: SvgPicture.asset(
+              isLiked ? R.heartFilled : R.heartOutlined,
+              fit: BoxFit.cover,
             ),
           ),
         ],

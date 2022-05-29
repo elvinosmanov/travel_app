@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -26,6 +27,7 @@ class AllCommentsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomBackButton(
+              onPressed: () => context.router.pop(),
               label: '$commentsNumber Comments',
             ).padding(top: 20, bottom: 20, left: 16),
             const CustomDivider(),
@@ -53,7 +55,11 @@ class AllCommentsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: kLightGreyColor_1,
           boxShadow: [
-            BoxShadow(blurRadius: 3, spreadRadius: 3, offset: const Offset(0, 2), color: Colors.black.withOpacity(0.2))
+            BoxShadow(
+                blurRadius: 3,
+                spreadRadius: 3,
+                offset: const Offset(0, 2),
+                color: Colors.black.withOpacity(0.2))
           ],
         ),
         child: Column(

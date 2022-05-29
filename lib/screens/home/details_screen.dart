@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,10 +11,10 @@ import 'package:travel_app/components/custom_divider.dart';
 import 'package:travel_app/components/custom_opacity_button.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/routes/router.gr.dart';
 
 import '../../components/custom_rating_bar.dart';
 
-//TODO: After finishing Routing Delete Scaffold and SafeArea widgets
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
     Key? key,
@@ -42,7 +43,7 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   bool isReadmore = false;
   //TODO: Should Delete
-  final commentCount = 0;
+  final commentCount = 2;
   final _controller = ScrollController();
   @override
   void initState() {
@@ -60,7 +61,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
         controller: _controller,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           DetailsImageContainer(
             images: widget.images,
@@ -69,16 +69,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _buildTwoChildrenRow(
-                  SvgPicture.asset(R.eyeBlack), widget.viewCount.viewCountToString().mediumTextStyle(15)),
+              _buildTwoChildrenRow(SvgPicture.asset(R.eyeBlack),
+                  widget.viewCount.viewCountToString().mediumTextStyle(15)),
               _buildTwoChildrenRow(
                   widget.rate.toStringAsFixed(1).mediumTextStyle(15),
                   CustomRatingBar(
                     initialRating: widget.rate,
                   )),
-              _buildTwoChildrenRow(widget.commentCount.toString().mediumTextStyle(15), SvgPicture.asset(R.comment)),
               _buildTwoChildrenRow(
-                  widget.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack)),
+                  widget.commentCount.toString().mediumTextStyle(15), SvgPicture.asset(R.comment)),
+              _buildTwoChildrenRow(widget.likeCount.toString().mediumTextStyle(15),
+                  SvgPicture.asset(R.heartFilledBlack)),
             ],
           ).padding(all: 16),
           Padding(
@@ -116,7 +117,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ],
                 ).padding(top: 16, bottom: 10),
                 _buildMap(),
-                'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: commentCount == 0 ? 0 : 16),
+                'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: 16),
               ],
             ),
           ),
@@ -127,13 +128,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   children: [
                     SvgPicture.asset(
                       R.noComments,
-                      height: 160,
+                      height: 50,
                     ),
                     FittedBox(
                             child: 'There are no comments yet. Would you like to write a comment?'
                                 .regularTextStyle(12, kGoogleRedColor)
                                 .padding(top: 8))
-                        .padding(left: 16, right: 16)
+                        .padding(left: 16, right: 16, top: 8)
                   ],
                 ).padding(bottom: 32)
               : _buildSeeAllReviewsButton().padding(bottom: 32),
@@ -149,19 +150,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   SizedBox _buildCardList() {
     return SizedBox(
-      height: 240,
+      height: 180,
       child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.only(left: 16),
           scrollDirection: Axis.horizontal,
           itemCount: 5,
           itemBuilder: (context, index) {
-            return const CategoryCard2(
+            return CategoryCard2(
               width: 150,
               text: 'Gobustan Stones',
               place: 'Gobustan, Azerbaijan',
               isLiked: false,
               imageName: R.shoppingImage,
+              onPressed: () => context.router.push(
+                DetailsRoute(
+                  images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+                  likeCount: 350,
+                  commentCount: 30,
+                  rate: 3.8,
+                  viewCount: 14000000,
+                  isLiked: false,
+                ),
+              ),
             ).padding(right: 16);
           }),
     );
@@ -172,6 +183,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
+          onTap: () => context.router.push(const AllCommentsRoute()),
           child: 'See All Reviews'.mediumTextStyle(13, kDarkGreyColor),
         )
       ],
@@ -203,7 +215,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
           isReadmore = !isReadmore;
         });
       },
-      child: (!isReadmore ? 'Read more' : 'Read less').mediumTextStyle(15, kBlueColor).padding(all: 8),
+      child:
+          (!isReadmore ? 'Read more' : 'Read less').mediumTextStyle(15, kBlueColor).padding(all: 8),
     );
   }
 
@@ -298,7 +311,8 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                  decoration: BoxDecoration(color: kWhiteColor.withOpacity(0.57), borderRadius: kRadius16),
+                  decoration:
+                      BoxDecoration(color: kWhiteColor.withOpacity(0.57), borderRadius: kRadius16),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -337,7 +351,9 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
         children: [
           CustomOpacityButton(
             imageName: R.backArrow,
-            onPressed: () {},
+            onPressed: () {
+              context.router.pop();
+            },
           ),
           CustomOpacityButton(
             imageName: _isLiked ? R.heartFilled : R.heartOutlined,
@@ -371,7 +387,8 @@ class _CustomVisitButtonState extends State<CustomVisitButton> {
         ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(willVisit ? kLightBlueColor : kWhiteColor),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+            shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
             padding: MaterialStateProperty.all(EdgeInsets.all(5)),
           ),
           onPressed: () {

@@ -11,28 +11,30 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i4;
-import 'package:flutter/material.dart' as _i19;
+import 'package:flutter/material.dart' as _i21;
 
 import '../screens/home/all_categories.dart' as _i9;
+import '../screens/home/all_comments_screen.dart' as _i11;
 import '../screens/home/categories_screen.dart' as _i8;
+import '../screens/home/details_screen.dart' as _i10;
 import '../screens/home/home_screen.dart' as _i7;
 import '../screens/navigation/navigation_screen.dart' as _i3;
 import '../screens/onboarding/onboarding_screen.dart' as _i1;
 import '../screens/profile/profile_screen.dart' as _i6;
-import '../screens/profile/widgets/my_favorites_tab_view.dart' as _i10;
-import '../screens/profile/widgets/ratings_tab_view.dart' as _i11;
-import '../screens/profile/widgets/will_visit_tab_view.dart' as _i12;
+import '../screens/profile/widgets/my_favorites_tab_view.dart' as _i12;
+import '../screens/profile/widgets/ratings_tab_view.dart' as _i13;
+import '../screens/profile/widgets/will_visit_tab_view.dart' as _i14;
 import '../screens/search/search_screen.dart' as _i5;
-import '../screens/settings/change_password_screen.dart' as _i17;
-import '../screens/settings/languages_screen.dart' as _i15;
-import '../screens/settings/personal_informations_screen.dart' as _i14;
-import '../screens/settings/privacy_policy_screen.dart' as _i18;
-import '../screens/settings/report_bug_screen.dart' as _i16;
-import '../screens/settings/settings_screen.dart' as _i13;
+import '../screens/settings/change_password_screen.dart' as _i19;
+import '../screens/settings/languages_screen.dart' as _i17;
+import '../screens/settings/personal_informations_screen.dart' as _i16;
+import '../screens/settings/privacy_policy_screen.dart' as _i20;
+import '../screens/settings/report_bug_screen.dart' as _i18;
+import '../screens/settings/settings_screen.dart' as _i15;
 import '../screens/welcome/welcome_screen.dart' as _i2;
 
 class AppRouter extends _i4.RootStackRouter {
-  AppRouter([_i19.GlobalKey<_i19.NavigatorState>? navigatorKey])
+  AppRouter([_i21.GlobalKey<_i21.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -90,41 +92,58 @@ class AppRouter extends _i4.RootStackRouter {
       return _i4.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i5.SearchScreen());
     },
+    DetailsRoute.name: (routeData) {
+      final args = routeData.argsAs<DetailsRouteArgs>();
+      return _i4.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i10.DetailsScreen(
+              key: args.key,
+              isLiked: args.isLiked,
+              images: args.images,
+              viewCount: args.viewCount,
+              commentCount: args.commentCount,
+              likeCount: args.likeCount,
+              rate: args.rate));
+    },
+    AllCommentsRoute.name: (routeData) {
+      return _i4.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i11.AllCommentsScreen());
+    },
     MyFavoritesTab.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i10.MyFavoritesTabView());
+          routeData: routeData, child: const _i12.MyFavoritesTabView());
     },
     RatingsTab.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i11.RatingsTabView());
+          routeData: routeData, child: const _i13.RatingsTabView());
     },
     WillVisitTab.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i12.WillVisitTabView());
+          routeData: routeData, child: const _i14.WillVisitTabView());
     },
     SettingsRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i13.SettingsScreen());
+          routeData: routeData, child: const _i15.SettingsScreen());
     },
     PersonalInformationsRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i14.PersonalInformationsScreen());
+          routeData: routeData, child: const _i16.PersonalInformationsScreen());
     },
     LanguagesRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i15.LanguagesScreen());
+          routeData: routeData, child: const _i17.LanguagesScreen());
     },
     ReportBugRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i16.ReportBugScreen());
+          routeData: routeData, child: const _i18.ReportBugScreen());
     },
     ChangePasswordRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i17.ChangePasswordScreen());
+          routeData: routeData, child: const _i19.ChangePasswordScreen());
     },
     PrivacyPolicyRoute.name: (routeData) {
       return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i18.PrivacyPolicyScreen());
+          routeData: routeData, child: const _i20.PrivacyPolicyScreen());
     }
   };
 
@@ -145,7 +164,11 @@ class AppRouter extends _i4.RootStackRouter {
                     path: 'all-categories/:id/:sortId',
                     parent: HomeRouter.name),
                 _i4.RouteConfig(SearchRoute.name,
-                    path: 'search', parent: HomeRouter.name)
+                    path: 'search', parent: HomeRouter.name),
+                _i4.RouteConfig(DetailsRoute.name,
+                    path: 'details', parent: HomeRouter.name),
+                _i4.RouteConfig(AllCommentsRoute.name,
+                    path: 'all-comments', parent: HomeRouter.name)
               ]),
           _i4.RouteConfig(SearchRouter.name,
               path: 'search', parent: NavigationRoute.name),
@@ -261,7 +284,7 @@ class CategoriesRoute extends _i4.PageRouteInfo<void> {
 /// [_i9.AllCategoriesScreen]
 class AllCategoriesRoute extends _i4.PageRouteInfo<AllCategoriesRouteArgs> {
   AllCategoriesRoute(
-      {_i19.Key? key, String? selectedValue, int? initialSortValue})
+      {_i21.Key? key, String? selectedValue, int? initialSortValue})
       : super(AllCategoriesRoute.name,
             path: 'all-categories/:id/:sortId',
             args: AllCategoriesRouteArgs(
@@ -277,7 +300,7 @@ class AllCategoriesRouteArgs {
   const AllCategoriesRouteArgs(
       {this.key, this.selectedValue, this.initialSortValue});
 
-  final _i19.Key? key;
+  final _i21.Key? key;
 
   final String? selectedValue;
 
@@ -298,7 +321,70 @@ class SearchRoute extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i10.MyFavoritesTabView]
+/// [_i10.DetailsScreen]
+class DetailsRoute extends _i4.PageRouteInfo<DetailsRouteArgs> {
+  DetailsRoute(
+      {_i21.Key? key,
+      bool isLiked = false,
+      required List<String> images,
+      required int viewCount,
+      required int commentCount,
+      required int likeCount,
+      required double rate})
+      : super(DetailsRoute.name,
+            path: 'details',
+            args: DetailsRouteArgs(
+                key: key,
+                isLiked: isLiked,
+                images: images,
+                viewCount: viewCount,
+                commentCount: commentCount,
+                likeCount: likeCount,
+                rate: rate));
+
+  static const String name = 'DetailsRoute';
+}
+
+class DetailsRouteArgs {
+  const DetailsRouteArgs(
+      {this.key,
+      this.isLiked = false,
+      required this.images,
+      required this.viewCount,
+      required this.commentCount,
+      required this.likeCount,
+      required this.rate});
+
+  final _i21.Key? key;
+
+  final bool isLiked;
+
+  final List<String> images;
+
+  final int viewCount;
+
+  final int commentCount;
+
+  final int likeCount;
+
+  final double rate;
+
+  @override
+  String toString() {
+    return 'DetailsRouteArgs{key: $key, isLiked: $isLiked, images: $images, viewCount: $viewCount, commentCount: $commentCount, likeCount: $likeCount, rate: $rate}';
+  }
+}
+
+/// generated route for
+/// [_i11.AllCommentsScreen]
+class AllCommentsRoute extends _i4.PageRouteInfo<void> {
+  const AllCommentsRoute() : super(AllCommentsRoute.name, path: 'all-comments');
+
+  static const String name = 'AllCommentsRoute';
+}
+
+/// generated route for
+/// [_i12.MyFavoritesTabView]
 class MyFavoritesTab extends _i4.PageRouteInfo<void> {
   const MyFavoritesTab() : super(MyFavoritesTab.name, path: 'my-favorites');
 
@@ -306,7 +392,7 @@ class MyFavoritesTab extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.RatingsTabView]
+/// [_i13.RatingsTabView]
 class RatingsTab extends _i4.PageRouteInfo<void> {
   const RatingsTab() : super(RatingsTab.name, path: 'ratings');
 
@@ -314,7 +400,7 @@ class RatingsTab extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.WillVisitTabView]
+/// [_i14.WillVisitTabView]
 class WillVisitTab extends _i4.PageRouteInfo<void> {
   const WillVisitTab() : super(WillVisitTab.name, path: 'will-visit');
 
@@ -322,7 +408,7 @@ class WillVisitTab extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i13.SettingsScreen]
+/// [_i15.SettingsScreen]
 class SettingsRoute extends _i4.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: '');
 
@@ -330,7 +416,7 @@ class SettingsRoute extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i14.PersonalInformationsScreen]
+/// [_i16.PersonalInformationsScreen]
 class PersonalInformationsRoute extends _i4.PageRouteInfo<void> {
   const PersonalInformationsRoute()
       : super(PersonalInformationsRoute.name, path: 'personal-informations');
@@ -339,7 +425,7 @@ class PersonalInformationsRoute extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.LanguagesScreen]
+/// [_i17.LanguagesScreen]
 class LanguagesRoute extends _i4.PageRouteInfo<void> {
   const LanguagesRoute() : super(LanguagesRoute.name, path: 'languages');
 
@@ -347,7 +433,7 @@ class LanguagesRoute extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i16.ReportBugScreen]
+/// [_i18.ReportBugScreen]
 class ReportBugRoute extends _i4.PageRouteInfo<void> {
   const ReportBugRoute() : super(ReportBugRoute.name, path: 'report-a-bug');
 
@@ -355,7 +441,7 @@ class ReportBugRoute extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i17.ChangePasswordScreen]
+/// [_i19.ChangePasswordScreen]
 class ChangePasswordRoute extends _i4.PageRouteInfo<void> {
   const ChangePasswordRoute()
       : super(ChangePasswordRoute.name, path: 'change-password');
@@ -364,7 +450,7 @@ class ChangePasswordRoute extends _i4.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i18.PrivacyPolicyScreen]
+/// [_i20.PrivacyPolicyScreen]
 class PrivacyPolicyRoute extends _i4.PageRouteInfo<void> {
   const PrivacyPolicyRoute()
       : super(PrivacyPolicyRoute.name, path: 'privacy-policy');

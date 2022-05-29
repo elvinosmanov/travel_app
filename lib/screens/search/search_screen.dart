@@ -46,10 +46,9 @@ class _SearchScreenState extends State<SearchScreen> {
             child: ListView.builder(
               controller: _controller,
               physics: const BouncingScrollPhysics(),
-              itemCount: 30,
+              itemCount: 8,
               itemBuilder: (context, index) {
-                return const _SearchResult(
-                    'BlackBird Coffee BlackBird CoffeeBlackBird CoffeeBlackBird CoffeeBlackBird CoffeeBlackBird CoffeeBlackBird CoffeeBlackBird Coffee');
+                return const _SearchResult('BlackBird Coffee BlackBird CoffeeBlackBird');
               },
             ),
           )
