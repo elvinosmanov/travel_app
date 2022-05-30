@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/search_textfield.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/data/app_data.dart';
@@ -13,7 +12,6 @@ import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
-import '../../cubit/navigation/navigation_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,9 +22,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _exploreSortValue = 0;
+  final _controller = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (_controller.position.pixels < 0) _controller.jumpTo(0);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
+      controller: _controller,
       padding: const EdgeInsets.only(bottom: 20),
       physics: const BouncingScrollPhysics(),
       children: [
@@ -35,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         SearchTextField(
           enabled: false,
           onPressed: () {
-            context.read<NavigationCubit>().onItemTapped(1);
+            context.router.pushNamed('/search/');
           },
         ).padding(top: 32, bottom: 32, left: 16, right: 16),
         CategoryBar(
@@ -49,8 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const CategoryList().padding(top: 16, bottom: 32),
         CategoryBar(
           categoryName: 'Explore',
-          onPressed: () =>
-              context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
+          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
         ),
         SortList(
           initialValue: _exploreSortValue,
@@ -64,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
         const ExploreList(),
         CategoryBar(
           categoryName: 'New Added',
-          onPressed: () => context.router.push(AllCategoriesRoute(
-              initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
+          onPressed: () => context.router.push(
+              AllCategoriesRoute(initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
         const NewAddedList(),
         const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
@@ -194,8 +201,7 @@ class CategoryList extends StatelessWidget {
         itemCount: _data.length,
         itemBuilder: (context, index) {
           return CategoryCard(
-            onPressed: () =>
-                context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
+            onPressed: () => context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
             image: _data[index].image,
             title: _data[index].name,
           ).padding(right: 8);
@@ -227,8 +233,7 @@ class TitleBar extends StatelessWidget {
         Container(
           width: 44,
           height: 44,
-          decoration: BoxDecoration(
-              color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
+          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
           child: SvgPicture.asset(
             R.notification,
             fit: BoxFit.scaleDown,

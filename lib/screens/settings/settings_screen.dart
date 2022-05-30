@@ -1,16 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/screens/settings/widgets/settings_bar.dart';
-import 'package:auto_route/auto_route.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
-
+  const SettingsScreen({
+    Key? key,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -84,17 +84,9 @@ class SettingsScreen extends StatelessWidget {
 
   Widget _buildTopNavigation() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, top: defaultTopPadding, right: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const CustomBackButton(
-            hasLabel: false,
-          ),
-          'Settings'.boldTextStyle(15),
-          const SizedBox(width: 24),
-        ],
-      ),
-    );
+        padding: const EdgeInsets.only(top: defaultTopPadding),
+        child: Center(
+          child: 'Settings'.boldTextStyle(15),
+        ));
   }
 }

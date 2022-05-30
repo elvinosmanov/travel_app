@@ -13,6 +13,7 @@ class CategoryCard2 extends StatelessWidget {
     this.placeSize,
     required this.isLiked,
     required this.imageName,
+    this.onHeartPressed,
     this.onPressed,
     this.width,
     this.height,
@@ -23,6 +24,7 @@ class CategoryCard2 extends StatelessWidget {
   final double? placeSize;
   final bool isLiked;
   final String imageName;
+  final Function()? onHeartPressed;
   final Function()? onPressed;
   final double? width;
   final double? height;
@@ -84,9 +86,15 @@ class CategoryCard2 extends StatelessWidget {
           Positioned(
             top: 13,
             right: 12,
-            child: SvgPicture.asset(
-              isLiked ? R.heartFilled : R.heartOutlined,
-              fit: BoxFit.cover,
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              onPressed: onHeartPressed,
+              splashRadius: 100,
+              icon: SvgPicture.asset(
+                isLiked ? R.heartFilled : R.heartOutlined,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ],

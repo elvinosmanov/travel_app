@@ -1,17 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:travel_app/components/custom_back_button.dart';
-import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/extensions/extensions.dart';
+
 import '../../components/search_textfield.dart';
 
 //TODO: search etmeyin isleri coxdu. Bu hisseni yarimciq qoyuram bura diqqet et
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
-
+  const SearchScreen({
+    Key? key,
+  }) : super(key: key);
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -28,31 +27,34 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const CustomBackButton().padding(top: defaultTopPadding, bottom: 16),
-          const SearchTextField(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              'Recent'.semiBoldTextStyle(18),
-              TextButton(onPressed: () {}, child: 'Clear all'.regularTextStyle(12, kDarkGreyColor))
-            ],
-          ).padding(top: 24, bottom: 8, left: 16),
-          Expanded(
-            child: ListView.builder(
-              controller: _controller,
-              physics: const BouncingScrollPhysics(),
-              itemCount: 8,
-              itemBuilder: (context, index) {
-                return const _SearchResult('BlackBird Coffee BlackBird CoffeeBlackBird');
-              },
-            ),
-          )
-        ],
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.only(left: 16.0, right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+              
+            const SizedBox(height: 16),
+            const SearchTextField(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                'Recent'.semiBoldTextStyle(18),
+                TextButton(onPressed: () {}, child: 'Clear all'.regularTextStyle(12, kDarkGreyColor))
+              ],
+            ).padding(top: 24, bottom: 8, left: 16),
+            Expanded(
+              child: ListView.builder(
+                controller: _controller,
+                physics: const BouncingScrollPhysics(),
+                itemCount: 8,
+                itemBuilder: (context, index) {
+                  return const _SearchResult('BlackBird Coffee BlackBird CoffeeBlackBird');
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

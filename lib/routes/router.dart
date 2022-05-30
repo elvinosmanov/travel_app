@@ -21,11 +21,6 @@ import '../screens/profile/widgets/ratings_tab_view.dart';
 import '../screens/profile/widgets/will_visit_tab_view.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Screen,Route', routes: [
-  //TODO: FOR NOW CHANGED PLACE
-  // AutoRoute(path: 'all_categories', page: AllCategoriesScreen),
-  // AutoRoute(path: 'details', page: DetailsScreen),
-  // AutoRoute(path: 'all_comments', page: AllCommentsScreen),
-
   AutoRoute(path: 'onboarding', page: OnboardingScreen),
   AutoRoute(path: 'welcome', page: WelcomeScreen),
   AutoRoute(path: '/', page: NavigationScreen, children: [
@@ -38,7 +33,7 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
         AutoRoute(path: 'categories', page: CategoriesScreen),
         // AutoRoute(path: 'all-categories', page: AllCategoriesScreen),
         AutoRoute(path: 'all-categories/:id/:sortId', page: AllCategoriesScreen),
-        AutoRoute(path: 'search',  page: SearchScreen),
+        // CustomRoute(path: 'search', page: SearchScreen, transitionsBuilder: TransitionsBuilders.slideBottom),
         AutoRoute(path: 'details', page: DetailsScreen),
         AutoRoute(path: 'all-comments', page: AllCommentsScreen),
       ],

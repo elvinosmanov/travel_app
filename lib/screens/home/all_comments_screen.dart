@@ -75,7 +75,6 @@ class AllCommentsScreen extends StatelessWidget {
                     itemSize: 26,
                     ignoreGestures: false,
                     onPressed: (value) {
-                      print(value);
                     }).padding(top: 8, bottom: 8),
               ],
             ),
@@ -93,7 +92,6 @@ class AllCommentsScreen extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {
-                        print('context');
                       },
                       icon: SvgPicture.asset(R.send))
                 ],

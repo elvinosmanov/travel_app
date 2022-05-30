@@ -88,10 +88,6 @@ class AppRouter extends _i4.RootStackRouter {
               selectedValue: args.selectedValue,
               initialSortValue: args.initialSortValue));
     },
-    SearchRoute.name: (routeData) {
-      return _i4.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i5.SearchScreen());
-    },
     DetailsRoute.name: (routeData) {
       final args = routeData.argsAs<DetailsRouteArgs>();
       return _i4.MaterialPageX<dynamic>(
@@ -163,8 +159,6 @@ class AppRouter extends _i4.RootStackRouter {
                 _i4.RouteConfig(AllCategoriesRoute.name,
                     path: 'all-categories/:id/:sortId',
                     parent: HomeRouter.name),
-                _i4.RouteConfig(SearchRoute.name,
-                    path: 'search', parent: HomeRouter.name),
                 _i4.RouteConfig(DetailsRoute.name,
                     path: 'details', parent: HomeRouter.name),
                 _i4.RouteConfig(AllCommentsRoute.name,
@@ -310,14 +304,6 @@ class AllCategoriesRouteArgs {
   String toString() {
     return 'AllCategoriesRouteArgs{key: $key, selectedValue: $selectedValue, initialSortValue: $initialSortValue}';
   }
-}
-
-/// generated route for
-/// [_i5.SearchScreen]
-class SearchRoute extends _i4.PageRouteInfo<void> {
-  const SearchRoute() : super(SearchRoute.name, path: 'search');
-
-  static const String name = 'SearchRoute';
 }
 
 /// generated route for

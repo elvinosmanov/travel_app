@@ -6,7 +6,7 @@ extension StringExtensions on int {
     } else if (this >= 1000) {
       return '${(this / 1000).toStringAsFixed(0)}K';
     } else {
-      return this.toString();
+      return toString();
     }
   }
 }

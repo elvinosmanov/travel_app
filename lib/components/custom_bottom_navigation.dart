@@ -67,7 +67,7 @@ class CustomBottomNavigationIcon extends StatelessWidget {
         onTap: onTap,
         child: SizedBox(
           width: MediaQuery.of(context).size.width / 4,
-          height: 50,
+          height: 55,
           child: isActive
               ? Align(
                   alignment: Alignment.center,

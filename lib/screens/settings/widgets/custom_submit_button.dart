@@ -17,7 +17,7 @@ class CustomSubmitButton extends StatelessWidget {
   final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
           style: ButtonStyle(

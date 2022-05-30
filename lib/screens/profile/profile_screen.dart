@@ -122,9 +122,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         'elvinosmanov'.semiBoldTextStyle(18, kBlueColor),
-        SvgPicture.asset(
-          R.settings,
-          fit: BoxFit.scaleDown,
+        IconButton(
+          onPressed: () => context.router.pushNamed('/settings/'),
+          icon: SvgPicture.asset(
+            R.settings,
+            fit: BoxFit.scaleDown,
+          ),
         )
       ],
     );

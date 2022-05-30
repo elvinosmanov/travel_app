@@ -29,7 +29,7 @@ class _MyFavoritesTabViewState extends State<MyFavoritesTabView> {
           isLiked: data[index].isLiked,
           place: data[index].place,
           text: data[index].text,
-          onPressed: () {
+          onHeartPressed: () {
             setState(() {
               data[index].isLiked = !data[index].isLiked;
             });

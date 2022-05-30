@@ -5,10 +5,13 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/components/category_card2.dart';
 import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/components/sort_list.dart';
+import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/home/widgets/custom_drop_down_button.dart';
+
+import '../../routes/router.gr.dart';
 
 class AllCategoriesScreen extends StatefulWidget {
   const AllCategoriesScreen({
@@ -33,7 +36,6 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
         body: SafeArea(
       child: Column(
@@ -70,6 +72,18 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                 place: data[index].place,
                 text: data[index].text,
                 onPressed: () {
+                  context.router.push(
+                    DetailsRoute(
+                      images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+                      likeCount: 350,
+                      commentCount: 30,
+                      rate: 3.8,
+                      viewCount: 14000000,
+                      isLiked: false,
+                    ),
+                  );
+                },
+                onHeartPressed: () {
                   setState(() {
                     data[index].isLiked = !data[index].isLiked;
                   });

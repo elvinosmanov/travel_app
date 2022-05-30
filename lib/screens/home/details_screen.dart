@@ -69,17 +69,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _buildTwoChildrenRow(SvgPicture.asset(R.eyeBlack),
-                  widget.viewCount.viewCountToString().mediumTextStyle(15)),
+              _buildTwoChildrenRow(
+                  SvgPicture.asset(R.eyeBlack), widget.viewCount.viewCountToString().mediumTextStyle(15)),
               _buildTwoChildrenRow(
                   widget.rate.toStringAsFixed(1).mediumTextStyle(15),
                   CustomRatingBar(
                     initialRating: widget.rate,
                   )),
+              _buildTwoChildrenRow(widget.commentCount.toString().mediumTextStyle(15), SvgPicture.asset(R.comment)),
               _buildTwoChildrenRow(
-                  widget.commentCount.toString().mediumTextStyle(15), SvgPicture.asset(R.comment)),
-              _buildTwoChildrenRow(widget.likeCount.toString().mediumTextStyle(15),
-                  SvgPicture.asset(R.heartFilledBlack)),
+                  widget.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack)),
             ],
           ).padding(all: 16),
           Padding(
@@ -138,9 +137,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ],
                 ).padding(bottom: 32)
               : _buildSeeAllReviewsButton().padding(bottom: 32),
-          const CategoryBar(
+          CategoryBar(
             categoryName: 'Places May You Like',
             color: kBlueColor,
+            onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: 2)),
           ).padding(bottom: 16),
           _buildCardList()
         ],
@@ -163,6 +163,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
               place: 'Gobustan, Azerbaijan',
               isLiked: false,
               imageName: R.shoppingImage,
+              onHeartPressed: () {
+                setState(() {
+                  // data[index].isLiked = !data[index].isLiked;
+                });
+              },
               onPressed: () => context.router.push(
                 DetailsRoute(
                   images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
@@ -215,8 +220,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           isReadmore = !isReadmore;
         });
       },
-      child:
-          (!isReadmore ? 'Read more' : 'Read less').mediumTextStyle(15, kBlueColor).padding(all: 8),
+      child: (!isReadmore ? 'Read more' : 'Read less').mediumTextStyle(15, kBlueColor).padding(all: 8),
     );
   }
 
@@ -311,15 +315,13 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                  decoration:
-                      BoxDecoration(color: kWhiteColor.withOpacity(0.57), borderRadius: kRadius16),
+                  decoration: BoxDecoration(color: kWhiteColor.withOpacity(0.57), borderRadius: kRadius16),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: widget.images.asMap().entries.map((entry) {
                       return GestureDetector(
                         onTap: () {
-                          print(entry.key);
                           _controller.animateToPage(entry.key);
                         },
                         child: Container(
@@ -387,9 +389,8 @@ class _CustomVisitButtonState extends State<CustomVisitButton> {
         ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(willVisit ? kLightBlueColor : kWhiteColor),
-            shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-            padding: MaterialStateProperty.all(EdgeInsets.all(5)),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+            padding: MaterialStateProperty.all(const EdgeInsets.all(5)),
           ),
           onPressed: () {
             setState(() {

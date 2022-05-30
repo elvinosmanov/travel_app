@@ -28,7 +28,7 @@ class _WillVisitTabViewState extends State<WillVisitTabView> {
           isLiked: data[index].isLiked,
           place: data[index].place,
           text: data[index].text,
-          onPressed: () {
+          onHeartPressed: () {
             setState(() {
               data[index].isLiked = !data[index].isLiked;
             });
