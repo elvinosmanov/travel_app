@@ -33,9 +33,10 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-              
             const SizedBox(height: 16),
-            const SearchTextField(),
+            SearchTextField(
+              focusNode: FocusNode()..requestFocus(),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

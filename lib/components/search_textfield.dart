@@ -10,14 +10,17 @@ class SearchTextField extends StatelessWidget {
     Key? key,
     this.onPressed,
     this.enabled,
+    this.focusNode,
   }) : super(key: key);
   final Function()? onPressed;
   final bool? enabled;
+  final FocusNode? focusNode;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: CustomTextField(
+        focusNode: focusNode,
         controller: TextEditingController(),
         filled: true,
         hintText: 'Search for places...',

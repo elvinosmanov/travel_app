@@ -31,9 +31,7 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
       children: [
         AutoRoute(path: '', page: HomeScreen),
         AutoRoute(path: 'categories', page: CategoriesScreen),
-        // AutoRoute(path: 'all-categories', page: AllCategoriesScreen),
         AutoRoute(path: 'all-categories/:id/:sortId', page: AllCategoriesScreen),
-        // CustomRoute(path: 'search', page: SearchScreen, transitionsBuilder: TransitionsBuilders.slideBottom),
         AutoRoute(path: 'details', page: DetailsScreen),
         AutoRoute(path: 'all-comments', page: AllCommentsScreen),
       ],

@@ -31,23 +31,7 @@ class MyApp extends StatelessWidget {
       routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: _appRouter.delegate(
         initialRoutes: [
-          const NavigationRoute()
-          // const SearchRouter()
-
-          // const AllCommentsRoute()
-
-          // DetailsRoute(
-          //   images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
-          //   likeCount: 350,
-          //   commentCount: 30,
-          //   rate: 3.8,
-          //   viewCount: 14000000,
-          //   isLiked: false,
-          // )
-
-          // const AllCategoriesRoute(),
-
-          // navigationPage(),
+           navigationPage()
         ],
       ),
     );
