@@ -57,4 +57,10 @@ class Category2 {
     required this.place,
     required this.isLiked,
   });
+
+  static alma(){
+
+  }
 }
+
+

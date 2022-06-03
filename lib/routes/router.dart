@@ -23,6 +23,7 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
 @MaterialAutoRouter(replaceInRouteName: 'Screen,Route', routes: [
   AutoRoute(path: 'onboarding', page: OnboardingScreen),
   AutoRoute(path: 'welcome', page: WelcomeScreen),
+  AutoRoute(path: 'all-comments', page: AllCommentsScreen),
   AutoRoute(path: '/', page: NavigationScreen, children: [
     AutoRoute(
       path: 'home',
@@ -33,7 +34,6 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
         AutoRoute(path: 'categories', page: CategoriesScreen),
         AutoRoute(path: 'all-categories/:id/:sortId', page: AllCategoriesScreen),
         AutoRoute(path: 'details', page: DetailsScreen),
-        AutoRoute(path: 'all-comments', page: AllCommentsScreen),
       ],
     ),
     AutoRoute(path: 'search', name: 'SearchRouter', page: SearchScreen),

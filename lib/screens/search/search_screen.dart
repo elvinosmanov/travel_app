@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
 
 import '../../components/search_textfield.dart';
@@ -27,6 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16),

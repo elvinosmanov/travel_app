@@ -20,11 +20,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
           child: child,
         );
       },
-      routes:  const [
+      routes: const [
         HomeRouter(),
         SearchRouter(),
         ProfileRouter(),
-         SettingsRouter(),
+        SettingsRouter(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return CustomBottomNavigationBar(

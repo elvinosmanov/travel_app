@@ -188,7 +188,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-          onTap: () => context.router.push(const AllCommentsRoute()),
+          onTap: () => context.router.pushNamed('all-comments'),
           child: 'See All Reviews'.mediumTextStyle(13, kDarkGreyColor),
         )
       ],
@@ -287,16 +287,19 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
       children: [
         CarouselSlider(
           items: widget.images
-              .map((item) => FadeInImage(
-                  placeholder: MemoryImage(kTransparentImage),
-                  fit: BoxFit.cover,
-                  width: 1000.0,
-                  image: AssetImage(item)))
+              .map((item) => FractionallySizedBox(
+                    widthFactor: 1 / 1.01,
+                    child: FadeInImage(
+                        placeholder: MemoryImage(kTransparentImage),
+                        fit: BoxFit.cover,
+                        width: 1000.0,
+                        image: AssetImage(item)),
+                  ))
               .toList(),
           carouselController: _controller,
           options: CarouselOptions(
               height: MediaQuery.of(context).size.height * 0.4,
-              viewportFraction: 1,
+              viewportFraction: 1.01,
               initialPage: 0,
               onPageChanged: (index, reason) {
                 setState(() {
