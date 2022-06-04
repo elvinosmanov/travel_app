@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/search_textfield.dart';
 import 'package:travel_app/core/constants.dart';
+import 'package:travel_app/cubit/category/category_cubit.dart';
 import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<CategoryCubit>().getAllCategories();
     _controller.addListener(() {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);
     });
@@ -188,23 +191,26 @@ class NewAddedList extends StatelessWidget {
 class CategoryList extends StatelessWidget {
   const CategoryList({Key? key}) : super(key: key);
 
-  final _data = Category.data;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 170,
-      child: ListView.builder(
-        clipBehavior: Clip.none,
-        padding: const EdgeInsets.only(left: 16.0),
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: _data.length,
-        itemBuilder: (context, index) {
-          return CategoryCard(
-            onPressed: () => context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
-            image: _data[index].image,
-            title: _data[index].name,
-          ).padding(right: 8);
+      child: BlocBuilder<CategoryCubit, CategoryState>(
+        builder: (context, state) {
+          return ListView.builder(
+            clipBehavior: Clip.none,
+            padding: const EdgeInsets.only(left: 16.0),
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: state.categoryList.length,
+            itemBuilder: (context, index) {
+              return CategoryCard(
+                onPressed: () => context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
+                image: state.categoryList[index]!.imageURL,
+                title: state.categoryList[index]!.name,
+              ).padding(right: 8);
+            },
+          );
         },
       ),
     );

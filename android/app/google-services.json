@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "276773021809",
+    "project_id": "azerbaijan-travel-app",
+    "storage_bucket": "azerbaijan-travel-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276773021809:android:783091357736a7dbfc53d0",
+        "android_client_info": {
+          "package_name": "com.example.travel_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276773021809-b9782g3prdie6187d2148u9b2443ca7c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnERrb__Iincj1zevy4i7W2njNrhyzXHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276773021809-b9782g3prdie6187d2148u9b2443ca7c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "276773021809-7uphf0b9p458bcg6300eh43kaj9rvuia.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.travelApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

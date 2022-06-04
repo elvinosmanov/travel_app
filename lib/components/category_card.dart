@@ -45,9 +45,14 @@ class CategoryCard extends StatelessWidget {
             children: [
               Container(
                 clipBehavior: Clip.none,
+                foregroundDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: const LinearGradient(
+                      colors: [Colors.black, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.center),
+                ),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
+                    image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)),
               ),
               Container(
                 decoration: BoxDecoration(
