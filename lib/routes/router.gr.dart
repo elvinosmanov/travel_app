@@ -99,7 +99,7 @@ class AppRouter extends _i5.RootStackRouter {
           child: _i11.DetailsScreen(
               key: args.key,
               isLiked: args.isLiked,
-              images: args.images,
+              imageURLs: args.images,
               viewCount: args.viewCount,
               commentCount: args.commentCount,
               likeCount: args.likeCount,

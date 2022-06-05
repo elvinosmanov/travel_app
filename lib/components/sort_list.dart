@@ -8,13 +8,13 @@ class SortList extends StatefulWidget {
   const SortList({
     Key? key,
     this.onPressed,
-    required this.categoryNames,
+    required this.categorySortNames,
     required this.initialValue,
     this.onChanged,
     this.controller,
   }) : super(key: key);
   final Function(int value)? onPressed;
-  final List<String> categoryNames;
+  final List<String> categorySortNames;
   final int initialValue;
   final Function(int value)? onChanged;
   final ScrollController? controller;
@@ -38,12 +38,12 @@ class _SortListState extends State<SortList> {
         controller: widget.controller,
         padding: const EdgeInsets.only(left: 16.0),
         scrollDirection: Axis.horizontal,
-        itemCount: widget.categoryNames.length,
+        itemCount: widget.categorySortNames.length,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return FilterItem(
               isActive: _selectedIndex == index,
-              itemName: widget.categoryNames[index],
+              itemName: widget.categorySortNames[index],
               onPressed: () {
                 if (widget.onChanged != null) {
                   widget.onChanged!(index);

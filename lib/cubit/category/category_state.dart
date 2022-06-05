@@ -3,7 +3,7 @@ part of 'category_cubit.dart';
 enum CategortStatus { initial, loading, success, error }
 
 class CategoryState extends Equatable {
-  CategoryState(
+  const CategoryState(
     this.status,
     this.categoryList,
     this.error,

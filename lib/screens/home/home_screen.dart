@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/search_textfield.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/cubit/category/category_cubit.dart';
-import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/category_card.dart';
@@ -60,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
         const CategoryList().padding(top: 16, bottom: 32),
         CategoryBar(
           categoryName: 'Explore',
-          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
+          onPressed: () =>
+              context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
         ),
         SortList(
           initialValue: _exploreSortValue,
@@ -69,13 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
               _exploreSortValue = value;
             });
           },
-          categoryNames: categoriesSorts,
+          categorySortNames: categoriesSorts,
         ).padding(top: 8), //bottom: 16-6
         const ExploreList(),
         CategoryBar(
           categoryName: 'New Added',
-          onPressed: () => context.router.push(
-              AllCategoriesRoute(initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
+          onPressed: () => context.router.push(AllCategoriesRoute(
+              initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
         const NewAddedList(),
         const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
@@ -205,7 +205,8 @@ class CategoryList extends StatelessWidget {
             itemCount: state.categoryList.length,
             itemBuilder: (context, index) {
               return CategoryCard(
-                onPressed: () => context.router.push(AllCategoriesRoute(selectedValue: categoryNames[index + 1])),
+                onPressed: () => context.router
+                    .push(AllCategoriesRoute(selectedValue: state.categoryList[index]!.name)),
                 image: state.categoryList[index]!.imageURL,
                 title: state.categoryList[index]!.name,
               ).padding(right: 8);
@@ -239,7 +240,8 @@ class TitleBar extends StatelessWidget {
         Container(
           width: 44,
           height: 44,
-          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
+          decoration: BoxDecoration(
+              color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
           child: SvgPicture.asset(
             R.notification,
             fit: BoxFit.scaleDown,

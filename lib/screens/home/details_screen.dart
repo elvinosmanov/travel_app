@@ -19,14 +19,14 @@ class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
     Key? key,
     this.isLiked = false,
-    required this.images,
+    required this.imageURLs,
     required this.viewCount,
     required this.commentCount,
     required this.likeCount,
     required this.rate,
   }) : super(key: key);
   final bool isLiked;
-  final List<String> images;
+  final List<String> imageURLs;
   final int viewCount;
   final int commentCount;
   final int likeCount;
@@ -63,7 +63,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         controller: _controller,
         children: <Widget>[
           DetailsImageContainer(
-            images: widget.images,
+            images: widget.imageURLs,
             isLiked: widget.isLiked,
           ),
           Row(

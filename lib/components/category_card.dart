@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -43,22 +44,32 @@ class CategoryCard extends StatelessWidget {
           height: 170,
           child: Stack(
             children: [
-              Container(
-                clipBehavior: Clip.none,
-                foregroundDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  gradient: const LinearGradient(
-                      colors: [Colors.black, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.center),
-                ),
-                decoration: BoxDecoration(
+              CachedNetworkImage(
+                imageUrl: image,
+                fit: BoxFit.fitHeight,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)),
+                    gradient: const LinearGradient(
+                        colors: [Colors.black, Colors.transparent],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.center),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   gradient: const LinearGradient(
-                      colors: [Colors.black, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.center),
+                      colors: [Colors.black, Colors.transparent],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.center),
                 ),
               ),
               if (hasStar)
@@ -67,8 +78,9 @@ class CategoryCard extends StatelessWidget {
                   right: 2,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                    decoration:
-                        BoxDecoration(color: kWhiteColor.withOpacity(0.8), borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(
+                        color: kWhiteColor.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(8)),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
