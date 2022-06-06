@@ -12,12 +12,15 @@ class CategoryCubit extends Cubit<CategoryState> {
       : _categoryRepository = categoryRepository ?? CategoryRepository(),
         super(CategoryState.initial());
 
-  void getAllCategories() async {
-    List<CategoryModel?> result = [];
+  void getAllCategories() {
     emit(state.copyWith(status: CategortStatus.loading));
     try {
-      result = await _categoryRepository.getAllCategories();
-      emit(state.copyWith(status: CategortStatus.success, categoryList: result));
+      final result = _categoryRepository.getAllCategories();
+      result.listen(
+        (categoryList) {
+          emit(state.copyWith(status: CategortStatus.success, categoryList: categoryList));
+        },
+      );
     } catch (e) {
       emit(state.copyWith(status: CategortStatus.error, error: 'Error: $e'));
     }

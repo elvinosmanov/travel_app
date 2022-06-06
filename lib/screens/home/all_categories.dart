@@ -74,7 +74,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                 onPressed: () {
                   context.router.push(
                     DetailsRoute(
-                      images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+                      imageURLs: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
                       likeCount: 350,
                       commentCount: 30,
                       rate: 3.8,

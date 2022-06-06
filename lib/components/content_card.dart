@@ -8,18 +8,18 @@ class ContentCard extends StatelessWidget {
   const ContentCard({
     Key? key,
     required this.starValue,
-    required this.image,
-    required this.name,
-    required this.place,
+    required this.imageURL,
+    required this.title,
+    required this.location,
     this.isHorizontal = true,
     this.width,
     this.height,
     this.onPressed,
   }) : super(key: key);
   final double starValue;
-  final String image;
-  final String name;
-  final String place;
+  final String imageURL;
+  final String title;
+  final String location;
   final bool isHorizontal;
   final double? width;
   final double? height;
@@ -32,8 +32,7 @@ class ContentCard extends StatelessWidget {
         width: width,
         height: height,
         child: Container(
-          decoration: BoxDecoration(
-              color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
+          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
           padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +44,7 @@ class ContentCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      isHorizontal ? name : name.useCorrectEllipsis(),
+                      isHorizontal ? title : title.useCorrectEllipsis(),
                       maxLines: isHorizontal ? 2 : 1,
                       overflow: TextOverflow.ellipsis,
                       style: kSemiBoldTextStyle(isHorizontal ? 14 : 18),
@@ -56,7 +55,7 @@ class ContentCard extends StatelessWidget {
                         SvgPicture.asset(R.map).padding(right: 2),
                         Flexible(
                           child: Text(
-                            place.useCorrectEllipsis(),
+                            location.useCorrectEllipsis(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: kSemiBoldTextStyle(isHorizontal ? 12 : 14, kDarkGreyColor),
@@ -83,7 +82,7 @@ class ContentCard extends StatelessWidget {
           // height: 210,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+            image: DecorationImage(image: NetworkImage(imageURL), fit: BoxFit.cover),
           ),
         ),
       ),

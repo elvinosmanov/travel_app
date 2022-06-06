@@ -99,7 +99,7 @@ class AppRouter extends _i5.RootStackRouter {
           child: _i11.DetailsScreen(
               key: args.key,
               isLiked: args.isLiked,
-              imageURLs: args.images,
+              imageURLs: args.imageURLs,
               viewCount: args.viewCount,
               commentCount: args.commentCount,
               likeCount: args.likeCount,
@@ -319,7 +319,7 @@ class DetailsRoute extends _i5.PageRouteInfo<DetailsRouteArgs> {
   DetailsRoute(
       {_i21.Key? key,
       bool isLiked = false,
-      required List<String> images,
+      required List<String> imageURLs,
       required int viewCount,
       required int commentCount,
       required int likeCount,
@@ -329,7 +329,7 @@ class DetailsRoute extends _i5.PageRouteInfo<DetailsRouteArgs> {
             args: DetailsRouteArgs(
                 key: key,
                 isLiked: isLiked,
-                images: images,
+                imageURLs: imageURLs,
                 viewCount: viewCount,
                 commentCount: commentCount,
                 likeCount: likeCount,
@@ -342,7 +342,7 @@ class DetailsRouteArgs {
   const DetailsRouteArgs(
       {this.key,
       this.isLiked = false,
-      required this.images,
+      required this.imageURLs,
       required this.viewCount,
       required this.commentCount,
       required this.likeCount,
@@ -352,7 +352,7 @@ class DetailsRouteArgs {
 
   final bool isLiked;
 
-  final List<String> images;
+  final List<String> imageURLs;
 
   final int viewCount;
 
@@ -364,7 +364,7 @@ class DetailsRouteArgs {
 
   @override
   String toString() {
-    return 'DetailsRouteArgs{key: $key, isLiked: $isLiked, images: $images, viewCount: $viewCount, commentCount: $commentCount, likeCount: $likeCount, rate: $rate}';
+    return 'DetailsRouteArgs{key: $key, isLiked: $isLiked, imageURLs: $imageURLs, viewCount: $viewCount, commentCount: $commentCount, likeCount: $likeCount, rate: $rate}';
   }
 }
 

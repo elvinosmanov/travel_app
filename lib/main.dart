@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/cubit/category/category_cubit.dart';
+import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/utils/onboarding_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => CategoryCubit(),)
+        BlocProvider(create: (context) => CategoryCubit()),
+        BlocProvider(create: (context) => PlaceCubit()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

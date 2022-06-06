@@ -5,11 +5,12 @@ import 'package:travel_app/repositories/category/base_category_repository.dart';
 class CategoryRepository extends BaseCategoryRepository {
   final _firebase = FirebaseFirestore.instance;
   @override
-  Future<List<CategoryModel?>> getAllCategories() async {
-    List<CategoryModel> categortList = [];
+  Stream<List<CategoryModel?>> getAllCategories() {
+    Stream<List<CategoryModel>> categortList;
     try {
-      final querySnapshot = await _firebase.collection('categories').get();
-      categortList = querySnapshot.docs.map((snapshot) => CategoryModel.getFromSnapshot(snapshot)).toList();
+      final querySnapshot = _firebase.collection('categories').snapshots();
+      categortList = querySnapshot
+          .map((querySnap) => querySnap.docs.map((snapshot) => CategoryModel.getFromSnapshot(snapshot)).toList());
       return categortList;
     } catch (e) {
       print(e);

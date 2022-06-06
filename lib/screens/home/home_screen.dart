@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/components/search_textfield.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/cubit/category/category_cubit.dart';
+import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/components/category_card.dart';
 import 'package:travel_app/components/content_card.dart';
 import 'package:travel_app/components/mini_card.dart';
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
@@ -28,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<CategoryCubit>().getAllCategories();
+    context.read<PlaceCubit>().getAllPlacesBySortValue(0);
     _controller.addListener(() {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);
     });
@@ -59,8 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const CategoryList().padding(top: 16, bottom: 32),
         CategoryBar(
           categoryName: 'Explore',
-          onPressed: () =>
-              context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
+          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
         ),
         SortList(
           initialValue: _exploreSortValue,
@@ -74,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
         const ExploreList(),
         CategoryBar(
           categoryName: 'New Added',
-          onPressed: () => context.router.push(AllCategoriesRoute(
-              initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
+          onPressed: () => context.router.push(
+              AllCategoriesRoute(initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
         const NewAddedList(),
         const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
@@ -117,31 +119,36 @@ class ExploreList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
-      child: ListView.builder(
-        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 16),
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return ContentCard(
-            width: 230,
-            height: 280,
-            starValue: 4.6,
-            image: R.tripImage,
-            name: "Gobustan milli parkı",
-            place: 'Karadagh, Baku',
-            onPressed: () => context.router.push(
-              DetailsRoute(
-                images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
-                likeCount: 350,
-                commentCount: 30,
-                rate: 3.8,
-                viewCount: 14000000,
-                isLiked: false,
-              ),
-            ),
-          ).padding(right: 16);
+      child: BlocBuilder<PlaceCubit, PlaceState>(
+        builder: (context, state) {
+          List<PlaceModel> placeModelList = state.places;
+          return ListView.builder(
+            padding: const EdgeInsets.only(top: 10, bottom: 10, left: 16),
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: placeModelList.length,
+            itemBuilder: (context, index) {
+              return ContentCard(
+                width: 230,
+                height: 280,
+                starValue: placeModelList[index].rateAvgCount,
+                imageURL: placeModelList[index].imageURLs[0],
+                title: placeModelList[index].title,
+                location: placeModelList[index].location,
+                onPressed: () => context.router.push(
+                  DetailsRoute(
+                    imageURLs: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+                    likeCount: 350,
+                    commentCount: 30,
+                    rate: 3.8,
+                    viewCount: 14000000,
+                    isLiked: false,
+                  ),
+                ),
+              ).padding(right: 16);
+            },
+          );
         },
       ),
     );
@@ -156,32 +163,37 @@ class NewAddedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return ListView.builder(
-      padding: EdgeInsets.only(left: width * 0.04, right: width * 0.04),
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      physics: const ClampingScrollPhysics(),
-      itemCount: 4,
-      itemBuilder: (context, index) {
-        return AspectRatio(
-          aspectRatio: 1 / 1.05,
-          child: ContentCard(
-            starValue: 4.6,
-            image: R.tripImage,
-            name: "Gobustan milli parkı",
-            place: 'Karadagh, Baku',
-            isHorizontal: false,
-            onPressed: () => context.router.push(
-              DetailsRoute(
-                images: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
-                likeCount: 350,
-                commentCount: 30,
-                rate: 3.8,
-                viewCount: 14000000,
-                isLiked: false,
-              ),
-            ),
-          ).padding(bottom: 16),
+    return BlocBuilder<PlaceCubit, PlaceState>(
+      builder: (context, state) {
+        List<PlaceModel> placeModelList = state.places;
+        return ListView.builder(
+          padding: EdgeInsets.only(left: width * 0.04, right: width * 0.04),
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          physics: const ClampingScrollPhysics(),
+          itemCount: placeModelList.length,
+          itemBuilder: (context, index) {
+            return AspectRatio(
+              aspectRatio: 1 / 1.05,
+              child: ContentCard(
+                starValue: placeModelList[index].rateAvgCount,
+                imageURL: placeModelList[index].imageURLs[0],
+                title: placeModelList[index].title,
+                location: placeModelList[index].location,
+                isHorizontal: false,
+                onPressed: () => context.router.push(
+                  DetailsRoute(
+                    imageURLs: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
+                    likeCount: 350,
+                    commentCount: 30,
+                    rate: 3.8,
+                    viewCount: 14000000,
+                    isLiked: false,
+                  ),
+                ),
+              ).padding(bottom: 16),
+            );
+          },
         );
       },
     );
@@ -205,8 +217,8 @@ class CategoryList extends StatelessWidget {
             itemCount: state.categoryList.length,
             itemBuilder: (context, index) {
               return CategoryCard(
-                onPressed: () => context.router
-                    .push(AllCategoriesRoute(selectedValue: state.categoryList[index]!.name)),
+                onPressed: () =>
+                    context.router.push(AllCategoriesRoute(selectedValue: state.categoryList[index]!.name)),
                 image: state.categoryList[index]!.imageURL,
                 title: state.categoryList[index]!.name,
               ).padding(right: 8);
@@ -240,8 +252,7 @@ class TitleBar extends StatelessWidget {
         Container(
           width: 44,
           height: 44,
-          decoration: BoxDecoration(
-              color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
+          decoration: BoxDecoration(color: kWhiteColor, borderRadius: kRadius16, boxShadow: [kBlackBoxShadow]),
           child: SvgPicture.asset(
             R.notification,
             fit: BoxFit.scaleDown,
