@@ -13,7 +13,6 @@ import 'package:travel_app/components/mini_card.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
-import 'package:travel_app/screens/home/provider/home_provider.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
 import '../../repositories/place/place_repository.dart';
@@ -64,21 +63,17 @@ class _HomeScreenState extends State<HomeScreen> {
         const CategoryList().padding(top: 16, bottom: 32),
         CategoryBar(
           categoryName: 'Explore',
-          onPressed: () =>
-              context.router.push(AllCategoriesRoute(initialSortValue: context.watch<HomeProvider>().sortIndex)),
+          onPressed: () => context.router.push(AllCategoriesRoute()),
         ),
-        SortList(
-          initialValue: context.watch<HomeProvider>().sortIndex,
-          onChanged: (value) {
-            context.read<PlaceCubit>().getAllPlacesBySortValue(value);
-            context.read<HomeProvider>().sortIndex = value;
-          },
-          categorySortNames: placeSorts,
-        ).padding(top: 8), //bottom: 16-6
-        const ExploreList(),
+        const SortList().padding(top: 8), //bottom: 16-6
+           const ExploreList(),
+        
         CategoryBar(
           categoryName: 'New Added',
-          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: newAddedIndex)),
+          onPressed: () {
+            context.read<PlaceCubit>().getAllPlacesBySortValue(newAddedIndex);
+            return context.router.push(AllCategoriesRoute());
+          },
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
         RepositoryProvider(
           create: (context) => PlaceRepository(),
@@ -128,6 +123,7 @@ class ExploreList extends StatelessWidget {
     return SizedBox(
       height: 300,
       child: BlocBuilder<PlaceCubit, PlaceState>(
+            buildWhen: (previous, current) => previous.places!=current.places,
         builder: (context, state) {
           List<PlaceModel> placeModelList = state.places;
           return ListView.builder(
@@ -172,6 +168,7 @@ class NewAddedList extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return BlocBuilder<PlaceCubit, PlaceState>(
+            buildWhen: (previous, current) => previous.places!=current.places,
       builder: (context, state) {
         List<PlaceModel> placeModelList = state.places;
         return ListView.builder(
@@ -216,6 +213,7 @@ class CategoryList extends StatelessWidget {
     return SizedBox(
       height: 170,
       child: BlocBuilder<CategoryCubit, CategoryState>(
+            buildWhen: (previous, current) => previous.categoryList!=current.categoryList,
         builder: (context, state) {
           return ListView.builder(
             clipBehavior: Clip.none,
@@ -226,7 +224,7 @@ class CategoryList extends StatelessWidget {
             itemBuilder: (context, index) {
               return CategoryCard(
                 onPressed: () =>
-                    context.router.push(AllCategoriesRoute(selectedValue: state.categoryList[index]!.name)),
+                    context.router.push(AllCategoriesRoute(selectedCategory: state.categoryList[index])),
                 image: state.categoryList[index]!.imageURL,
                 title: state.categoryList[index]!.name,
               ).padding(right: 8);

@@ -14,7 +14,7 @@ class PlaceCubit extends Cubit<PlaceState> {
         super(PlaceState.initial());
 
   getAllPlacesBySortValue(int value) {
-    emit(state.copyWith(status: PlaceStatus.loading));
+    emit(state.copyWith(status: PlaceStatus.loading, sortIndex: value));
     try {
       final result = _placeRepository.getAllPlacesBySortValue(value);
       result.listen(
@@ -25,6 +25,19 @@ class PlaceCubit extends Cubit<PlaceState> {
     } catch (e) {
       emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e'));
     }
-    _placeRepository.getAllPlacesBySortValue(value);
+  }
+
+  getAllPlacesByCategoryId(String id) {
+    emit(state.copyWith(status: PlaceStatus.loading));
+    try {
+      final result = _placeRepository.getAllPlacesByCategoryId(id);
+      result.listen(
+        (placeList) {
+          emit(state.copyWith(status: PlaceStatus.success, places: placeList));
+        },
+      );
+    } catch (e) {
+      emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e'));
+    }
   }
 }

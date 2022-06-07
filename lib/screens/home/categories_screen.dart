@@ -44,6 +44,7 @@ class CategoryGridView extends StatelessWidget {
       child: Stack(
         children: [
           BlocBuilder<CategoryCubit, CategoryState>(
+            buildWhen: (previous, current) => previous.categoryList!=current.categoryList,
             builder: (context, state) {
               return GridView.builder(
                   physics: const BouncingScrollPhysics(),
@@ -58,7 +59,7 @@ class CategoryGridView extends StatelessWidget {
                   itemBuilder: (BuildContext ctx, index) {
                     return CategoryCard(
                       onPressed: () =>
-                          context.router.push(AllCategoriesRoute(selectedValue: state.categoryList[index]!.name)),
+                          context.router.push(AllCategoriesRoute(selectedCategory: state.categoryList[index])),
                       textSize: 14,
                       image: state.categoryList[index]!.imageURL,
                       title: state.categoryList[index]!.name,

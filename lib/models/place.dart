@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -53,4 +55,21 @@ class PlaceModel extends Equatable {
         viewCount,
         createdDate
       ];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'categories': categories,
+      'title': title,
+      'description': description,
+      'location': location,
+      'image_urls': imageURLs,
+      'comment_count': commentCount,
+      'like_count': likeCount,
+      'view_count': viewCount,
+      'rate_avg_count': rateAvgCount,
+      'created_date':Timestamp.fromDate(createdDate) ,
+    };
+  }
+
+
 }

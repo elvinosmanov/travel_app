@@ -13,6 +13,7 @@
 import 'package:auto_route/auto_route.dart' as _i5;
 import 'package:flutter/material.dart' as _i21;
 
+import '../models/category.dart' as _i22;
 import '../screens/home/all_categories.dart' as _i10;
 import '../screens/home/all_comments_screen.dart' as _i3;
 import '../screens/home/categories_screen.dart' as _i9;
@@ -80,17 +81,12 @@ class AppRouter extends _i5.RootStackRouter {
           routeData: routeData, child: const _i9.CategoriesScreen());
     },
     AllCategoriesRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<AllCategoriesRouteArgs>(
-          orElse: () => AllCategoriesRouteArgs(
-              selectedValue: pathParams.optString('id'),
-              initialSortValue: pathParams.optInt('sortId')));
+          orElse: () => const AllCategoriesRouteArgs());
       return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i10.AllCategoriesScreen(
-              key: args.key,
-              selectedValue: args.selectedValue,
-              initialSortValue: args.initialSortValue));
+              key: args.key, selectedCategory: args.selectedCategory));
     },
     DetailsRoute.name: (routeData) {
       final args = routeData.argsAs<DetailsRouteArgs>();
@@ -158,8 +154,7 @@ class AppRouter extends _i5.RootStackRouter {
                 _i5.RouteConfig(CategoriesRoute.name,
                     path: 'categories', parent: HomeRouter.name),
                 _i5.RouteConfig(AllCategoriesRoute.name,
-                    path: 'all-categories/:id/:sortId',
-                    parent: HomeRouter.name),
+                    path: 'all-categories', parent: HomeRouter.name),
                 _i5.RouteConfig(DetailsRoute.name,
                     path: 'details', parent: HomeRouter.name)
               ]),
@@ -284,32 +279,25 @@ class CategoriesRoute extends _i5.PageRouteInfo<void> {
 /// generated route for
 /// [_i10.AllCategoriesScreen]
 class AllCategoriesRoute extends _i5.PageRouteInfo<AllCategoriesRouteArgs> {
-  AllCategoriesRoute(
-      {_i21.Key? key, String? selectedValue, int? initialSortValue})
+  AllCategoriesRoute({_i21.Key? key, _i22.CategoryModel? selectedCategory})
       : super(AllCategoriesRoute.name,
-            path: 'all-categories/:id/:sortId',
+            path: 'all-categories',
             args: AllCategoriesRouteArgs(
-                key: key,
-                selectedValue: selectedValue,
-                initialSortValue: initialSortValue),
-            rawPathParams: {'id': selectedValue, 'sortId': initialSortValue});
+                key: key, selectedCategory: selectedCategory));
 
   static const String name = 'AllCategoriesRoute';
 }
 
 class AllCategoriesRouteArgs {
-  const AllCategoriesRouteArgs(
-      {this.key, this.selectedValue, this.initialSortValue});
+  const AllCategoriesRouteArgs({this.key, this.selectedCategory});
 
   final _i21.Key? key;
 
-  final String? selectedValue;
-
-  final int? initialSortValue;
+  final _i22.CategoryModel? selectedCategory;
 
   @override
   String toString() {
-    return 'AllCategoriesRouteArgs{key: $key, selectedValue: $selectedValue, initialSortValue: $initialSortValue}';
+    return 'AllCategoriesRouteArgs{key: $key, selectedCategory: $selectedCategory}';
   }
 }
 

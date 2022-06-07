@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:travel_app/components/category_bar.dart';
 import 'package:travel_app/components/category_card2.dart';
@@ -10,6 +11,7 @@ import 'package:travel_app/components/custom_comment.dart';
 import 'package:travel_app/components/custom_divider.dart';
 import 'package:travel_app/components/custom_opacity_button.dart';
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/routes/router.gr.dart';
 
@@ -140,7 +142,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
           CategoryBar(
             categoryName: 'Places May You Like',
             color: kBlueColor,
-            onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: 2)),
+            onPressed: () {
+              context.read<PlaceCubit>().getAllPlacesBySortValue(2);
+              return context.router.push(AllCategoriesRoute());
+            },
           ).padding(bottom: 16),
           _buildCardList()
         ],
@@ -159,10 +164,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
           itemBuilder: (context, index) {
             return CategoryCard2(
               width: 150,
-              text: 'Gobustan Stones',
-              place: 'Gobustan, Azerbaijan',
+              title: 'Gobustan Stones',
+              location: 'Gobustan, Azerbaijan',
               isLiked: false,
-              imageName: R.shoppingImage,
+              imageUrl: R.shoppingImage,
               onHeartPressed: () {
                 setState(() {
                   // data[index].isLiked = !data[index].isLiked;

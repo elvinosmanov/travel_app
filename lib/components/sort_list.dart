@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_app/core/constants.dart';
 
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 
 ///There is padding top and bottom 8px
@@ -8,50 +11,42 @@ class SortList extends StatefulWidget {
   const SortList({
     Key? key,
     this.onPressed,
-    required this.categorySortNames,
-    required this.initialValue,
-    this.onChanged,
     this.controller,
   }) : super(key: key);
   final Function(int value)? onPressed;
-  final List<String> categorySortNames;
-  final int initialValue;
-  final Function(int value)? onChanged;
   final ScrollController? controller;
   @override
   State<SortList> createState() => _SortListState();
 }
 
 class _SortListState extends State<SortList> {
-  late int _selectedIndex;
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.initialValue;
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 46,
-      child: ListView.builder(
-        controller: widget.controller,
-        padding: const EdgeInsets.only(left: 16.0),
-        scrollDirection: Axis.horizontal,
-        itemCount: widget.categorySortNames.length,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return FilterItem(
-              isActive: _selectedIndex == index,
-              itemName: widget.categorySortNames[index],
-              onPressed: () {
-                if (widget.onChanged != null) {
-                  widget.onChanged!(index);
-                }
-                setState(() {
-                  _selectedIndex = index;
-                });
-              });
+      child: BlocBuilder<PlaceCubit, PlaceState>(
+        buildWhen: (previous, current) => previous.sortIndex != current.sortIndex,
+        builder: (context, state) {
+          return ListView.builder(
+            controller: widget.controller,
+            padding: const EdgeInsets.only(left: 16.0),
+            scrollDirection: Axis.horizontal,
+            itemCount: placeSorts.length,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return FilterItem(
+                  isActive: state.sortIndex == index,
+                  itemName: placeSorts[index],
+                  onPressed: () {
+                    context.read<PlaceCubit>().getAllPlacesBySortValue(index);
+                  }).padding(right: 10);
+            },
+          );
         },
       ),
     );
@@ -71,7 +66,8 @@ class FilterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      borderRadius: kRadius8,
       onTap: onPressed,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -85,7 +81,7 @@ class FilterItem extends StatelessWidget {
               decoration: const BoxDecoration(color: kBlueColor, shape: BoxShape.circle),
             )
         ],
-      ).padding(right: 24, top: 8, bottom: 8),
+      ).padding(all: 8),
     );
   }
 }

@@ -25,10 +25,10 @@ class _MyFavoritesTabViewState extends State<MyFavoritesTabView> {
       itemCount: data.length,
       itemBuilder: (context, index) {
         return CategoryCard2(
-          imageName: data[index].imageName,
+          imageUrl: data[index].imageName,
           isLiked: data[index].isLiked,
-          place: data[index].place,
-          text: data[index].text,
+          location: data[index].place,
+          title: data[index].text,
           onHeartPressed: () {
             setState(() {
               data[index].isLiked = !data[index].isLiked;
