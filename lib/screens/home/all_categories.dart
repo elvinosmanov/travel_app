@@ -53,7 +53,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
             },
           ).padding(left: 16),
           SortList(
-            categorySortNames: categoriesSorts,
+            categorySortNames: placeSorts,
             initialValue: widget.initialSortValue ?? 0,
           ).padding(top: 8, bottom: 8),
           Expanded(

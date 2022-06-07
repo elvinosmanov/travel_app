@@ -13,8 +13,10 @@ import 'package:travel_app/components/mini_card.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
+import 'package:travel_app/screens/home/provider/home_provider.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
+import '../../repositories/place/place_repository.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,7 +26,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _exploreSortValue = 0;
   final _controller = ScrollController();
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  final newAddedIndex = placeSorts.indexWhere((element) => element == 'New Added');
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -62,24 +64,30 @@ class _HomeScreenState extends State<HomeScreen> {
         const CategoryList().padding(top: 16, bottom: 32),
         CategoryBar(
           categoryName: 'Explore',
-          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: _exploreSortValue)),
+          onPressed: () =>
+              context.router.push(AllCategoriesRoute(initialSortValue: context.watch<HomeProvider>().sortIndex)),
         ),
         SortList(
-          initialValue: _exploreSortValue,
+          initialValue: context.watch<HomeProvider>().sortIndex,
           onChanged: (value) {
-            setState(() {
-              _exploreSortValue = value;
-            });
+            context.read<PlaceCubit>().getAllPlacesBySortValue(value);
+            context.read<HomeProvider>().sortIndex = value;
           },
-          categorySortNames: categoriesSorts,
+          categorySortNames: placeSorts,
         ).padding(top: 8), //bottom: 16-6
         const ExploreList(),
         CategoryBar(
           categoryName: 'New Added',
-          onPressed: () => context.router.push(
-              AllCategoriesRoute(initialSortValue: categoriesSorts.indexWhere((element) => element == 'New Added'))),
+          onPressed: () => context.router.push(AllCategoriesRoute(initialSortValue: newAddedIndex)),
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
-        const NewAddedList(),
+        RepositoryProvider(
+          create: (context) => PlaceRepository(),
+          child: BlocProvider(
+            create: (context) =>
+                PlaceCubit(placeRepository: context.read<PlaceRepository>())..getAllPlacesBySortValue(newAddedIndex),
+            child: const NewAddedList(),
+          ),
+        ),
         const CategoryBar(categoryName: 'Travel Guide').padding(top: 32, bottom: 6),
         const TravelGuideList(),
       ],

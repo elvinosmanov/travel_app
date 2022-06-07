@@ -1,7 +1,7 @@
 const String appName = 'Travel App';
 const double defaultTopPadding = 20;
 
-const categoriesSorts = ['All', 'Popular', 'Recommended', 'Most Viewed', 'Most Rated', 'New Added'];
+const placeSorts = ['All', 'Popular', 'Recommended', 'Most Viewed', 'Most Rated', 'New Added'];
 const categoryNames = [
   'All Categories',
   'History and Culture',

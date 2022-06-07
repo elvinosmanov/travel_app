@@ -9,9 +9,11 @@ part 'place_state.dart';
 
 class PlaceCubit extends Cubit<PlaceState> {
   final BasePlaceRepository _placeRepository;
-  PlaceCubit({BasePlaceRepository? placeRepository}) : _placeRepository = placeRepository ?? PlaceRepository(), super(PlaceState.initial());
-  
-  getAllPlacesBySortValue(int value){
+  PlaceCubit({BasePlaceRepository? placeRepository})
+      : _placeRepository = placeRepository ?? PlaceRepository(),
+        super(PlaceState.initial());
+
+  getAllPlacesBySortValue(int value) {
     emit(state.copyWith(status: PlaceStatus.loading));
     try {
       final result = _placeRepository.getAllPlacesBySortValue(value);
