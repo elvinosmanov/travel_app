@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/models/category.dart';
-import 'package:travel_app/repositories/category/base_category_repository.dart';
 
 class CategoryRepository extends BaseCategoryRepository {
   final _firebase = FirebaseFirestore.instance;
@@ -17,4 +16,7 @@ class CategoryRepository extends BaseCategoryRepository {
       rethrow;
     }
   }
+}
+abstract class BaseCategoryRepository {
+  Stream<List<CategoryModel?>> getAllCategories();
 }

@@ -1,8 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:travel_app/models/category.dart';
-import 'package:travel_app/repositories/category/base_category_repository.dart';
-import 'package:travel_app/repositories/category/category_repository.dart';
+import 'package:travel_app/repositories/category_repository.dart';
 
 part 'category_state.dart';
 

@@ -15,7 +15,7 @@ import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
-import '../../repositories/place/place_repository.dart';
+import '../../repositories/place_repository.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<CategoryCubit>().getAllCategories();
-    context.read<PlaceCubit>().getAllPlacesBySortValue(0);
+    context.read<PlaceCubit>().getAllPlacesBy(0);
     _controller.addListener(() {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);
     });
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         CategoryBar(
           categoryName: 'New Added',
           onPressed: () {
-            context.read<PlaceCubit>().getAllPlacesBySortValue(newAddedIndex);
+            context.read<PlaceCubit>().getAllPlacesBy(newAddedIndex);
             return context.router.push(AllCategoriesRoute());
           },
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           create: (context) => PlaceRepository(),
           child: BlocProvider(
             create: (context) =>
-                PlaceCubit(placeRepository: context.read<PlaceRepository>())..getAllPlacesBySortValue(newAddedIndex),
+                PlaceCubit(placeRepository: context.read<PlaceRepository>())..getAllPlacesBy(newAddedIndex),
             child: const NewAddedList(),
           ),
         ),

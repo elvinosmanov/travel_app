@@ -43,7 +43,7 @@ class _SortListState extends State<SortList> {
                   isActive: state.sortIndex == index,
                   itemName: placeSorts[index],
                   onPressed: () {
-                    context.read<PlaceCubit>().getAllPlacesBySortValue(index);
+                    context.read<PlaceCubit>().getAllPlacesBy(index);
                   }).padding(right: 10);
             },
           );

@@ -2,8 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../models/place.dart';
-import '../../repositories/place/base_place_repositort.dart';
-import '../../repositories/place/place_repository.dart';
+import '../../repositories/place_repository.dart';
 
 part 'place_state.dart';
 
@@ -13,27 +12,13 @@ class PlaceCubit extends Cubit<PlaceState> {
       : _placeRepository = placeRepository ?? PlaceRepository(),
         super(PlaceState.initial());
 
-  getAllPlacesBySortValue(int value) {
-    emit(state.copyWith(status: PlaceStatus.loading, sortIndex: value));
+  getAllPlacesBy(int value, {String? categoryId}) {
+    print('state.categoryId: ${state.categoryId}');
+    emit(state.copyWith(status: PlaceStatus.loading, sortIndex: value, categoryId: categoryId ?? state.categoryId));
     try {
-      final result = _placeRepository.getAllPlacesBySortValue(value);
+      final result = _placeRepository.getAllPlacesBy(value, categoryId ?? state.categoryId);
       result.listen(
         (placeList) {
-          emit(state.copyWith(status: PlaceStatus.success, places: placeList));
-        },
-      );
-    } catch (e) {
-      emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e'));
-    }
-  }
-
-  getAllPlacesByCategoryId(String id) {
-    emit(state.copyWith(status: PlaceStatus.loading));
-    try {
-      final result = _placeRepository.getAllPlacesByCategoryId(id);
-      result.listen(
-        (placeList) {
-          print(placeList.length);
           emit(state.copyWith(status: PlaceStatus.success, places: placeList));
         },
       );

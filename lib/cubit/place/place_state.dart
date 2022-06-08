@@ -8,15 +8,18 @@ class PlaceState extends Equatable {
     this.places,
     this.error,
     this.sortIndex,
+    this.categoryId,
   );
   final PlaceStatus status;
   final List<PlaceModel> places;
   final String error;
   final int sortIndex;
+  final String? categoryId;
   PlaceState.initial()
       : status = PlaceStatus.initial,
         error = '',
         sortIndex = 0,
+        categoryId = null,
         places = [];
   //DONT FORGET TO ADD FIELD HERE
   @override
@@ -27,12 +30,14 @@ class PlaceState extends Equatable {
     List<PlaceModel>? places,
     String? error,
     int? sortIndex,
+    String? categoryId,
   }) {
     return PlaceState(
       status ?? this.status,
       places ?? this.places,
       error ?? this.error,
       sortIndex ?? this.sortIndex,
+      categoryId ?? this.categoryId,
     );
   }
 }

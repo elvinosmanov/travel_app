@@ -52,8 +52,6 @@ class MyApp extends StatelessWidget {
 
 PageRouteInfo<dynamic> navigationPage() {
   bool? isExistingUser = OnboardingPreferences.getOnboarding();
-  // ignore: avoid_print
-  print(isExistingUser);
   if (isExistingUser == null) {
     return const OnboardingRoute();
   } else {

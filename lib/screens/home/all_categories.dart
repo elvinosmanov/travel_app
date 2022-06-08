@@ -15,7 +15,7 @@ import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/home/widgets/custom_drop_down_button.dart';
 
 import '../../models/category.dart';
-import '../../repositories/place/place_repository.dart';
+import '../../repositories/place_repository.dart';
 import '../../routes/router.gr.dart';
 
 class AllCategoriesScreen extends StatefulWidget {
@@ -44,36 +44,30 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
       child: BlocProvider(
         create: (context) {
           final placeCubit = PlaceCubit(placeRepository: context.read<PlaceRepository>());
-          if (_selectedCategoryId != null) {
-            placeCubit.getAllPlacesByCategoryId(_selectedCategoryId!);
-          } else {
-            placeCubit.getAllPlacesBySortValue(0);
-          }
+            placeCubit.getAllPlacesBy(0, categoryId: _selectedCategoryId!);
           return placeCubit;
         },
-        child: Scaffold(
-            body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomBackButton(
-                onPressed: () => context.router.pop(),
-              ).padding(left: 16, top: defaultTopPadding, bottom: 16),
-              CustomDropDownButton(
-                selectedValue: _selectedCategoryId,
-                onChanged: (String? value) {
-                  if (_selectedCategoryId != null) {
-                    _selectedCategoryId = value;
-                    setState(() {});
-                    context.read<PlaceCubit>().getAllPlacesByCategoryId(value!);
-                  }
-                },
-              ).padding(left: 16),
-              const SortList().padding(top: 8, bottom: 8),
-              Expanded(child: BlocBuilder<PlaceCubit, PlaceState>(
-                builder: (context, state) {
-                  print('place LengtJ:${state.places.length}');
-                  return MasonryGridView.count(
+        child: BlocBuilder<PlaceCubit, PlaceState>(
+          builder: (context, state) {
+            return Scaffold(
+                body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomBackButton(
+                    onPressed: () => context.router.pop(),
+                  ).padding(left: 16, top: defaultTopPadding, bottom: 16),
+                  CustomDropDownButton(
+                    selectedValue: state.categoryId,
+                    onChanged: (String? value) {
+                      if (_selectedCategoryId != null) {
+                        context.read<PlaceCubit>().getAllPlacesBy(state.sortIndex, categoryId: value!);
+                      }
+                    },
+                  ).padding(left: 16),
+                  const SortList().padding(top: 8, bottom: 8),
+                  Expanded(
+                      child: MasonryGridView.count(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
                     crossAxisCount: 2,
@@ -106,12 +100,12 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                         },
                       );
                     },
-                  );
-                },
-              )),
-            ],
-          ),
-        )),
+                  )),
+                ],
+              ),
+            ));
+          },
+        ),
       ),
     );
   }
