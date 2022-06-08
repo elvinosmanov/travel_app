@@ -33,6 +33,7 @@ class PlaceCubit extends Cubit<PlaceState> {
       final result = _placeRepository.getAllPlacesByCategoryId(id);
       result.listen(
         (placeList) {
+          print(placeList.length);
           emit(state.copyWith(status: PlaceStatus.success, places: placeList));
         },
       );

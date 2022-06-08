@@ -3,16 +3,16 @@ import 'package:equatable/equatable.dart';
 
 class CategoryModel extends Equatable {
   final String id;
-   String name;
+  String name;
   final String imageURL;
-   CategoryModel({
+  CategoryModel({
     required this.id,
-     required this.name,
+    required this.name,
     required this.imageURL,
   });
 
   @override
-  List<Object?> get props => [name, imageURL];
+  List<Object?> get props => [name, imageURL, id];
 
   factory CategoryModel.getFromSnapshot(DocumentSnapshot snapshot) {
     CategoryModel categoryModel =
