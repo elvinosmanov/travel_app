@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travel_app/core/constants.dart';
 
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
@@ -30,20 +29,20 @@ class _SortListState extends State<SortList> {
     return SizedBox(
       height: 46,
       child: BlocBuilder<PlaceCubit, PlaceState>(
-        buildWhen: (previous, current) => previous.sortIndex != current.sortIndex,
+        buildWhen: (previous, current) => previous.sortedValue != current.sortedValue,
         builder: (context, state) {
           return ListView.builder(
             controller: widget.controller,
             padding: const EdgeInsets.only(left: 16.0),
             scrollDirection: Axis.horizontal,
-            itemCount: placeSorts.length,
+            itemCount: PlaceSorts.values.length,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return FilterItem(
-                  isActive: state.sortIndex == index,
-                  itemName: placeSorts[index],
+                  isActive: state.sortedValue == PlaceSorts.values[index],
+                  itemName: PlaceSorts.values[index].toString(),
                   onPressed: () {
-                    context.read<PlaceCubit>().getAllPlacesBy(index);
+                    context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.values[index]);
                   }).padding(right: 10);
             },
           );

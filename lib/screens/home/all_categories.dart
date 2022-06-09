@@ -44,7 +44,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
       child: BlocProvider(
         create: (context) {
           final placeCubit = PlaceCubit(placeRepository: context.read<PlaceRepository>());
-            placeCubit.getAllPlacesBy(0, categoryId: _selectedCategoryId!);
+            placeCubit.getAllPlacesBy(PlaceSorts.all, categoryId: _selectedCategoryId!);
           return placeCubit;
         },
         child: BlocBuilder<PlaceCubit, PlaceState>(
@@ -61,7 +61,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                     selectedValue: state.categoryId,
                     onChanged: (String? value) {
                       if (_selectedCategoryId != null) {
-                        context.read<PlaceCubit>().getAllPlacesBy(state.sortIndex, categoryId: value!);
+                        context.read<PlaceCubit>().getAllPlacesBy(state.sortedValue, categoryId: value!);
                       }
                     },
                   ).padding(left: 16),

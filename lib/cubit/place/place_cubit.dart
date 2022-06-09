@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:travel_app/core/constants.dart';
 
 import '../../models/place.dart';
 import '../../repositories/place_repository.dart';
@@ -12,9 +13,8 @@ class PlaceCubit extends Cubit<PlaceState> {
       : _placeRepository = placeRepository ?? PlaceRepository(),
         super(PlaceState.initial());
 
-  getAllPlacesBy(int value, {String? categoryId}) {
-    print('state.categoryId: ${state.categoryId}');
-    emit(state.copyWith(status: PlaceStatus.loading, sortIndex: value, categoryId: categoryId ?? state.categoryId));
+  getAllPlacesBy(PlaceSorts value, {String? categoryId}) {
+    emit(state.copyWith(status: PlaceStatus.loading, sortedValue: value, categoryId: categoryId ?? state.categoryId));
     try {
       final result = _placeRepository.getAllPlacesBy(value, categoryId ?? state.categoryId);
       result.listen(

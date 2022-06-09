@@ -143,7 +143,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             categoryName: 'Places May You Like',
             color: kBlueColor,
             onPressed: () {
-              context.read<PlaceCubit>().getAllPlacesBy(2);
+              context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.recommended);
               return context.router.push(AllCategoriesRoute());
             },
           ).padding(bottom: 16),

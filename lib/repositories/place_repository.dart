@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/models/place.dart';
 
 class PlaceRepository extends BasePlaceRepository {
   final _firebase = FirebaseFirestore.instance;
 
   @override
-  Stream<List<PlaceModel>> getAllPlacesBy(int sortValue, String? categoryId) {
+  Stream<List<PlaceModel>> getAllPlacesBy(PlaceSorts sortValue, String? categoryId) {
     Stream<List<PlaceModel>> placeList;
     Stream<QuerySnapshot> querySnapshot;
     Query<Map<String, dynamic>> query;
+    print('state.categoryId: $categoryId');
     if (categoryId != null) {
       query = _firebase.collection('places').where('categories', arrayContains: categoryId);
     } else {
@@ -16,26 +18,22 @@ class PlaceRepository extends BasePlaceRepository {
     }
     try {
       switch (sortValue) {
-        case 0:
+        case PlaceSorts.all:
           querySnapshot = query.snapshots();
           break;
-        case 1:
-          querySnapshot = query.limit(1).snapshots();
+        case PlaceSorts.popular:
+          querySnapshot = query.orderBy('view_count', descending: true).snapshots();
           break;
-        case 2:
-          querySnapshot = query.limit(2).snapshots();
+        case PlaceSorts.newAdded:
+          querySnapshot = query.orderBy('created_date', descending: true).snapshots();
           break;
-        case 3:
-          querySnapshot = query.limit(3).snapshots();
+        case PlaceSorts.mostRated:
+          querySnapshot = query.orderBy('rate_avg_count',descending: true).snapshots();
           break;
-        case 4:
-          querySnapshot = query.limit(4).snapshots();
-          break;
-        case 5:
+       
+        case PlaceSorts.recommended:
           querySnapshot = query.limit(5).snapshots();
           break;
-        default:
-          querySnapshot = query.limit(6).snapshots();
       }
       placeList = querySnapshot
           .map((querySnap) => querySnap.docs.map((snapshot) => PlaceModel.getFromSnapshot(snapshot)).toList());
@@ -67,6 +65,6 @@ class PlaceRepository extends BasePlaceRepository {
 }
 
 abstract class BasePlaceRepository {
-  Stream<List<PlaceModel>> getAllPlacesBy(int sortValue, String? categoryId);
+  Stream<List<PlaceModel>> getAllPlacesBy(PlaceSorts sortValue, String? categoryId);
   // Stream<List<PlaceModel>> getAllPlacesByCategoryId(String id);
 }

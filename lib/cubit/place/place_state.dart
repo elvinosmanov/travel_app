@@ -2,23 +2,36 @@ part of 'place_cubit.dart';
 
 enum PlaceStatus { initial, loading, success, error }
 
+enum PlaceSorts {
+  all('All'),
+  popular('Popular'),
+  recommended('Recommended'),
+  mostRated('Most Rated'),
+  newAdded('New Added');
+
+  final String _value;
+  const PlaceSorts(this._value);
+  @override
+  String toString() => _value;
+}
+
 class PlaceState extends Equatable {
   const PlaceState(
     this.status,
     this.places,
     this.error,
-    this.sortIndex,
+    this.sortedValue,
     this.categoryId,
   );
   final PlaceStatus status;
   final List<PlaceModel> places;
   final String error;
-  final int sortIndex;
+  final PlaceSorts sortedValue;
   final String? categoryId;
   PlaceState.initial()
       : status = PlaceStatus.initial,
         error = '',
-        sortIndex = 0,
+        sortedValue = PlaceSorts.all,
         categoryId = null,
         places = [];
   //DONT FORGET TO ADD FIELD HERE
@@ -29,14 +42,14 @@ class PlaceState extends Equatable {
     PlaceStatus? status,
     List<PlaceModel>? places,
     String? error,
-    int? sortIndex,
+    PlaceSorts? sortedValue,
     String? categoryId,
   }) {
     return PlaceState(
       status ?? this.status,
       places ?? this.places,
       error ?? this.error,
-      sortIndex ?? this.sortIndex,
+      sortedValue ?? this.sortedValue,
       categoryId ?? this.categoryId,
     );
   }

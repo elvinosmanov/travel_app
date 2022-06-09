@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -36,7 +34,7 @@ class PlaceModel extends Equatable {
         imageURLs: snapshot['image_urls'],
         commentCount: snapshot['comment_count'],
         likeCount: snapshot['like_count'],
-        rateAvgCount: snapshot['rate_avg_count'],
+        rateAvgCount: snapshot['rate_avg_count'].toDouble(),
         viewCount: snapshot['view_count'],
         createdDate: DateTime.parse(snapshot['created_date'].toDate().toString()));
     return placeModel;
@@ -67,9 +65,7 @@ class PlaceModel extends Equatable {
       'like_count': likeCount,
       'view_count': viewCount,
       'rate_avg_count': rateAvgCount,
-      'created_date':Timestamp.fromDate(createdDate) ,
+      'created_date': Timestamp.fromDate(createdDate),
     };
   }
-
-
 }
