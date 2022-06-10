@@ -3,9 +3,9 @@ import 'package:equatable/equatable.dart';
 
 class CategoryModel extends Equatable {
   final String id;
-  String name;
+ final String name;
   final String imageURL;
-  CategoryModel({
+  const CategoryModel({
     required this.id,
     required this.name,
     required this.imageURL,
@@ -16,7 +16,7 @@ class CategoryModel extends Equatable {
 
   factory CategoryModel.getFromSnapshot(DocumentSnapshot snapshot) {
     CategoryModel categoryModel =
-        CategoryModel(name: snapshot['name'], imageURL: snapshot['image_url'], id: snapshot['id']);
+        CategoryModel(name: snapshot['name'], imageURL: snapshot['image_url'], id: snapshot.id);
     return categoryModel;
   }
 }

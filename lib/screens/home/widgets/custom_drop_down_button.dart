@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/category/category_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/models/category.dart';
 
 class CustomDropDownButton extends StatefulWidget {
   final String? selectedValue;

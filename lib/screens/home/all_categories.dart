@@ -6,11 +6,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/components/category_card2.dart';
 import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/components/sort_list.dart';
-import 'package:travel_app/core/R.dart';
 import 'package:travel_app/core/constants.dart';
-import 'package:travel_app/cubit/category/category_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
-import 'package:travel_app/data/app_data.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/home/widgets/custom_drop_down_button.dart';
 
@@ -34,7 +31,9 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedCategoryId = widget.selectedCategory!.id;
+    if (widget.selectedCategory != null) {
+      _selectedCategoryId = widget.selectedCategory!.id;
+    }
   }
 
   @override
@@ -44,7 +43,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
       child: BlocProvider(
         create: (context) {
           final placeCubit = PlaceCubit(placeRepository: context.read<PlaceRepository>());
-            placeCubit.getAllPlacesBy(PlaceSorts.all, categoryId: _selectedCategoryId!);
+          placeCubit.getAllPlacesBy(PlaceSorts.all, categoryId: _selectedCategoryId);
           return placeCubit;
         },
         child: BlocBuilder<PlaceCubit, PlaceState>(
@@ -60,9 +59,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                   CustomDropDownButton(
                     selectedValue: state.categoryId,
                     onChanged: (String? value) {
-                      if (_selectedCategoryId != null) {
-                        context.read<PlaceCubit>().getAllPlacesBy(state.sortedValue, categoryId: value!);
-                      }
+                      context.read<PlaceCubit>().getAllPlacesBy(state.sortedValue, categoryId: value);
                     },
                   ).padding(left: 16),
                   const SortList().padding(top: 8, bottom: 8),
@@ -83,14 +80,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                         title: state.places[index].title,
                         onPressed: () {
                           context.router.push(
-                            DetailsRoute(
-                              imageURLs: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
-                              likeCount: 350,
-                              commentCount: 30,
-                              rate: 3.8,
-                              viewCount: 14000000,
-                              isLiked: false,
-                            ),
+                            DetailsRoute(placeModel: state.places[index]),
                           );
                         },
                         onHeartPressed: () {

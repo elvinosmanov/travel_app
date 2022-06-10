@@ -12,16 +12,23 @@ class CategoryCubit extends Cubit<CategoryState> {
         super(CategoryState.initial());
 
   void getAllCategories() {
-    emit(state.copyWith(status: CategortStatus.loading));
+    emit(state.copyWith(status: CategoryStatus.loading));
     try {
       final result = _categoryRepository.getAllCategories();
       result.listen(
         (categoryList) {
-          emit(state.copyWith(status: CategortStatus.success, categoryList: categoryList));
+          emit(state.copyWith(status: CategoryStatus.success, categoryList: [
+            const CategoryModel(
+                id: 'all-categories-id',
+                name: 'All Categories',
+                imageURL:
+                    'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/flag_interest_image.jpg?alt=media&token=980696c3-24d2-49b3-a016-11ef138dbf99'),
+            ...categoryList
+          ]));
         },
       );
     } catch (e) {
-      emit(state.copyWith(status: CategortStatus.error, error: 'Error: $e'));
+      emit(state.copyWith(status: CategoryStatus.error, error: 'Error: $e'));
     }
   }
 }

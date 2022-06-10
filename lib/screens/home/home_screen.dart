@@ -140,14 +140,7 @@ class ExploreList extends StatelessWidget {
                 title: placeModelList[index].title,
                 location: placeModelList[index].location,
                 onPressed: () => context.router.push(
-                  DetailsRoute(
-                    imageURLs: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
-                    likeCount: 350,
-                    commentCount: 30,
-                    rate: 3.8,
-                    viewCount: 14000000,
-                    isLiked: false,
-                  ),
+                  DetailsRoute(placeModel: state.places[index]),
                 ),
               ).padding(right: 16);
             },
@@ -186,14 +179,7 @@ class NewAddedList extends StatelessWidget {
                 location: placeModelList[index].location,
                 isHorizontal: false,
                 onPressed: () => context.router.push(
-                  DetailsRoute(
-                    imageURLs: const [R.accomodationImage, R.gastronomyImage, R.mateImage],
-                    likeCount: 350,
-                    commentCount: 30,
-                    rate: 3.8,
-                    viewCount: 14000000,
-                    isLiked: false,
-                  ),
+                  DetailsRoute(placeModel: state.places[index]),
                 ),
               ).padding(bottom: 16),
             );

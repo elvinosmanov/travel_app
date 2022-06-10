@@ -10,8 +10,7 @@ class PlaceRepository extends BasePlaceRepository {
     Stream<List<PlaceModel>> placeList;
     Stream<QuerySnapshot> querySnapshot;
     Query<Map<String, dynamic>> query;
-    print('state.categoryId: $categoryId');
-    if (categoryId != null) {
+    if (categoryId != null && categoryId != 'all-categories-id') {
       query = _firebase.collection('places').where('categories', arrayContains: categoryId);
     } else {
       query = _firebase.collection('places');
@@ -28,9 +27,9 @@ class PlaceRepository extends BasePlaceRepository {
           querySnapshot = query.orderBy('created_date', descending: true).snapshots();
           break;
         case PlaceSorts.mostRated:
-          querySnapshot = query.orderBy('rate_avg_count',descending: true).snapshots();
+          querySnapshot = query.orderBy('rate_avg_count', descending: true).snapshots();
           break;
-       
+
         case PlaceSorts.recommended:
           querySnapshot = query.limit(5).snapshots();
           break;
@@ -44,24 +43,25 @@ class PlaceRepository extends BasePlaceRepository {
     }
   }
 
-  // addPlaces() {
-  //   PlaceModel placeModel = PlaceModel(
-  //       categories: const ['qlQQt96efCf6KTtasKAs', 'VNEfgzFC07kbC6rEK7sk'],
-  //       title: 'Menim balam baldir',
-  //       description: 'Balan Baldir yoxsa daldir',
-  //       location: 'Qudani alim',
-  //       imageURLs: const [
-  //         'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',
-  //         'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',
-  //         'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce'
-  //       ],
-  //       commentCount: 24,
-  //       likeCount: 43,
-  //       rateAvgCount: 4.6,
-  //       viewCount: 13,
-  //       createdDate: DateTime.now());
-  //   _firebase.collection('places').doc().set(placeModel.toMap());
-  // }
+  addPlaces() {
+    final docRef = _firebase.collection('places').doc();
+    PlaceModel placeModel = PlaceModel(
+        id: docRef.id,
+        categories: const ['VNEfgzFC07kbC6rEK7sk'],
+        title: 'Bu yenidir',
+        description: 'Balan Baldir yoxsa daldir',
+        location: 'YENI PLACE ',
+        imageURLs: const [
+          'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',
+          'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',
+        ],
+        commentCount: 32,
+        likeCount: 4568,
+        rateAvgCount: 2.7,
+        viewCount: 132164232,
+        createdDate: DateTime.now());
+    docRef.set(placeModel.toMap());
+  }
 }
 
 abstract class BasePlaceRepository {

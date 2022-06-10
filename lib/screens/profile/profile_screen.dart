@@ -101,18 +101,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
         ),
-        child: AspectRatio(
-          aspectRatio: 6 / 2.85,
-          child: _croppedCoverImage != null
-              ? Image.file(
-                  File(_croppedCoverImage!.path),
-                  fit: BoxFit.cover,
-                )
-              : Image.asset(
-                  R.museumAndArtImage,
-                  fit: BoxFit.cover,
-                ),
-        ),
+        // child: AspectRatio(
+        //   aspectRatio: 6 / 2.85,
+        //   child: _croppedCoverImage != null
+        //       ? Image.file(
+        //           File(_croppedCoverImage!.path),
+        //           fit: BoxFit.cover,
+        //         )
+        //       : 
+        //       Image.asset(
+        //           R.museumAndArtImage,
+        //           fit: BoxFit.cover,
+        //         ),
+        // ),
       ),
     );
   }
@@ -142,15 +143,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           GestureDetector(
             onTap: () => showBottomSheet(ImageType.profile),
             child: Stack(
-              children: [
+              children:  [
                 CircleAvatar(
                   radius: 70,
                   backgroundColor: kLightGreyColor_1,
-                  child: CircleAvatar(
+                  child: 
+                  CircleAvatar(
                       radius: 66,
                       backgroundImage: _croppedProfileImage != null
                           ? FileImage(File(_croppedProfileImage!.path)) as ImageProvider
-                          : const AssetImage(R.accomodationImage)),
+                          : const AssetImage(R.flagInterestImage)),
                 ),
                 const Positioned(
                     bottom: 0,

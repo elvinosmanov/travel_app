@@ -6,7 +6,7 @@ import '../../../components/category_card2.dart';
 import '../../../data/app_data.dart';
 class MyFavoritesTabView extends StatefulWidget {
   const MyFavoritesTabView({Key? key}) : super(key: key);
-
+  
   @override
   State<MyFavoritesTabView> createState() => _MyFavoritesTabViewState();
 }

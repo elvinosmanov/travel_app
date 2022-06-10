@@ -9,12 +9,12 @@ class R {
   static const mateImage = 'assets/images/mate_image.jpg';
   static const tripImage = 'assets/images/trip_image.jpg';
   static const logo = 'assets/images/logo.png';
-  static const accomodationImage = 'assets/images/accomodation.jpg';
-  static const shoppingImage = 'assets/images/shopping.jpg';
-  static const gastronomyImage = 'assets/images/gastronomy.jpg';
-  static const natureAndAgroImage = 'assets/images/nature_and_agro.jpg';
-  static const museumAndArtImage = 'assets/images/museum_and_art.jpg';
-  static const historyAndCultureImage = 'assets/images/history_and_culture.jpg';
+  // static const accomodationImage = 'assets/images/accomodation.jpg';
+  // static const shoppingImage = 'assets/images/shopping.jpg';
+  // static const gastronomyImage = 'assets/images/gastronomy.jpg';
+  // static const natureAndAgroImage = 'assets/images/nature_and_agro.jpg';
+  // static const museumAndArtImage = 'assets/images/museum_and_art.jpg';
+  // static const historyAndCultureImage = 'assets/images/history_and_culture.jpg';
 
   //Icons
   static const facebookIcon = 'assets/icons/facebook.svg';

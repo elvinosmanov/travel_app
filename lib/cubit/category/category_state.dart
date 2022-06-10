@@ -1,6 +1,6 @@
 part of 'category_cubit.dart';
 
-enum CategortStatus { initial, loading, success, error }
+enum CategoryStatus { initial, loading, success, error }
 
 class CategoryState extends Equatable {
   const CategoryState(
@@ -8,12 +8,12 @@ class CategoryState extends Equatable {
     this.categoryList,
     this.error,
   );
-  final CategortStatus status;
+  final CategoryStatus status;
   final List<CategoryModel?> categoryList;
   final String? error;
 
   CategoryState.initial()
-      : status = CategortStatus.initial,
+      : status = CategoryStatus.initial,
         error = null,
         categoryList = [];
 
@@ -21,7 +21,7 @@ class CategoryState extends Equatable {
   List<Object> get props => [categoryList, status];
 
   CategoryState copyWith({
-    CategortStatus? status,
+    CategoryStatus? status,
     List<CategoryModel?>? categoryList,
     String? error,
   }) {

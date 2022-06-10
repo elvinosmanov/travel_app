@@ -75,15 +75,17 @@ class CategoryCard2 extends StatelessWidget {
       child: Stack(
         children: [
           ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  width: width ?? double.infinity,
-                  height: height,
-                  fit: BoxFit.cover,
-                  placeholder: (context, _) => const Center(
-                        child: CircularProgressIndicator(),
-                      ))),
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              width: width ?? double.infinity,
+              height: height,
+              fit: BoxFit.cover,
+              placeholder: (context, _) => const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
           Positioned(
             top: 13,
             right: 12,

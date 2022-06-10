@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:travel_app/components/custom_back_button.dart';
@@ -7,41 +8,49 @@ import 'package:travel_app/components/custom_divider.dart';
 import 'package:travel_app/components/custom_rating_bar.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/cubit/comment/comments_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/models/comment.dart';
 
 import '../../components/custom_comment.dart';
 
 class AllCommentsScreen extends StatelessWidget {
   //TODO: commentsListin lengthi olacaq deye bu variable a ehtiyac olmayacaq
-  final commentsNumber = 8;
   const AllCommentsScreen({
     Key? key,
-    // required this.commentsList,
+    required this.placeId,
   }) : super(key: key);
-  // final List commentsList;
+  final String placeId;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomBackButton(
-              onPressed: () => context.router.pop(),
-              label: '$commentsNumber Comments',
-            ).padding(top: 20, bottom: 20, left: 16),
-            const CustomDivider(),
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  const ReviewList(),
-                  _buildCommentList(),
+    return BlocProvider(
+      create: (context) => CommentCubit()..getAllCommentsByPlaceId(placeId),
+      child: BlocBuilder<CommentCubit, CommentState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomBackButton(
+                    onPressed: () => context.router.pop(),
+                    label: '${state.comments.length} Comments',
+                  ).padding(top: 20, bottom: 20, left: 16),
+                  const CustomDivider(),
+                  Expanded(
+                    child: ListView(
+                      children: <Widget>[
+                        const ReviewList(),
+                        _buildCommentList(state.comments),
+                      ],
+                    ),
+                  ),
+                  _buildSendMessage()
                 ],
               ),
             ),
-            _buildSendMessage()
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -55,11 +64,7 @@ class AllCommentsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: kLightGreyColor_1,
           boxShadow: [
-            BoxShadow(
-                blurRadius: 3,
-                spreadRadius: 3,
-                offset: const Offset(0, 2),
-                color: Colors.black.withOpacity(0.2))
+            BoxShadow(blurRadius: 3, spreadRadius: 3, offset: const Offset(0, 2), color: Colors.black.withOpacity(0.2))
           ],
         ),
         child: Column(
@@ -70,12 +75,8 @@ class AllCommentsScreen extends StatelessWidget {
               children: <Widget>[
                 'Rate us'.mediumTextStyle(15),
                 'Your likes are important to us'.regularTextStyle(11, kDarkGreyColor),
-                CustomRatingBar(
-                    initialRating: 0,
-                    itemSize: 26,
-                    ignoreGestures: false,
-                    onPressed: (value) {
-                    }).padding(top: 8, bottom: 8),
+                CustomRatingBar(initialRating: 0, itemSize: 26, ignoreGestures: false, onPressed: (value) {})
+                    .padding(top: 8, bottom: 8),
               ],
             ),
             Container(
@@ -90,10 +91,7 @@ class AllCommentsScreen extends StatelessWidget {
                       hintText: 'Write a comment',
                     ),
                   ),
-                  IconButton(
-                      onPressed: () {
-                      },
-                      icon: SvgPicture.asset(R.send))
+                  IconButton(onPressed: () {}, icon: SvgPicture.asset(R.send))
                 ],
               ),
             ),
@@ -103,21 +101,14 @@ class AllCommentsScreen extends StatelessWidget {
     );
   }
 
-  //TODO: Kecici olaraq, sonra comments detailsden gelecek
-  ListView _buildCommentList() {
+  ListView _buildCommentList(List<CommentModel> comments) {
     return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: commentsNumber,
+        itemCount: comments.length,
         itemBuilder: (context, index) {
-          return const CustomComment(
-            comment:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            imageName: R.flagInterestImage,
-            name: 'Elvin',
-            rating: 3.1,
-            surname: 'Osmanov',
-            time: '1 hours ago',
+          return CustomComment(
+            commentModel: comments[index],
           );
         });
   }

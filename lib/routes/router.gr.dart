@@ -14,6 +14,7 @@ import 'package:auto_route/auto_route.dart' as _i5;
 import 'package:flutter/material.dart' as _i21;
 
 import '../models/category.dart' as _i22;
+import '../models/place.dart' as _i23;
 import '../screens/home/all_categories.dart' as _i10;
 import '../screens/home/all_comments_screen.dart' as _i3;
 import '../screens/home/categories_screen.dart' as _i9;
@@ -49,8 +50,10 @@ class AppRouter extends _i5.RootStackRouter {
           routeData: routeData, child: const _i2.WelcomeScreen());
     },
     AllCommentsRoute.name: (routeData) {
+      final args = routeData.argsAs<AllCommentsRouteArgs>();
       return _i5.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i3.AllCommentsScreen());
+          routeData: routeData,
+          child: _i3.AllCommentsScreen(key: args.key, placeId: args.placeId));
     },
     NavigationRoute.name: (routeData) {
       return _i5.MaterialPageX<dynamic>(
@@ -92,14 +95,8 @@ class AppRouter extends _i5.RootStackRouter {
       final args = routeData.argsAs<DetailsRouteArgs>();
       return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i11.DetailsScreen(
-              key: args.key,
-              isLiked: args.isLiked,
-              imageURLs: args.imageURLs,
-              viewCount: args.viewCount,
-              commentCount: args.commentCount,
-              likeCount: args.likeCount,
-              rate: args.rate));
+          child:
+              _i11.DetailsScreen(key: args.key, placeModel: args.placeModel));
     },
     MyFavoritesTab.name: (routeData) {
       return _i5.MaterialPageX<dynamic>(
@@ -210,10 +207,26 @@ class WelcomeRoute extends _i5.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.AllCommentsScreen]
-class AllCommentsRoute extends _i5.PageRouteInfo<void> {
-  const AllCommentsRoute() : super(AllCommentsRoute.name, path: 'all-comments');
+class AllCommentsRoute extends _i5.PageRouteInfo<AllCommentsRouteArgs> {
+  AllCommentsRoute({_i21.Key? key, required String placeId})
+      : super(AllCommentsRoute.name,
+            path: 'all-comments',
+            args: AllCommentsRouteArgs(key: key, placeId: placeId));
 
   static const String name = 'AllCommentsRoute';
+}
+
+class AllCommentsRouteArgs {
+  const AllCommentsRouteArgs({this.key, required this.placeId});
+
+  final _i21.Key? key;
+
+  final String placeId;
+
+  @override
+  String toString() {
+    return 'AllCommentsRouteArgs{key: $key, placeId: $placeId}';
+  }
 }
 
 /// generated route for
@@ -304,55 +317,24 @@ class AllCategoriesRouteArgs {
 /// generated route for
 /// [_i11.DetailsScreen]
 class DetailsRoute extends _i5.PageRouteInfo<DetailsRouteArgs> {
-  DetailsRoute(
-      {_i21.Key? key,
-      bool isLiked = false,
-      required List<String> imageURLs,
-      required int viewCount,
-      required int commentCount,
-      required int likeCount,
-      required double rate})
+  DetailsRoute({_i21.Key? key, required _i23.PlaceModel placeModel})
       : super(DetailsRoute.name,
             path: 'details',
-            args: DetailsRouteArgs(
-                key: key,
-                isLiked: isLiked,
-                imageURLs: imageURLs,
-                viewCount: viewCount,
-                commentCount: commentCount,
-                likeCount: likeCount,
-                rate: rate));
+            args: DetailsRouteArgs(key: key, placeModel: placeModel));
 
   static const String name = 'DetailsRoute';
 }
 
 class DetailsRouteArgs {
-  const DetailsRouteArgs(
-      {this.key,
-      this.isLiked = false,
-      required this.imageURLs,
-      required this.viewCount,
-      required this.commentCount,
-      required this.likeCount,
-      required this.rate});
+  const DetailsRouteArgs({this.key, required this.placeModel});
 
   final _i21.Key? key;
 
-  final bool isLiked;
-
-  final List<String> imageURLs;
-
-  final int viewCount;
-
-  final int commentCount;
-
-  final int likeCount;
-
-  final double rate;
+  final _i23.PlaceModel placeModel;
 
   @override
   String toString() {
-    return 'DetailsRouteArgs{key: $key, isLiked: $isLiked, imageURLs: $imageURLs, viewCount: $viewCount, commentCount: $commentCount, likeCount: $likeCount, rate: $rate}';
+    return 'DetailsRouteArgs{key: $key, placeModel: $placeModel}';
   }
 }
 
