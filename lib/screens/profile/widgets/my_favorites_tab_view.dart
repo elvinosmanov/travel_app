@@ -42,4 +42,3 @@ class _MyFavoritesTabViewState extends State<MyFavoritesTabView> {
     );
   }
 }
-
