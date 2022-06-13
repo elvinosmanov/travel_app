@@ -13,12 +13,13 @@ class PlaceCubit extends Cubit<PlaceState> {
         super(PlaceState.initial());
   getAllPlacesBy(PlaceSorts value, {String? categoryId}) async {
     emit(state.copyWith(status: PlaceStatus.loading, sortedValue: value, categoryId: categoryId ?? state.categoryId));
-    try {
-      final result = await _placeRepository.getAllPlacesBy(value, categoryId ?? state.categoryId);
-      emit(state.copyWith(status: PlaceStatus.success, places: result));
-      print('done');
-    } catch (e) {
-      emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e'));
-    }
+
+    final result = _placeRepository.getAllPlacesBy(value, categoryId ?? state.categoryId);
+    result.listen((placeList) {})
+      ..onData((placeList) {
+        placeList.first.rateAvgCount;
+        emit(state.copyWith(status: PlaceStatus.success, places: placeList));
+      })
+      ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
   }
 }

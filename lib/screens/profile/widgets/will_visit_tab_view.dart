@@ -3,6 +3,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/data/app_data.dart';
 
 import '../../../components/category_card2.dart';
+import '../../../models/place.dart';
+
 class WillVisitTabView extends StatefulWidget {
   const WillVisitTabView({Key? key}) : super(key: key);
 
@@ -24,15 +26,18 @@ class _WillVisitTabViewState extends State<WillVisitTabView> {
       itemCount: data.length,
       itemBuilder: (context, index) {
         return CategoryCard2(
-          imageUrl: data[index].imageName,
-          isLiked: data[index].isLiked,
-          location: data[index].place,
-          title: data[index].text,
-          onHeartPressed: () {
-            setState(() {
-              data[index].isLiked = !data[index].isLiked;
-            });
-          },
+          placeModel: PlaceModel(
+              id: '',
+              categories: [],
+              title: '',
+              description: '',
+              location: '',
+              imageURLs: [],
+              commentCount: 0,
+              likeCount: 0,
+              viewCount: 0,
+              rateAvgCount: 1.0,
+              createdDate: DateTime.now()),
           textSize: 14,
           placeSize: 10,
           height: 160,
@@ -41,4 +46,3 @@ class _WillVisitTabViewState extends State<WillVisitTabView> {
     );
   }
 }
-

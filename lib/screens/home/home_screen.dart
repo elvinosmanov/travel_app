@@ -121,7 +121,10 @@ class ExploreList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
-      child: BlocBuilder<PlaceCubit, PlaceState>(
+      child: BlocConsumer<PlaceCubit, PlaceState>(
+        listener: (context, state) {
+          //TODO Listener bloc istifade etmeyeceksense blocbuildere geri cevir.
+        },
         buildWhen: (previous, current) => previous.places != current.places,
         builder: (context, state) {
           List<PlaceModel> placeModelList = state.places;

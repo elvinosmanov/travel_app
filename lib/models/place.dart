@@ -12,8 +12,6 @@ class PlaceModel extends Equatable {
   final int likeCount;
   final int viewCount;
   final double rateAvgCount;
-  final bool isLiked;
-  final bool willVisit;
   final DateTime createdDate;
   const PlaceModel({
     required this.id,
@@ -26,12 +24,10 @@ class PlaceModel extends Equatable {
     required this.likeCount,
     required this.viewCount,
     required this.rateAvgCount,
-    required this.isLiked,
-    required this.willVisit,
     required this.createdDate,
   });
 
-  factory PlaceModel.getFromSnapshot(DocumentSnapshot snapshot, bool isLiked, bool willVisit) {
+  factory PlaceModel.getFromSnapshot(DocumentSnapshot snapshot) {
     PlaceModel placeModel = PlaceModel(
         id: snapshot.id,
         categories: snapshot['categories'],
@@ -43,8 +39,6 @@ class PlaceModel extends Equatable {
         likeCount: snapshot['like_count'],
         rateAvgCount: snapshot['rate_avg_count'].toDouble(),
         viewCount: snapshot['view_count'],
-        willVisit: willVisit,
-        isLiked: isLiked,
         createdDate: DateTime.parse(snapshot['created_date'].toDate().toString()));
     return placeModel;
   }
@@ -81,6 +75,6 @@ class PlaceModel extends Equatable {
 
   @override
   String toString() {
-    return 'PlaceModel(id: $id, categories: $categories, title: $title, description: $description, location: $location, imageURLs: $imageURLs, commentCount: $commentCount, likeCount: $likeCount, viewCount: $viewCount, rateAvgCount: $rateAvgCount, isLiked: $isLiked, willVisit: $willVisit, createdDate: $createdDate)';
+    return 'PlaceModel(id: $id, categories: $categories, title: $title, description: $description, location: $location, imageURLs: $imageURLs, commentCount: $commentCount, likeCount: $likeCount, viewCount: $viewCount, rateAvgCount: $rateAvgCount,  createdDate: $createdDate)';
   }
 }

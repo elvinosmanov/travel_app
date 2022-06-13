@@ -11,18 +11,15 @@ class CommentCubit extends Cubit<CommentState> {
       : _commentRepository = commentRepository ?? CommentRepository(),
         super(CommentState.initial());
 
-  getAllCommentsByPlaceId(String placeId,{ int? limit}) {
+  getAllCommentsByPlaceId(String placeId, {int? limit}) {
     emit(state.copyWith(status: CommentStatus.loading));
-    try {
-      final result = _commentRepository.getAllCommentsByPlaceId(placeId, limit);
-      result.listen(
-        (commentList) {
-        },
-      ).onData((commentList) {
+    final result = _commentRepository.getAllCommentsByPlaceId(placeId, limit);
+    result.listen((commentList) {})
+      ..onData((commentList) {
         emit(state.copyWith(status: CommentStatus.success, comments: commentList));
+      })
+      ..onError((e) {
+        emit(state.copyWith(status: CommentStatus.error, error: 'Error: $e'));
       });
-    } catch (e) {
-      emit(state.copyWith(status: CommentStatus.error, error: 'Error: $e'));
-    }
   }
 }

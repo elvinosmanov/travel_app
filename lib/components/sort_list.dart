@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_app/core/constants.dart';
 
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
@@ -42,7 +43,7 @@ class _SortListState extends State<SortList> {
                   isActive: state.sortedValue == PlaceSorts.values[index],
                   itemName: PlaceSorts.values[index].toString(),
                   onPressed: () {
-                    context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.values[index]);
+                    context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.values[index], categoryId: kAllCategoryId);
                   }).padding(right: 10);
             },
           );

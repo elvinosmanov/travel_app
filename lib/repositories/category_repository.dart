@@ -6,15 +6,10 @@ class CategoryRepository extends BaseCategoryRepository {
   @override
   Stream<List<CategoryModel?>> getAllCategories() {
     Stream<List<CategoryModel>> categorytList;
-    try {
       final querySnapshot = _firebase.collection('categories').snapshots();
       categorytList = querySnapshot
           .map((querySnap) => querySnap.docs.map((snapshot) => CategoryModel.getFromSnapshot(snapshot)).toList());
       return categorytList;
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
   }
 }
 abstract class BaseCategoryRepository {

@@ -1,34 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/models/place.dart';
 
 class CategoryCard2 extends StatelessWidget {
   const CategoryCard2({
     Key? key,
-    required this.title,
     this.textSize,
-    required this.location,
     this.placeSize,
-    required this.isLiked,
-    required this.imageUrl,
-    this.onHeartPressed,
     this.onPressed,
     this.width,
     this.height,
+    required this.placeModel,
   }) : super(key: key);
-  final String title;
   final double? textSize;
-  final String location;
   final double? placeSize;
-  final bool isLiked;
-  final String imageUrl;
-  final Function()? onHeartPressed;
   final Function()? onPressed;
   final double? width;
   final double? height;
+  final PlaceModel placeModel;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -39,10 +34,10 @@ class CategoryCard2 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            _buildImageContainer(),
+            _buildImageContainer(context),
             Flexible(
               child: Text(
-                title,
+                placeModel.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: kSemiBoldTextStyle(textSize ?? 16),
@@ -54,7 +49,7 @@ class CategoryCard2 extends StatelessWidget {
                 SvgPicture.asset(R.mapOutliend),
                 Flexible(
                   child: Text(
-                    location.useCorrectEllipsis(),
+                    placeModel.location.useCorrectEllipsis(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: kRegularTextStyle(placeSize ?? 12, kDarkGreyColor),
@@ -68,7 +63,9 @@ class CategoryCard2 extends StatelessWidget {
     );
   }
 
-  Material _buildImageContainer() {
+  Material _buildImageContainer(BuildContext context) {
+    bool isLiked = false;
+
     return Material(
       borderRadius: BorderRadius.circular(10),
       elevation: 4,
@@ -77,7 +74,7 @@ class CategoryCard2 extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
-              imageUrl: imageUrl,
+              imageUrl: placeModel.imageURLs[0],
               width: width ?? double.infinity,
               height: height,
               fit: BoxFit.cover,
@@ -90,13 +87,23 @@ class CategoryCard2 extends StatelessWidget {
             top: 13,
             right: 12,
             child: IconButton(
+              iconSize: 30,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
-              onPressed: onHeartPressed,
+              onPressed: () {
+                  context.read<LikeCubit>().likeOrNotPlaces(placeModel.id, isLiked);
+              },
               splashRadius: 100,
-              icon: SvgPicture.asset(
-                isLiked ? R.heartFilled : R.heartOutlined,
-                fit: BoxFit.cover,
+              icon: BlocBuilder<LikeCubit, LikeState>(
+                builder: (context, state) {
+                  isLiked = state.likeList.any((element) {
+                    return element.placeId == placeModel.id;
+                  });
+                  return SvgPicture.asset(
+                    isLiked ? R.heartFilled : R.heartOutlined,
+                    fit: BoxFit.scaleDown,
+                  );
+                },
               ),
             ),
           ),

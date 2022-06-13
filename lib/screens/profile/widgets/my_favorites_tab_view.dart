@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:travel_app/models/place.dart';
 
 import '../../../components/category_card2.dart';
 import '../../../data/app_data.dart';
+
 class MyFavoritesTabView extends StatefulWidget {
   const MyFavoritesTabView({Key? key}) : super(key: key);
-  
+
   @override
   State<MyFavoritesTabView> createState() => _MyFavoritesTabViewState();
 }
@@ -25,15 +26,18 @@ class _MyFavoritesTabViewState extends State<MyFavoritesTabView> {
       itemCount: data.length,
       itemBuilder: (context, index) {
         return CategoryCard2(
-          imageUrl: data[index].imageName,
-          isLiked: data[index].isLiked,
-          location: data[index].place,
-          title: data[index].text,
-          onHeartPressed: () {
-            setState(() {
-              data[index].isLiked = !data[index].isLiked;
-            });
-          },
+          placeModel: PlaceModel(
+              id: '',
+              categories: [],
+              title: '',
+              description: '',
+              location: '',
+              imageURLs: [],
+              commentCount: 0,
+              likeCount: 0,
+              viewCount: 0,
+              rateAvgCount: 1.0,
+              createdDate: DateTime.now()),
           textSize: 14,
           placeSize: 10,
           height: 160,

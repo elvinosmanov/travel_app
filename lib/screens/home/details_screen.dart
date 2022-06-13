@@ -13,8 +13,10 @@ import 'package:travel_app/components/custom_opacity_button.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/comment/comments_cubit.dart';
+import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/models/like.dart';
 import 'package:travel_app/routes/router.gr.dart';
 
 import '../../components/custom_rating_bar.dart';
@@ -46,7 +48,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeModel.id,limit: 3),
+      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeModel.id, limit: 3),
       child: Builder(builder: (context) {
         return Scaffold(
           body: ListView(
@@ -58,7 +60,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               //TODO isLiked change
               DetailsImageContainer(
                 imageUrls: widget.placeModel.imageURLs,
-                isLiked: true,
+                placeId: widget.placeModel.id,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,7 +119,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
               ),
               BlocBuilder<CommentCubit, CommentState>(
                 builder: (context, state) {
-                  print(state.status);
                   return state.status == CommentStatus.loading
                       ? const Center(child: CircularProgressIndicator())
                       : Column(
@@ -176,15 +177,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 return CategoryCard2(
                   width: 150,
                   height: 130,
-                  title: state.places[index].title,
-                  location: state.places[index].location,
-                  isLiked: false,
-                  imageUrl: state.places[index].imageURLs[0],
-                  onHeartPressed: () {
-                    setState(() {
-                      // data[index].isLiked = !data[index].isLiked;
-                    });
-                  },
+                  placeModel: state.places[index],
                   onPressed: () => context.router.push(
                     DetailsRoute(placeModel: state.places[index]),
                   ),
@@ -200,7 +193,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-          onTap: () => context.router.push( AllCommentsRoute(placeId: widget.placeModel.id)),
+          onTap: () => context.router.push(AllCommentsRoute(placeId: widget.placeModel.id)),
           child: ('See All Reviews').mediumTextStyle(13, kDarkGreyColor),
         )
       ],
@@ -279,18 +272,16 @@ class DetailsImageContainer extends StatefulWidget {
   const DetailsImageContainer({
     Key? key,
     required this.imageUrls,
-    required this.isLiked,
+    required this.placeId,
   }) : super(key: key);
   final List<String> imageUrls;
-  final bool isLiked;
-
+  final String placeId;
   @override
   State<DetailsImageContainer> createState() => _DetailsImageContainerState();
 }
 
 class _DetailsImageContainerState extends State<DetailsImageContainer> {
   int _current = 0;
-  bool _isLiked = false;
   final CarouselController _controller = CarouselController();
 
   @override
@@ -362,6 +353,7 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
   }
 
   Positioned _buildButtonRow() {
+    bool isLiked = false;
     return Positioned(
       top: 40,
       left: 0,
@@ -375,12 +367,19 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
               context.router.pop();
             },
           ),
-          CustomOpacityButton(
-            imageName: _isLiked ? R.heartFilled : R.heartOutlined,
-            onPressed: () {
-              setState(() {
-                _isLiked = !_isLiked;
+          BlocBuilder<LikeCubit, LikeState>(
+            buildWhen: (previous, current) => previous.likeList != current.likeList,
+            builder: (context, state) {
+              isLiked = state.likeList.any((element) {
+                print(element.placeId);
+                return element.placeId == widget.placeId;
               });
+              return CustomOpacityButton(
+                imageName: isLiked ? R.heartFilled : R.heartOutlined,
+                onPressed: () {
+                  context.read<LikeCubit>().likeOrNotPlaces(widget.placeId, isLiked);
+                },
+              );
             },
           ),
         ],
@@ -411,9 +410,7 @@ class _CustomVisitButtonState extends State<CustomVisitButton> {
             padding: MaterialStateProperty.all(const EdgeInsets.all(5)),
           ),
           onPressed: () {
-            setState(() {
-              willVisit = !willVisit;
-            });
+            context.read()
           },
           child: Row(
             children: <Widget>[

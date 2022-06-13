@@ -7,6 +7,7 @@ import 'package:travel_app/components/category_card2.dart';
 import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/components/sort_list.dart';
 import 'package:travel_app/core/constants.dart';
+import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/home/widgets/custom_drop_down_button.dart';
@@ -34,6 +35,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     if (widget.selectedCategory != null) {
       _selectedCategoryId = widget.selectedCategory!.id;
     }
+    context.read<LikeCubit>().getAllUserLikes();
   }
 
   @override
@@ -72,21 +74,14 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                     crossAxisSpacing: 8,
                     itemCount: state.places.length,
                     itemBuilder: (context, index) {
+                      //TODO isLiked
                       return CategoryCard2(
                         textSize: 14,
-                        imageUrl: state.places[index].imageURLs[0],
-                        isLiked: true,
-                        location: state.places[index].location,
-                        title: state.places[index].title,
+                        placeModel: state.places[index],
                         onPressed: () {
                           context.router.push(
                             DetailsRoute(placeModel: state.places[index]),
                           );
-                        },
-                        onHeartPressed: () {
-                          // setState(() {
-                          //   data[index].isLiked = !data[index].isLiked;
-                          // });
                         },
                       );
                     },
