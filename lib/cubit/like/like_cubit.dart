@@ -17,13 +17,13 @@ class LikeCubit extends Cubit<LikeState> {
     final result = _likeRepository.getAllUserLikes();
     result.listen((likeList) {})
       ..onData((likeList) {
-        print(likeList);
         emit(state.copyWith(status: LikeStatus.success, likeList: likeList));
       })
       ..onError((e) {
         emit(state.copyWith(status: LikeStatus.error, error: 'Error: $e'));
       });
   }
+
 
   void likeOrNotPlaces(String placeId, bool isLiked) {
     _likeRepository.likeOrNotPlaces(placeId, isLiked);

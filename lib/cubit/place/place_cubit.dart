@@ -17,9 +17,12 @@ class PlaceCubit extends Cubit<PlaceState> {
     final result = _placeRepository.getAllPlacesBy(value, categoryId ?? state.categoryId);
     result.listen((placeList) {})
       ..onData((placeList) {
-        placeList.first.rateAvgCount;
         emit(state.copyWith(status: PlaceStatus.success, places: placeList));
       })
       ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
+  }
+  
+  void increamantViewCount(String placeId){
+    _placeRepository.increamentViewCount(placeId);
   }
 }

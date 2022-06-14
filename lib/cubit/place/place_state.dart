@@ -19,12 +19,14 @@ class PlaceState extends Equatable {
   const PlaceState(
     this.status,
     this.places,
+    this.placeModel,
     this.error,
     this.sortedValue,
     this.categoryId,
   );
   final PlaceStatus status;
   final List<PlaceModel> places;
+  final PlaceModel placeModel;
   final String error;
   final PlaceSorts sortedValue;
   final String? categoryId;
@@ -33,6 +35,7 @@ class PlaceState extends Equatable {
         error = '',
         sortedValue = PlaceSorts.all,
         categoryId = null,
+        placeModel = PlaceModel.empty,
         places = [];
   //DONT FORGET TO ADD FIELD HERE
   @override
@@ -41,6 +44,7 @@ class PlaceState extends Equatable {
   PlaceState copyWith({
     PlaceStatus? status,
     List<PlaceModel>? places,
+    PlaceModel? placeModel,
     String? error,
     PlaceSorts? sortedValue,
     String? categoryId,
@@ -48,6 +52,7 @@ class PlaceState extends Equatable {
     return PlaceState(
       status ?? this.status,
       places ?? this.places,
+      placeModel ?? this.placeModel,
       error ?? this.error,
       sortedValue ?? this.sortedValue,
       categoryId ?? this.categoryId,

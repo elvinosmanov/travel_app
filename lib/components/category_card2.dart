@@ -87,25 +87,25 @@ class CategoryCard2 extends StatelessWidget {
             top: 13,
             right: 12,
             child: IconButton(
-              iconSize: 30,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              onPressed: () {
+                iconSize: 30,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: () {
                   context.read<LikeCubit>().likeOrNotPlaces(placeModel.id, isLiked);
-              },
-              splashRadius: 100,
-              icon: BlocBuilder<LikeCubit, LikeState>(
-                builder: (context, state) {
-                  isLiked = state.likeList.any((element) {
-                    return element.placeId == placeModel.id;
-                  });
-                  return SvgPicture.asset(
-                    isLiked ? R.heartFilled : R.heartOutlined,
-                    fit: BoxFit.scaleDown,
-                  );
                 },
-              ),
-            ),
+                splashRadius: 100,
+                icon: BlocSelector<LikeCubit, LikeState, bool>(
+                  selector: (state) {
+                    return state.checkLike(placeModel.id);
+                  },
+                  builder: (context, state) {
+                    isLiked = state;
+                    return SvgPicture.asset(
+                      isLiked ? R.heartFilled : R.heartOutlined,
+                      fit: BoxFit.scaleDown,
+                    );
+                  },
+                )),
           ),
         ],
       ),

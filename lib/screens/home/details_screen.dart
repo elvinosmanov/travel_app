@@ -15,8 +15,8 @@ import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/comment/comments_cubit.dart';
 import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
+import 'package:travel_app/cubit/will_visit/will_visit_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/models/like.dart';
 import 'package:travel_app/routes/router.gr.dart';
 
 import '../../components/custom_rating_bar.dart';
@@ -28,8 +28,6 @@ class DetailsScreen extends StatefulWidget {
     required this.placeModel,
   }) : super(key: key);
   final PlaceModel placeModel;
-  // final bool willVisit;
-  // final
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
 }
@@ -43,12 +41,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
     _controller.addListener(() {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);
     });
+    context.read<WillVisitCubit>().getAllUserWillVisits();
+    context.read<PlaceCubit>().increamantViewCount(widget.placeModel.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeModel.id, limit: 3),
+      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeModel.id),
       child: Builder(builder: (context) {
         return Scaffold(
           body: ListView(
@@ -72,10 +72,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       CustomRatingBar(
                         initialRating: widget.placeModel.rateAvgCount,
                       )),
+                  BlocSelector<CommentCubit, CommentState, int>(
+                    selector: (state) {
+                      return state.comments.length;
+                    },
+                    builder: (context, state) {
+                      return _buildTwoChildrenRow(state.toString().mediumTextStyle(15), SvgPicture.asset(R.comment));
+                    },
+                  ),
                   _buildTwoChildrenRow(
-                      widget.placeModel.commentCount.toString().mediumTextStyle(15), SvgPicture.asset(R.comment)),
-                  _buildTwoChildrenRow(
-                      widget.placeModel.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack)),
+                      widget.placeModel.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack))
                 ],
               ).padding(all: 16),
               Padding(
@@ -91,7 +97,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         widget.placeModel.location.semiBoldTextStyle(15, kDarkGreyColor)
                       ],
                     ),
-                    const CustomVisitButton(),
+                    CustomVisitButton(
+                      placeId: widget.placeModel.id,
+                    ),
                     'About'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
                     buildText(widget.placeModel.description),
                   ],
@@ -207,7 +215,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: state.comments.length,
+            itemCount: state.comments.length <= 3 ? state.comments.length : 3,
             itemBuilder: (context, index) {
               return CustomComment(
                 commentModel: state.comments[index],
@@ -367,13 +375,12 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
               context.router.pop();
             },
           ),
-          BlocBuilder<LikeCubit, LikeState>(
-            buildWhen: (previous, current) => previous.likeList != current.likeList,
+          BlocSelector<LikeCubit, LikeState, bool>(
+            selector: (state) {
+              return state.checkLike(widget.placeId);
+            },
             builder: (context, state) {
-              isLiked = state.likeList.any((element) {
-                print(element.placeId);
-                return element.placeId == widget.placeId;
-              });
+              isLiked = state;
               return CustomOpacityButton(
                 imageName: isLiked ? R.heartFilled : R.heartOutlined,
                 onPressed: () {
@@ -391,7 +398,9 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
 class CustomVisitButton extends StatefulWidget {
   const CustomVisitButton({
     Key? key,
+    required this.placeId,
   }) : super(key: key);
+  final String placeId;
   @override
   State<CustomVisitButton> createState() => _CustomVisitButtonState();
 }
@@ -403,21 +412,29 @@ class _CustomVisitButtonState extends State<CustomVisitButton> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(willVisit ? kLightBlueColor : kWhiteColor),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-            padding: MaterialStateProperty.all(const EdgeInsets.all(5)),
-          ),
-          onPressed: () {
-            context.read()
+        BlocSelector<WillVisitCubit, WillVisitState, bool>(
+          selector: (state) {
+            return state.checkWillVisit(widget.placeId);
           },
-          child: Row(
-            children: <Widget>[
-              SvgPicture.asset(R.worldMap).padding(right: 4),
-              (willVisit ? 'Will visit' : 'Will not visit').semiBoldTextStyle(14, kBlueColor)
-            ],
-          ),
+          builder: (context, state) {
+            willVisit = state;
+            return ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(willVisit ? kLightBlueColor : kWhiteColor),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+                padding: MaterialStateProperty.all(const EdgeInsets.all(5)),
+              ),
+              onPressed: () {
+                context.read<WillVisitCubit>().willVisitOrNotPlaces(widget.placeId, willVisit);
+              },
+              child: Row(
+                children: <Widget>[
+                  SvgPicture.asset(R.worldMap).padding(right: 4),
+                  (willVisit ? 'Will visit' : 'Will not visit').semiBoldTextStyle(14, kBlueColor)
+                ],
+              ),
+            );
+          },
         ),
       ],
     );

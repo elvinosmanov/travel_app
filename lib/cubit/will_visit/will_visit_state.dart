@@ -11,13 +11,16 @@ class WillVisitState extends Equatable {
   final WillVisitStatus status;
   final List<WillVisitModel> willVisitList;
   final String error;
-   WillVisitState.initial()
+  WillVisitState.initial()
       : status = WillVisitStatus.initial,
         error = '',
         willVisitList = [];
 
   @override
   List<Object> get props => [status, willVisitList, error];
+  bool checkWillVisit(String placeId) {
+    return willVisitList.any((element) => element.placeId == placeId);
+  }
 
   WillVisitState copyWith({
     WillVisitStatus? status,

@@ -26,6 +26,7 @@ class PlaceModel extends Equatable {
     required this.rateAvgCount,
     required this.createdDate,
   });
+  static PlaceModel get  empty => PlaceModel(id: '', categories: const [], title: '', description: '', location: '', imageURLs: const [], commentCount: 0, likeCount: 0, viewCount: 0, rateAvgCount: 0, createdDate: DateTime.now());
 
   factory PlaceModel.getFromSnapshot(DocumentSnapshot snapshot) {
     PlaceModel placeModel = PlaceModel(

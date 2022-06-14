@@ -3,15 +3,16 @@ import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/models/place.dart';
 
 class PlaceRepository extends BasePlaceRepository {
-  final _firebase = FirebaseFirestore.instance;
+  // final _firebase = FirebaseFirestore.instance;
+  final _placeRef = FirebaseFirestore.instance.collection('places');
   @override
   Stream<List<PlaceModel>> getAllPlacesBy(PlaceSorts sortValue, String? categoryId) {
     Stream<List<PlaceModel>> placeList;
     Query<Map<String, dynamic>> query;
     if (categoryId != null && categoryId != 'all-categories-id') {
-      query = _firebase.collection('places').where('categories', arrayContains: categoryId);
+      query = _placeRef.where('categories', arrayContains: categoryId);
     } else {
-      query = _firebase.collection('places');
+      query = _placeRef;
     }
     switch (sortValue) {
       case PlaceSorts.all:
@@ -36,6 +37,12 @@ class PlaceRepository extends BasePlaceRepository {
     return placeList;
   }
 
+  @override
+  void increamentViewCount(String placeId) {
+    var dc = _placeRef.doc(placeId);
+    dc.update({'view_count': FieldValue.increment(1)});
+  }
+
   Future<bool> checkIfDocExists(String docId, String collectionName) async {
     try {
       // Get reference to Firestore collection
@@ -49,7 +56,7 @@ class PlaceRepository extends BasePlaceRepository {
   }
 
   addPlaces() {
-    final docRef = _firebase.collection('places').doc();
+    final docRef = _placeRef.doc();
     PlaceModel placeModel = PlaceModel(
       id: docRef.id,
       categories: const ['VNEfgzFC07kbC6rEK7sk'],
@@ -68,8 +75,11 @@ class PlaceRepository extends BasePlaceRepository {
     );
     docRef.set(placeModel.toMap());
   }
+
 }
 
 abstract class BasePlaceRepository {
   Stream<List<PlaceModel>> getAllPlacesBy(PlaceSorts sortValue, String? categoryId);
+  void increamentViewCount(String placeId);
+
 }

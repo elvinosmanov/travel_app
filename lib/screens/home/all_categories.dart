@@ -35,7 +35,6 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     if (widget.selectedCategory != null) {
       _selectedCategoryId = widget.selectedCategory!.id;
     }
-    context.read<LikeCubit>().getAllUserLikes();
   }
 
   @override

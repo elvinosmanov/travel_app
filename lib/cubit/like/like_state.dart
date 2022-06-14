@@ -11,18 +11,22 @@ class LikeState extends Equatable {
   final LikeStatus status;
   final List<LikeModel> likeList;
   final String error;
-   LikeState.initial()
+  LikeState.initial()
       : status = LikeStatus.initial,
         error = '',
         likeList = [];
 
   @override
   List<Object> get props => [status, likeList, error];
+  bool checkLike(String placeId) {
+    return likeList.any((element) => element.placeId == placeId);
+  }
 
   LikeState copyWith({
     LikeStatus? status,
     List<LikeModel>? likeList,
     String? error,
+    int? likeCount,
   }) {
     return LikeState(
       status ?? this.status,

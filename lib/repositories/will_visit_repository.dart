@@ -8,14 +8,11 @@ class WillVisitRepository extends BaseWillVisitRepository {
   //TODO authentication duzelenden sonra user idini deyis
   @override
   Stream<List<WillVisitModel>> getAllUserWillVisits() {
-    var list = _willVisitPlaceRef
-        // .where('user_id', isEqualTo: kTemporaryUserId)
-        .snapshots()
-        .map((snapshot) {
-      print('document size: ${snapshot.size}');
-      return snapshot.docs.map((doc) => WillVisitModel.getFromSnapshot(doc)).toList();
+    var list = _willVisitPlaceRef.where('user_id', isEqualTo: kTemporaryUserId).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return WillVisitModel.getFromSnapshot(doc);
+      }).toList();
     });
-    print(list.toString());
     return list;
   }
 
@@ -28,7 +25,6 @@ class WillVisitRepository extends BaseWillVisitRepository {
       await _willVisitPlaceRef.doc('${kTemporaryUserId}_$placeId').set(willVisitModel.toMap());
     }
   }
-
 }
 
 abstract class BaseWillVisitRepository {

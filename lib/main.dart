@@ -8,6 +8,7 @@ import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/utils/onboarding_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'cubit/will_visit/will_visit_cubit.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CategoryCubit()),
         BlocProvider(create: (context) => PlaceCubit()),
         BlocProvider(create: (context) => LikeCubit()),
+        BlocProvider(create: (context) => WillVisitCubit()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

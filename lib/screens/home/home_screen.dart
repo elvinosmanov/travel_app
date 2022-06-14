@@ -15,6 +15,7 @@ import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
+import '../../cubit/like/like_cubit.dart';
 import '../../repositories/place_repository.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     context.read<CategoryCubit>().getAllCategories();
     context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.all);
+    context.read<LikeCubit>().getAllUserLikes();
+
     _controller.addListener(() {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);
     });
