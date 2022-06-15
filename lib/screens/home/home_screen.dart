@@ -146,7 +146,7 @@ class ExploreList extends StatelessWidget {
                 title: placeModelList[index].title,
                 location: placeModelList[index].location,
                 onPressed: () => context.router.push(
-                  DetailsRoute(placeModel: state.places[index]),
+                  DetailsRoute(placeId: state.places[index].id),
                 ),
               ).padding(right: 16);
             },
@@ -185,7 +185,7 @@ class NewAddedList extends StatelessWidget {
                 location: placeModelList[index].location,
                 isHorizontal: false,
                 onPressed: () => context.router.push(
-                  DetailsRoute(placeModel: state.places[index]),
+                  DetailsRoute(placeId: state.places[index].id),
                 ),
               ).padding(bottom: 16),
             );

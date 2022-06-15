@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:travel_app/core/constants.dart';
 
 import '../../models/place.dart';
 import '../../repositories/place_repository.dart';
@@ -21,8 +22,19 @@ class PlaceCubit extends Cubit<PlaceState> {
       })
       ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
   }
-  
-  void increamantViewCount(String placeId){
+
+  void increamantViewCount(String placeId) {
     _placeRepository.increamentViewCount(placeId);
+  }
+
+  getPlaceById(String placeId) {
+    emit(state.copyWith(status: PlaceStatus.loading));
+
+    final result = _placeRepository.getPlaceById(placeId);
+    result.listen((placeModel) {})
+      ..onData((placeModel) {
+        emit(state.copyWith(status: PlaceStatus.success, placeModel: placeModel));
+      })
+      ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
   }
 }

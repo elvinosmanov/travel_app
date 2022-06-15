@@ -18,11 +18,14 @@ class WillVisitRepository extends BaseWillVisitRepository {
 
   @override
   Future<void> willVisitOrNotPlaces(String placeId, bool iswillVisit) async {
+    var dc = FirebaseFirestore.instance.collection('places').doc(placeId);
     if (iswillVisit) {
       await _willVisitPlaceRef.doc('${kTemporaryUserId}_$placeId').delete();
+      dc.update({"willvisit_count": FieldValue.increment(-1)});
     } else {
       WillVisitModel willVisitModel = WillVisitModel(userId: kTemporaryUserId, placeId: placeId);
       await _willVisitPlaceRef.doc('${kTemporaryUserId}_$placeId').set(willVisitModel.toMap());
+      dc.update({"willvisit_count": FieldValue.increment(1)});
     }
   }
 }

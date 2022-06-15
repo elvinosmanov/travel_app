@@ -14,7 +14,6 @@ import 'package:auto_route/auto_route.dart' as _i5;
 import 'package:flutter/material.dart' as _i21;
 
 import '../models/category.dart' as _i22;
-import '../models/place.dart' as _i23;
 import '../screens/home/all_categories.dart' as _i10;
 import '../screens/home/all_comments_screen.dart' as _i3;
 import '../screens/home/categories_screen.dart' as _i9;
@@ -92,11 +91,12 @@ class AppRouter extends _i5.RootStackRouter {
               key: args.key, selectedCategory: args.selectedCategory));
     },
     DetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<DetailsRouteArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<DetailsRouteArgs>(
+          orElse: () => DetailsRouteArgs(placeId: pathParams.getString('id')));
       return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
-          child:
-              _i11.DetailsScreen(key: args.key, placeModel: args.placeModel));
+          child: _i11.DetailsScreen(key: args.key, placeId: args.placeId));
     },
     MyFavoritesTab.name: (routeData) {
       return _i5.MaterialPageX<dynamic>(
@@ -153,7 +153,7 @@ class AppRouter extends _i5.RootStackRouter {
                 _i5.RouteConfig(AllCategoriesRoute.name,
                     path: 'all-categories', parent: HomeRouter.name),
                 _i5.RouteConfig(DetailsRoute.name,
-                    path: 'details', parent: HomeRouter.name)
+                    path: 'details/:id', parent: HomeRouter.name)
               ]),
           _i5.RouteConfig(SearchRouter.name,
               path: 'search', parent: NavigationRoute.name),
@@ -317,24 +317,25 @@ class AllCategoriesRouteArgs {
 /// generated route for
 /// [_i11.DetailsScreen]
 class DetailsRoute extends _i5.PageRouteInfo<DetailsRouteArgs> {
-  DetailsRoute({_i21.Key? key, required _i23.PlaceModel placeModel})
+  DetailsRoute({_i21.Key? key, required String placeId})
       : super(DetailsRoute.name,
-            path: 'details',
-            args: DetailsRouteArgs(key: key, placeModel: placeModel));
+            path: 'details/:id',
+            args: DetailsRouteArgs(key: key, placeId: placeId),
+            rawPathParams: {'id': placeId});
 
   static const String name = 'DetailsRoute';
 }
 
 class DetailsRouteArgs {
-  const DetailsRouteArgs({this.key, required this.placeModel});
+  const DetailsRouteArgs({this.key, required this.placeId});
 
   final _i21.Key? key;
 
-  final _i23.PlaceModel placeModel;
+  final String placeId;
 
   @override
   String toString() {
-    return 'DetailsRouteArgs{key: $key, placeModel: $placeModel}';
+    return 'DetailsRouteArgs{key: $key, placeId: $placeId}';
   }
 }
 

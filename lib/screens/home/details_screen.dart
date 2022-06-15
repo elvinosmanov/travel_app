@@ -17,17 +17,17 @@ import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/cubit/will_visit/will_visit_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
 
 import '../../components/custom_rating_bar.dart';
-import '../../models/place.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
     Key? key,
-    required this.placeModel,
+    @PathParam('id') required this.placeId,
   }) : super(key: key);
-  final PlaceModel placeModel;
+  final String placeId;
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
 }
@@ -42,132 +42,135 @@ class _DetailsScreenState extends State<DetailsScreen> {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);
     });
     context.read<WillVisitCubit>().getAllUserWillVisits();
-    context.read<PlaceCubit>().increamantViewCount(widget.placeModel.id);
+    context.read<PlaceCubit>().increamantViewCount(widget.placeId);
+    context.read<PlaceCubit>().getPlaceById(widget.placeId);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeModel.id),
-      child: Builder(builder: (context) {
-        return Scaffold(
-          body: ListView(
-            padding: EdgeInsets.zero,
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            controller: _controller,
-            children: <Widget>[
-              //TODO isLiked change
-              DetailsImageContainer(
-                imageUrls: widget.placeModel.imageURLs,
-                placeId: widget.placeModel.id,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _buildTwoChildrenRow(SvgPicture.asset(R.eyeBlack),
-                      widget.placeModel.viewCount.viewCountToString().mediumTextStyle(15)),
-                  _buildTwoChildrenRow(
-                      widget.placeModel.rateAvgCount.toStringAsFixed(1).mediumTextStyle(15),
-                      CustomRatingBar(
-                        initialRating: widget.placeModel.rateAvgCount,
-                      )),
-                  BlocSelector<CommentCubit, CommentState, int>(
-                    selector: (state) {
-                      return state.comments.length;
-                    },
-                    builder: (context, state) {
-                      return _buildTwoChildrenRow(state.toString().mediumTextStyle(15), SvgPicture.asset(R.comment));
-                    },
+      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeId),
+      child: BlocBuilder<PlaceCubit, PlaceState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: ListView(
+              padding: EdgeInsets.zero,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              controller: _controller,
+              children: <Widget>[
+                //TODO isLiked change
+                DetailsImageContainer(
+                  imageUrls: state.placeModel.imageURLs,
+                  placeId: widget.placeId,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    _buildTwoChildrenRow(SvgPicture.asset(R.eyeBlack),
+                        state.placeModel.viewCount.viewCountToString().mediumTextStyle(15)),
+                    _buildTwoChildrenRow(
+                        state.placeModel.rateAvgCount.toStringAsFixed(1).mediumTextStyle(15),
+                        CustomRatingBar(
+                          initialRating: state.placeModel.rateAvgCount,
+                        )),
+                    BlocSelector<CommentCubit, CommentState, int>(
+                      selector: (state) {
+                        return state.comments.length;
+                      },
+                      builder: (context, state) {
+                        return _buildTwoChildrenRow(state.toString().mediumTextStyle(15), SvgPicture.asset(R.comment));
+                      },
+                    ),
+                    _buildTwoChildrenRow(
+                        state.placeModel.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack))
+                  ],
+                ).padding(all: 16),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CustomDivider(),
+                      state.placeModel.title.heading1().padding(top: 32, bottom: 4),
+                      Row(
+                        children: <Widget>[
+                          SvgPicture.asset(R.map, fit: BoxFit.scaleDown).padding(right: 2),
+                          state.placeModel.location.semiBoldTextStyle(15, kDarkGreyColor)
+                        ],
+                      ),
+                      CustomVisitButton(
+                        placeId: state.placeModel.id,
+                      ),
+                      'About'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
+                      buildText(state.placeModel.description),
+                    ],
                   ),
-                  _buildTwoChildrenRow(
-                      widget.placeModel.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack))
-                ],
-              ).padding(all: 16),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CustomDivider(),
-                    widget.placeModel.title.heading1().padding(top: 32, bottom: 4),
-                    Row(
-                      children: <Widget>[
-                        SvgPicture.asset(R.map, fit: BoxFit.scaleDown).padding(right: 2),
-                        widget.placeModel.location.semiBoldTextStyle(15, kDarkGreyColor)
-                      ],
-                    ),
-                    CustomVisitButton(
-                      placeId: widget.placeModel.id,
-                    ),
-                    'About'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
-                    buildText(widget.placeModel.description),
-                  ],
                 ),
-              ),
-              if (widget.placeModel.description.length > kMaxDisplayableDescriptionLength)
-                _buildReadMoreButton().padding(left: 8),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16, top: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: <Widget>[
-                        'Location'.semiBoldTextStyle(18),
-                        const Spacer(),
-                        SvgPicture.asset(R.sendNavigation).padding(right: 8),
-                        '1.2km'.semiBoldTextStyle(13, kDarkGreyColor),
-                      ],
-                    ).padding(top: 16, bottom: 10),
-                    _buildMap(),
-                    'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: 16),
-                  ],
+                if (state.placeModel.description.length > kMaxDisplayableDescriptionLength)
+                  _buildReadMoreButton().padding(left: 8),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16, top: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          'Location'.semiBoldTextStyle(18),
+                          const Spacer(),
+                          SvgPicture.asset(R.sendNavigation).padding(right: 8),
+                          '1.2km'.semiBoldTextStyle(13, kDarkGreyColor),
+                        ],
+                      ).padding(top: 16, bottom: 10),
+                      _buildMap(),
+                      'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: 16),
+                    ],
+                  ),
                 ),
-              ),
-              BlocBuilder<CommentCubit, CommentState>(
-                builder: (context, state) {
-                  return state.status == CommentStatus.loading
-                      ? const Center(child: CircularProgressIndicator())
-                      : Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildCommentList(),
-                            if (state.comments.isEmpty)
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SvgPicture.asset(
-                                    R.noComments,
-                                    height: 80,
-                                  ),
-                                  FittedBox(
-                                          child: 'There are no comments yet. Would you like to write a comment?'
-                                              .regularTextStyle(12, kGoogleRedColor)
-                                              .padding(top: 8))
-                                      .padding(left: 16, right: 16, top: 8)
-                                ],
-                              ).padding(bottom: 32)
-                            else
-                              _buildSeeAllReviewsButton().padding(bottom: 32),
-                          ],
-                        );
-                },
-              ),
+                BlocBuilder<CommentCubit, CommentState>(
+                  builder: (context, state) {
+                    return state.status == CommentStatus.loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : Column(
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildCommentList(),
+                              if (state.comments.isEmpty)
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      R.noComments,
+                                      height: 80,
+                                    ),
+                                    FittedBox(
+                                            child: 'There are no comments yet. Would you like to write a comment?'
+                                                .regularTextStyle(12, kGoogleRedColor)
+                                                .padding(top: 8))
+                                        .padding(left: 16, right: 16, top: 8)
+                                  ],
+                                ).padding(bottom: 32)
+                              else
+                                _buildSeeAllReviewsButton().padding(bottom: 32),
+                            ],
+                          );
+                  },
+                ),
 
-              CategoryBar(
-                categoryName: 'Places May You Like',
-                color: kBlueColor,
-                onPressed: () {
-                  context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.recommended);
-                  return context.router.push(AllCategoriesRoute());
-                },
-              ).padding(bottom: 16),
-              _buildCardList()
-            ],
-          ),
-        );
-      }),
+                // CategoryBar(
+                //   categoryName: 'Places May You Like',
+                //   color: kBlueColor,
+                //   onPressed: () {
+                //     context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.recommended);
+                //     return context.router.push(AllCategoriesRoute());
+                //   },
+                // ).padding(bottom: 16),
+                // _buildCardList()
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -187,7 +190,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   height: 130,
                   placeModel: state.places[index],
                   onPressed: () => context.router.push(
-                    DetailsRoute(placeModel: state.places[index]),
+                    DetailsRoute(placeId: state.places[index].id),
                   ),
                 ).padding(right: 16);
               }),
@@ -201,7 +204,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-          onTap: () => context.router.push(AllCommentsRoute(placeId: widget.placeModel.id)),
+          onTap: () => context.router.push(AllCommentsRoute(placeId: widget.placeId)),
           child: ('See All Reviews').mediumTextStyle(13, kDarkGreyColor),
         )
       ],

@@ -29,17 +29,17 @@ class PlaceState extends Equatable {
   final PlaceModel placeModel;
   final String error;
   final PlaceSorts sortedValue;
-  final String? categoryId;
+  final String categoryId;
   PlaceState.initial()
       : status = PlaceStatus.initial,
         error = '',
         sortedValue = PlaceSorts.all,
-        categoryId = null,
+        categoryId = kAllCategoryId,
         placeModel = PlaceModel.empty,
         places = [];
   //DONT FORGET TO ADD FIELD HERE
   @override
-  List<Object> get props => [status, places];
+  List<Object> get props => [status, places,placeModel,error,sortedValue,categoryId];
 
   PlaceState copyWith({
     PlaceStatus? status,

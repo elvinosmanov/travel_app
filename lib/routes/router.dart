@@ -33,7 +33,7 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
         AutoRoute(path: '', page: HomeScreen),
         AutoRoute(path: 'categories', page: CategoriesScreen),
         AutoRoute(path: 'all-categories', page: AllCategoriesScreen),
-        AutoRoute(path: 'details', page: DetailsScreen),
+        AutoRoute(path: 'details/:id', page: DetailsScreen),
       ],
     ),
     AutoRoute(path: 'search', name: 'SearchRouter', page: SearchScreen),

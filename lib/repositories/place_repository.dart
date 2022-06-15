@@ -76,10 +76,15 @@ class PlaceRepository extends BasePlaceRepository {
     docRef.set(placeModel.toMap());
   }
 
+  @override
+  Stream<PlaceModel> getPlaceById(String placeId) {
+    return _placeRef.doc(placeId).snapshots().map((event) => PlaceModel.getFromSnapshot(event));
+  }
 }
 
 abstract class BasePlaceRepository {
   Stream<List<PlaceModel>> getAllPlacesBy(PlaceSorts sortValue, String? categoryId);
   void increamentViewCount(String placeId);
 
+  Stream<PlaceModel> getPlaceById(String placeId);
 }

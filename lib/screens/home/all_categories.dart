@@ -79,7 +79,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                         placeModel: state.places[index],
                         onPressed: () {
                           context.router.push(
-                            DetailsRoute(placeModel: state.places[index]),
+                            DetailsRoute(placeId: state.places[index].id),
                           );
                         },
                       );
