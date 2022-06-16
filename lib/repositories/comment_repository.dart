@@ -17,4 +17,6 @@ class CommentRepository extends BaseCommentRepository {
 
 abstract class BaseCommentRepository {
   Stream<List<CommentModel>> getAllCommentsByPlaceId(String placeId,[int? limit]);
+
+  sendReview(CommentModel commentModel) {}
 }

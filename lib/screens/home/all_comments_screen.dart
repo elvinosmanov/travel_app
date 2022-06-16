@@ -1,8 +1,9 @@
+import 'dart:html';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/components/custom_divider.dart';
 import 'package:travel_app/components/custom_rating_bar.dart';
@@ -11,20 +12,27 @@ import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/comment/comments_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/models/comment.dart';
-
 import '../../components/custom_comment.dart';
 
-class AllCommentsScreen extends StatelessWidget {
+class AllCommentsScreen extends StatefulWidget {
   //TODO: commentsListin lengthi olacaq deye bu variable a ehtiyac olmayacaq
   const AllCommentsScreen({
     Key? key,
     required this.placeId,
   }) : super(key: key);
   final String placeId;
+
+  @override
+  State<AllCommentsScreen> createState() => _AllCommentsScreenState();
+}
+
+class _AllCommentsScreenState extends State<AllCommentsScreen> {
+  double givenRating = 5.0;
+  final controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CommentCubit()..getAllCommentsByPlaceId(placeId),
+      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeId),
       child: BlocBuilder<CommentCubit, CommentState>(
         builder: (context, state) {
           return Scaffold(
@@ -73,9 +81,11 @@ class AllCommentsScreen extends StatelessWidget {
           children: [
             Column(
               children: <Widget>[
-                'Rate us'.mediumTextStyle(15),
+                'Rate this place'.mediumTextStyle(15),
                 'Your likes are important to us'.regularTextStyle(11, kDarkGreyColor),
-                CustomRatingBar(initialRating: 0, itemSize: 26, ignoreGestures: false, onPressed: (value) {})
+                CustomRatingBar(initialRating: 5, itemSize: 26, ignoreGestures: false, onPressed: (value) {
+                  givenRating = value;
+                })
                     .padding(top: 8, bottom: 8),
               ],
             ),
@@ -87,11 +97,17 @@ class AllCommentsScreen extends StatelessWidget {
                     child: CustomTextField(
                       // maxLines: 4,
                       textInputAction: TextInputAction.newline,
-                      controller: TextEditingController(),
+                      controller: controller,
                       hintText: 'Write a comment',
                     ),
                   ),
-                  IconButton(onPressed: () {}, icon: SvgPicture.asset(R.send))
+                  IconButton(
+                      onPressed: () {
+                        context.read<CommentCubit>().sendReview(widget.placeId, controller.text,givenRating);
+                      },
+                      icon: SvgPicture.asset(
+                        R.send,
+                      ))
                 ],
               ),
             ),

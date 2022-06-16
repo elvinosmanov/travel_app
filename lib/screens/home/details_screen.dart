@@ -3,7 +3,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 import 'package:travel_app/components/category_bar.dart';
 import 'package:travel_app/components/category_card2.dart';
@@ -17,9 +19,9 @@ import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/cubit/will_visit/will_visit_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
-import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
-
+// ignore: depend_on_referenced_packages
+import 'package:latlong2/latlong.dart';
 import '../../components/custom_rating_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -44,6 +46,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     context.read<WillVisitCubit>().getAllUserWillVisits();
     context.read<PlaceCubit>().increamantViewCount(widget.placeId);
     context.read<PlaceCubit>().getPlaceById(widget.placeId);
+    context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.recommended);
   }
 
   @override
@@ -59,7 +62,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
               shrinkWrap: true,
               controller: _controller,
               children: <Widget>[
-                //TODO isLiked change
                 DetailsImageContainer(
                   imageUrls: state.placeModel.imageURLs,
                   placeId: widget.placeId,
@@ -114,14 +116,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: <Widget>[
-                          'Location'.semiBoldTextStyle(18),
-                          const Spacer(),
-                          SvgPicture.asset(R.sendNavigation).padding(right: 8),
-                          '1.2km'.semiBoldTextStyle(13, kDarkGreyColor),
-                        ],
-                      ).padding(top: 16, bottom: 10),
+                      'Location'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
                       _buildMap(),
                       'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: 16),
                     ],
@@ -136,36 +131,37 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             children: [
                               _buildCommentList(),
                               if (state.comments.isEmpty)
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SvgPicture.asset(
-                                      R.noComments,
-                                      height: 80,
-                                    ),
-                                    FittedBox(
-                                            child: 'There are no comments yet. Would you like to write a comment?'
-                                                .regularTextStyle(12, kGoogleRedColor)
-                                                .padding(top: 8))
-                                        .padding(left: 16, right: 16, top: 8)
-                                  ],
-                                ).padding(bottom: 32)
+                                GestureDetector(
+                                  onTap: () => context.router.push(AllCommentsRoute(placeId: widget.placeId)),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        R.noComments,
+                                        height: 80,
+                                      ),
+                                      FittedBox(
+                                              child: 'There are no comments yet. Would you like to write a comment?'
+                                                  .regularTextStyle(12, kGoogleRedColor)
+                                                  .padding(top: 8))
+                                          .padding(left: 16, right: 16, top: 8)
+                                    ],
+                                  ).padding(bottom: 32),
+                                )
                               else
                                 _buildSeeAllReviewsButton().padding(bottom: 32),
                             ],
                           );
                   },
                 ),
-
-                // CategoryBar(
-                //   categoryName: 'Places May You Like',
-                //   color: kBlueColor,
-                //   onPressed: () {
-                //     context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.recommended);
-                //     return context.router.push(AllCategoriesRoute());
-                //   },
-                // ).padding(bottom: 16),
-                // _buildCardList()
+                CategoryBar(
+                  categoryName: 'Places May You Like',
+                  color: kBlueColor,
+                  onPressed: () {
+                    return context.router.push(AllCategoriesRoute());
+                  },
+                ).padding(bottom: 16),
+                _buildCardList()
               ],
             ),
           );
@@ -241,20 +237,54 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Container _buildMap() {
     return Container(
+      clipBehavior: Clip.hardEdge,
       width: double.infinity,
-      height: 170,
+      height: 220,
       decoration: BoxDecoration(
         borderRadius: kRadius16,
-        color: kLightGreyColor_4,
       ),
       child: Stack(
         children: [
+          FlutterMap(
+            options: MapOptions(
+              center: LatLng(40.409264, 49.867092),
+              zoom: 16.0,
+            ),
+            layers: [
+              // TileLayerOptions(
+              //     urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", subdomains: ['a', 'b', 'c']),
+              TileLayerOptions(
+                urlTemplate: "https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey={apikey}",
+                additionalOptions: {"apikey": "c4bce2e5f7b14c28883efe9268d0de1d"},
+              ),
+              MarkerLayerOptions(
+                markers: [
+                  Marker(
+                    point: LatLng(40.409264, 49.867092),
+                    builder: (ctx) => SvgPicture.asset(
+                      width: 35.0,
+                      height: 35.0,
+                      R.map,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
           Align(
-            alignment: Alignment.center,
-            child: SvgPicture.asset(
-              R.map,
-              fit: BoxFit.scaleDown,
-            ).padding(bottom: 16),
+            alignment: Alignment.bottomRight,
+            child: GestureDetector(
+              onTap: () {
+                MapsLauncher.launchCoordinates(40.397403, 49.865);
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                decoration: const BoxDecoration(
+                    color: kRedColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(16))),
+                child: 'Get Direction'.mediumTextStyle(15, kWhiteColor),
+              ),
+            ),
           )
         ],
       ),
