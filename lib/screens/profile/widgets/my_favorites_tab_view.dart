@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/models/place.dart';
@@ -31,8 +32,9 @@ class _MyFavoritesTabViewState extends State<MyFavoritesTabView> {
               categories: [],
               title: '',
               description: '',
-              location: '',
+              locationName: '',
               imageURLs: [],
+              location: const GeoPoint(41,41),
               commentCount: 0,
               likeCount: 0,
               viewCount: 0,

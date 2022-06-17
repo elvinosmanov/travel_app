@@ -50,6 +50,7 @@ class CommentModel extends Equatable {
       'place_id': placeId,
       'review': comment,
       'submitted_by': submittedBy,
+      'image_url' :imageUrl,
       'rate': rate,
       'created_date': Timestamp.fromDate(createdDate),
     };

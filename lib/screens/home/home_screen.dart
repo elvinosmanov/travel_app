@@ -144,7 +144,7 @@ class ExploreList extends StatelessWidget {
                 starValue: placeModelList[index].rateAvgCount,
                 imageURL: placeModelList[index].imageURLs[0],
                 title: placeModelList[index].title,
-                location: placeModelList[index].location,
+                location: placeModelList[index].locationName,
                 onPressed: () => context.router.push(
                   DetailsRoute(placeId: state.places[index].id),
                 ),
@@ -182,7 +182,7 @@ class NewAddedList extends StatelessWidget {
                 starValue: placeModelList[index].rateAvgCount,
                 imageURL: placeModelList[index].imageURLs[0],
                 title: placeModelList[index].title,
-                location: placeModelList[index].location,
+                location: placeModelList[index].locationName,
                 isHorizontal: false,
                 onPressed: () => context.router.push(
                   DetailsRoute(placeId: state.places[index].id),

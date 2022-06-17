@@ -37,6 +37,7 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   bool isReadmore = false;
   final _controller = ScrollController();
+  MapController mapController = MapController();
   @override
   void initState() {
     super.initState();
@@ -47,126 +48,124 @@ class _DetailsScreenState extends State<DetailsScreen> {
     context.read<PlaceCubit>().increamantViewCount(widget.placeId);
     context.read<PlaceCubit>().getPlaceById(widget.placeId);
     context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.recommended);
+    context.read<CommentCubit>().getAllCommentsByPlaceId(widget.placeId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeId),
-      child: BlocBuilder<PlaceCubit, PlaceState>(
-        builder: (context, state) {
-          return Scaffold(
-            body: ListView(
-              padding: EdgeInsets.zero,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              controller: _controller,
-              children: <Widget>[
-                DetailsImageContainer(
-                  imageUrls: state.placeModel.imageURLs,
-                  placeId: widget.placeId,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _buildTwoChildrenRow(SvgPicture.asset(R.eyeBlack),
-                        state.placeModel.viewCount.viewCountToString().mediumTextStyle(15)),
-                    _buildTwoChildrenRow(
-                        state.placeModel.rateAvgCount.toStringAsFixed(1).mediumTextStyle(15),
-                        CustomRatingBar(
-                          initialRating: state.placeModel.rateAvgCount,
-                        )),
-                    BlocSelector<CommentCubit, CommentState, int>(
-                      selector: (state) {
-                        return state.comments.length;
-                      },
-                      builder: (context, state) {
-                        return _buildTwoChildrenRow(state.toString().mediumTextStyle(15), SvgPicture.asset(R.comment));
-                      },
+    return BlocBuilder<PlaceCubit, PlaceState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: ListView(
+            padding: EdgeInsets.zero,
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            controller: _controller,
+            children: <Widget>[
+              DetailsImageContainer(
+                imageUrls: state.placeModel.imageURLs,
+                placeId: widget.placeId,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _buildTwoChildrenRow(
+                      SvgPicture.asset(R.eyeBlack), state.placeModel.viewCount.viewCountToString().mediumTextStyle(15)),
+                  _buildTwoChildrenRow(
+                      state.placeModel.rateAvgCount.toStringAsFixed(1).mediumTextStyle(15),
+                      CustomRatingBar(
+                        initialRating: state.placeModel.rateAvgCount,
+                      )),
+                  BlocSelector<CommentCubit, CommentState, int>(
+                    selector: (state) {
+                      return state.comments.length;
+                    },
+                    builder: (context, state) {
+                      return _buildTwoChildrenRow(state.toString().mediumTextStyle(15), SvgPicture.asset(R.comment));
+                    },
+                  ),
+                  _buildTwoChildrenRow(
+                      state.placeModel.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack))
+                ],
+              ).padding(all: 16),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CustomDivider(),
+                    state.placeModel.title.heading1().padding(top: 32, bottom: 4),
+                    Row(
+                      children: <Widget>[
+                        SvgPicture.asset(R.map, fit: BoxFit.scaleDown).padding(right: 2),
+                        state.placeModel.locationName.semiBoldTextStyle(15, kDarkGreyColor)
+                      ],
                     ),
-                    _buildTwoChildrenRow(
-                        state.placeModel.likeCount.toString().mediumTextStyle(15), SvgPicture.asset(R.heartFilledBlack))
+                    CustomVisitButton(
+                      placeId: state.placeModel.id,
+                    ),
+                    'About'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
+                    buildText(state.placeModel.description),
                   ],
-                ).padding(all: 16),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CustomDivider(),
-                      state.placeModel.title.heading1().padding(top: 32, bottom: 4),
-                      Row(
-                        children: <Widget>[
-                          SvgPicture.asset(R.map, fit: BoxFit.scaleDown).padding(right: 2),
-                          state.placeModel.location.semiBoldTextStyle(15, kDarkGreyColor)
-                        ],
-                      ),
-                      CustomVisitButton(
-                        placeId: state.placeModel.id,
-                      ),
-                      'About'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
-                      buildText(state.placeModel.description),
-                    ],
-                  ),
                 ),
-                if (state.placeModel.description.length > kMaxDisplayableDescriptionLength)
-                  _buildReadMoreButton().padding(left: 8),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16, top: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      'Location'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
-                      _buildMap(),
-                      'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: 16),
-                    ],
-                  ),
+              ),
+              if (state.placeModel.description.length > kMaxDisplayableDescriptionLength)
+                _buildReadMoreButton().padding(left: 8),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    'Location'.semiBoldTextStyle(18).padding(top: 16, bottom: 10),
+                    _buildMap(state),
+                    'Comments'.semiBoldTextStyle(22).padding(top: 24, bottom: 16),
+                  ],
                 ),
-                BlocBuilder<CommentCubit, CommentState>(
-                  builder: (context, state) {
-                    return state.status == CommentStatus.loading
-                        ? const Center(child: CircularProgressIndicator())
-                        : Column(
-                            // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildCommentList(),
-                              if (state.comments.isEmpty)
-                                GestureDetector(
-                                  onTap: () => context.router.push(AllCommentsRoute(placeId: widget.placeId)),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        R.noComments,
-                                        height: 80,
-                                      ),
-                                      FittedBox(
-                                              child: 'There are no comments yet. Would you like to write a comment?'
-                                                  .regularTextStyle(12, kGoogleRedColor)
-                                                  .padding(top: 8))
-                                          .padding(left: 16, right: 16, top: 8)
-                                    ],
-                                  ).padding(bottom: 32),
-                                )
-                              else
-                                _buildSeeAllReviewsButton().padding(bottom: 32),
-                            ],
-                          );
-                  },
-                ),
-                CategoryBar(
-                  categoryName: 'Places May You Like',
-                  color: kBlueColor,
-                  onPressed: () {
-                    return context.router.push(AllCategoriesRoute());
-                  },
-                ).padding(bottom: 16),
-                _buildCardList()
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+              BlocBuilder<CommentCubit, CommentState>(
+                builder: (context, state) {
+                  return state.status == CommentStatus.loading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildCommentList(),
+                            if (state.comments.isEmpty)
+                              GestureDetector(
+                                onTap: () => context.router.push(AllCommentsRoute(placeId: widget.placeId)),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      R.noComments,
+                                      height: 80,
+                                    ),
+                                    FittedBox(
+                                            child: 'There are no comments yet. Would you like to write a comment?'
+                                                .regularTextStyle(12, kGoogleRedColor)
+                                                .padding(top: 8))
+                                        .padding(left: 16, right: 16, top: 8)
+                                  ],
+                                ).padding(bottom: 32),
+                              )
+                            else
+                              _buildSeeAllReviewsButton().padding(bottom: 32),
+                          ],
+                        );
+                },
+              ),
+              CategoryBar(
+                categoryName: 'Places May You Like',
+                color: kBlueColor,
+                onPressed: () {
+                  return context.router.push(AllCategoriesRoute());
+                },
+              ).padding(bottom: 16),
+              _buildCardList()
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -235,7 +234,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Container _buildMap() {
+  Container _buildMap(PlaceState state) {
+    final loc = state.placeModel.location;
     return Container(
       clipBehavior: Clip.hardEdge,
       width: double.infinity,
@@ -246,8 +246,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
       child: Stack(
         children: [
           FlutterMap(
+            mapController: mapController..center,
             options: MapOptions(
-              center: LatLng(40.409264, 49.867092),
+              center: LatLng(loc.latitude, loc.longitude),
               zoom: 16.0,
             ),
             layers: [
@@ -260,7 +261,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               MarkerLayerOptions(
                 markers: [
                   Marker(
-                    point: LatLng(40.409264, 49.867092),
+                    point: LatLng(loc.latitude, loc.longitude),
                     builder: (ctx) => SvgPicture.asset(
                       width: 35.0,
                       height: 35.0,
@@ -276,7 +277,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             alignment: Alignment.bottomRight,
             child: GestureDetector(
               onTap: () {
-                MapsLauncher.launchCoordinates(40.397403, 49.865);
+                MapsLauncher.launchCoordinates(loc.latitude, loc.longitude);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),

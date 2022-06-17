@@ -62,7 +62,8 @@ class PlaceRepository extends BasePlaceRepository {
       categories: const ['VNEfgzFC07kbC6rEK7sk'],
       title: 'Bu yenidir',
       description: 'Balan Baldir yoxsa daldir',
-      location: 'YENI PLACE ',
+      locationName: 'YENI PLACE ',
+      location: const GeoPoint(40,40),
       imageURLs: const [
         'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',
         'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',

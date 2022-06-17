@@ -49,7 +49,7 @@ class CategoryCard2 extends StatelessWidget {
                 SvgPicture.asset(R.mapOutliend),
                 Flexible(
                   child: Text(
-                    placeModel.location.useCorrectEllipsis(),
+                    placeModel.locationName.useCorrectEllipsis(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: kRegularTextStyle(placeSize ?? 12, kDarkGreyColor),

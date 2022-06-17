@@ -15,32 +15,35 @@ class CommentCubit extends Cubit<CommentState> {
   getAllCommentsByPlaceId(String placeId, {int? limit}) {
     emit(state.copyWith(status: CommentStatus.loading));
     final result = _commentRepository.getAllCommentsByPlaceId(placeId, limit);
-    result.listen((commentList) {})
+    result.listen((commentList) {
+    })
       ..onData((commentList) {
+
         emit(state.copyWith(status: CommentStatus.success, comments: commentList));
       })
       ..onError((e) {
+        print('error var $e');
         emit(state.copyWith(status: CommentStatus.error, error: 'Error: $e'));
       });
   }
 
-  void sendReview(String placeId, String review, double givenRate) {
+  Future<void> sendReview(String placeId, String review, double givenRate) async {
+    if (state.status == CommentStatus.loading) return;
     emit(state.copyWith(status: CommentStatus.loading));
     final CommentModel commentModel = CommentModel(
         userId: kTemporaryUserId,
         placeId: placeId,
-        imageUrl: '',
+        imageUrl:
+            'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/flag_interest_image.jpg?alt=media&token=980696c3-24d2-49b3-a016-11ef138dbf99',
         comment: review,
-        submittedBy: '',
+        submittedBy: 'Name Surname',
         rate: givenRate,
         createdDate: DateTime.now());
-    final result = _commentRepository.sendReview(commentModel);
-    result.listen((commentList) {})
-      ..onData((commentList) {
-        emit(state.copyWith(status: CommentStatus.success, comments: commentList));
-      })
-      ..onError((e) {
-        emit(state.copyWith(status: CommentStatus.error, error: 'Error: $e'));
-      });
+    try {
+      await _commentRepository.sendReview(commentModel);
+      emit(state.copyWith(status: CommentStatus.success));
+    } on Exception catch (e) {
+      emit(state.copyWith(status: CommentStatus.error, error: 'Error: $e'));
+    }
   }
 }

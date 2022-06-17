@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +6,7 @@ import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/components/custom_divider.dart';
 import 'package:travel_app/components/custom_rating_bar.dart';
 import 'package:travel_app/components/custom_textfield.dart';
+import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/comment/comments_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
@@ -30,36 +29,42 @@ class _AllCommentsScreenState extends State<AllCommentsScreen> {
   double givenRating = 5.0;
   final controller = TextEditingController();
   @override
+  void initState() {
+    super.initState();
+    context.read<CommentCubit>().getAllCommentsByPlaceId(widget.placeId);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CommentCubit()..getAllCommentsByPlaceId(widget.placeId),
-      child: BlocBuilder<CommentCubit, CommentState>(
-        builder: (context, state) {
-          return Scaffold(
-            body: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomBackButton(
-                    onPressed: () => context.router.pop(),
-                    label: '${state.comments.length} Comments',
-                  ).padding(top: 20, bottom: 20, left: 16),
-                  const CustomDivider(),
-                  Expanded(
-                    child: ListView(
-                      children: <Widget>[
-                        const ReviewList(),
-                        _buildCommentList(state.comments),
-                      ],
-                    ),
+    return BlocBuilder<CommentCubit, CommentState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomBackButton(
+                  onPressed: () => context.router.pop(),
+                  label: '${state.comments.length} Comments',
+                ).padding(top: 20, bottom: 20, left: 16),
+                const CustomDivider(),
+                Expanded(
+                  child: ListView(
+                    children: <Widget>[
+                      const ReviewList(),
+                      _buildCommentList(state.comments),
+                    ],
                   ),
+                ),
+                if (!(state.comments.any(
+                  (element) => element.userId == kTemporaryUserId,
+                )))
                   _buildSendMessage()
-                ],
-              ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -83,10 +88,13 @@ class _AllCommentsScreenState extends State<AllCommentsScreen> {
               children: <Widget>[
                 'Rate this place'.mediumTextStyle(15),
                 'Your likes are important to us'.regularTextStyle(11, kDarkGreyColor),
-                CustomRatingBar(initialRating: 5, itemSize: 26, ignoreGestures: false, onPressed: (value) {
-                  givenRating = value;
-                })
-                    .padding(top: 8, bottom: 8),
+                CustomRatingBar(
+                    initialRating: 5,
+                    itemSize: 26,
+                    ignoreGestures: false,
+                    onPressed: (value) {
+                      givenRating = value;
+                    }).padding(top: 8, bottom: 8),
               ],
             ),
             Container(
@@ -95,6 +103,7 @@ class _AllCommentsScreenState extends State<AllCommentsScreen> {
                 children: <Widget>[
                   Expanded(
                     child: CustomTextField(
+                      focusNode: FocusNode()..requestFocus(),
                       // maxLines: 4,
                       textInputAction: TextInputAction.newline,
                       controller: controller,
@@ -103,7 +112,7 @@ class _AllCommentsScreenState extends State<AllCommentsScreen> {
                   ),
                   IconButton(
                       onPressed: () {
-                        context.read<CommentCubit>().sendReview(widget.placeId, controller.text,givenRating);
+                        context.read<CommentCubit>().sendReview(widget.placeId, controller.text, givenRating);
                       },
                       icon: SvgPicture.asset(
                         R.send,

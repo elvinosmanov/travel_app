@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_app/core/colors.dart';
 import 'package:travel_app/cubit/category/category_cubit.dart';
+import 'package:travel_app/cubit/comment/comments_cubit.dart';
 import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/routes/router.gr.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => PlaceCubit()),
         BlocProvider(create: (context) => LikeCubit()),
         BlocProvider(create: (context) => WillVisitCubit()),
+        BlocProvider(create: (context) => CommentCubit()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
