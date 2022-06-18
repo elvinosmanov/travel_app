@@ -3,22 +3,23 @@ import 'package:equatable/equatable.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/models/comment.dart';
 import 'package:travel_app/repositories/comment_repository.dart';
+import 'package:travel_app/repositories/place_repository.dart';
 
 part 'comments_state.dart';
 
 class CommentCubit extends Cubit<CommentState> {
   final BaseCommentRepository _commentRepository;
-  CommentCubit({BaseCommentRepository? commentRepository})
+  final BasePlaceRepository _placeRepository;
+  CommentCubit({BaseCommentRepository? commentRepository, BasePlaceRepository? placeRepository})
       : _commentRepository = commentRepository ?? CommentRepository(),
+        _placeRepository = placeRepository ?? PlaceRepository(),
         super(CommentState.initial());
 
   getAllCommentsByPlaceId(String placeId, {int? limit}) {
     emit(state.copyWith(status: CommentStatus.loading));
     final result = _commentRepository.getAllCommentsByPlaceId(placeId, limit);
-    result.listen((commentList) {
-    })
+    result.listen((commentList) {})
       ..onData((commentList) {
-
         emit(state.copyWith(status: CommentStatus.success, comments: commentList));
       })
       ..onError((e) {
@@ -41,8 +42,10 @@ class CommentCubit extends Cubit<CommentState> {
         createdDate: DateTime.now());
     try {
       await _commentRepository.sendReview(commentModel);
+      await _placeRepository.updateReviewCountAndRate(placeId, givenRate);
       emit(state.copyWith(status: CommentStatus.success));
     } on Exception catch (e) {
+      print(e);
       emit(state.copyWith(status: CommentStatus.error, error: 'Error: $e'));
     }
   }

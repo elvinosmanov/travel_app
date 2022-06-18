@@ -12,15 +12,45 @@ class PlaceCubit extends Cubit<PlaceState> {
   PlaceCubit({BasePlaceRepository? placeRepository})
       : _placeRepository = placeRepository ?? PlaceRepository(),
         super(PlaceState.initial());
-  getAllPlacesBy(PlaceSorts value, {String? categoryId}) async {
-    emit(state.copyWith(status: PlaceStatus.loading, sortedValue: value, categoryId: categoryId ?? state.categoryId));
-
-    final result = _placeRepository.getAllPlacesBy(value, categoryId ?? state.categoryId);
+  getAllPlacesBy({String? categoryId}) async {
+    // if (categoryId == state.categoryId) return;
+    emit(state.copyWith(status: PlaceStatus.loading, categoryId: categoryId ?? state.categoryId));
+    Stream<List<PlaceModel>> result;
+    result = _placeRepository.getAllPlacesByCategoryId(categoryId ?? state.categoryId);
     result.listen((placeList) {})
       ..onData((placeList) {
+        changePlaceSortValue(state.sortedValue);
         emit(state.copyWith(status: PlaceStatus.success, places: placeList));
       })
       ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
+  }
+
+  changePlaceSortValue(PlaceSorts value) {
+    switch (value) {
+      case PlaceSorts.popular:
+        var list = state.places;
+        list.sort(
+          (a, b) => a.viewCount.compareTo(b.viewCount),
+        );
+        emit(state.copyWith(places: list, sortedValue: PlaceSorts.popular));
+        break;
+      case PlaceSorts.mostRated:
+        var list = state.places;
+        list.sort(
+          (a, b) => a.rateAvgCount.compareTo(b.rateAvgCount),
+        );
+        emit(state.copyWith(places: list, sortedValue: PlaceSorts.mostRated));
+        break;
+      case PlaceSorts.newAdded:
+        var list = state.places;
+        list.sort(
+          (a, b) => a.createdDate.compareTo(b.createdDate),
+        );
+        emit(state.copyWith(places: list, sortedValue: PlaceSorts.newAdded));
+        break;
+      // default:
+      //   emit(state.copyWith(places: state.places, sortedValue: state.sortedValue));
+    }
   }
 
   void increamantViewCount(String placeId) {

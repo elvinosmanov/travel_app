@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<CategoryCubit>().getAllCategories();
-    context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.all);
+    context.read<PlaceCubit>().getAllPlacesBy(categoryId: kAllCategoryId);
     context.read<LikeCubit>().getAllUserLikes();
 
     _controller.addListener(() {
@@ -73,15 +73,16 @@ class _HomeScreenState extends State<HomeScreen> {
         CategoryBar(
           categoryName: 'New Added',
           onPressed: () {
-            context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.newAdded);
+            context.read<PlaceCubit>().changePlaceSortValue(PlaceSorts.newAdded);
             return context.router.push(AllCategoriesRoute());
           },
         ).padding(top: 22, bottom: 16), //bottom: 32-10 22
         RepositoryProvider(
-          create: (context) => PlaceRepository(),
+          create: (context) => PlaceRepository()..getAllPlacesByCategoryId(kAllCategoryId),
           child: BlocProvider(
-            create: (context) =>
-                PlaceCubit(placeRepository: context.read<PlaceRepository>())..getAllPlacesBy(PlaceSorts.newAdded),
+            create: (context) => PlaceCubit(placeRepository: context.read<PlaceRepository>())
+              ..changePlaceSortValue(PlaceSorts.newAdded)
+              ..getAllPlacesBy(),
             child: const NewAddedList(),
           ),
         ),
@@ -128,7 +129,7 @@ class ExploreList extends StatelessWidget {
         listener: (context, state) {
           //TODO Listener bloc istifade etmeyeceksense blocbuildere geri cevir.
         },
-        buildWhen: (previous, current) => previous.places != current.places,
+        // buildWhen: (previous, current) => previous.sortedValue != current.sortedValue,
         builder: (context, state) {
           List<PlaceModel> placeModelList = state.places;
           return ListView.builder(

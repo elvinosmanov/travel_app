@@ -6,7 +6,7 @@ class PlaceRepository extends BasePlaceRepository {
   // final _firebase = FirebaseFirestore.instance;
   final _placeRef = FirebaseFirestore.instance.collection('places');
   @override
-  Stream<List<PlaceModel>> getAllPlacesBy(PlaceSorts sortValue, String? categoryId) {
+  Stream<List<PlaceModel>> getAllPlacesByCategoryId(String? categoryId) {
     Stream<List<PlaceModel>> placeList;
     Query<Map<String, dynamic>> query;
     if (categoryId != null && categoryId != 'all-categories-id') {
@@ -14,24 +14,20 @@ class PlaceRepository extends BasePlaceRepository {
     } else {
       query = _placeRef;
     }
-    switch (sortValue) {
-      case PlaceSorts.all:
-        break;
-      case PlaceSorts.popular:
-        query = query.orderBy('view_count', descending: true);
-        break;
-      case PlaceSorts.newAdded:
-        query = query.orderBy('created_date', descending: true);
-        break;
-      case PlaceSorts.mostRated:
-        query = query.orderBy('rate_avg_count', descending: true);
-        break;
 
-      case PlaceSorts.recommended:
-        query = query.limit(5);
-        break;
-    }
     placeList = query
+        .orderBy('view_count', descending: true)
+        .snapshots()
+        .map((querySnap) => querySnap.docs.map((snapshot) => PlaceModel.getFromSnapshot(snapshot)).toList());
+    return placeList;
+  }
+  @override
+  Stream<List<PlaceModel>> getAllUserFavoritePlaces(String? userId) {
+    Stream<List<PlaceModel>> placeList;
+    Query<Map<String, dynamic>> query;
+      query = _placeRef.where('categories', arrayContains: categoryId);
+    placeList = query
+        .orderBy('view_count', descending: true)
         .snapshots()
         .map((querySnap) => querySnap.docs.map((snapshot) => PlaceModel.getFromSnapshot(snapshot)).toList());
     return placeList;
@@ -41,6 +37,21 @@ class PlaceRepository extends BasePlaceRepository {
   void increamentViewCount(String placeId) {
     var dc = _placeRef.doc(placeId);
     dc.update({'view_count': FieldValue.increment(1)});
+  }
+
+  @override
+  Future<void> updateReviewCountAndRate(String placeId, double rateValue) async {
+    var doc = await _placeRef.doc(placeId).get();
+
+    var placeModel = PlaceModel.getFromSnapshot(doc);
+    var dc = _placeRef.doc(placeId);
+    print(placeModel.rateAvgCount);
+    print(placeModel.commentCount);
+    print(placeModel.rateAvgCount * placeModel.commentCount + rateValue);
+    dc.update({
+      'comment_count': FieldValue.increment(1),
+      'rate_avg_count': (placeModel.rateAvgCount * placeModel.commentCount + rateValue) / (placeModel.commentCount + 1)
+    });
   }
 
   Future<bool> checkIfDocExists(String docId, String collectionName) async {
@@ -63,7 +74,7 @@ class PlaceRepository extends BasePlaceRepository {
       title: 'Bu yenidir',
       description: 'Balan Baldir yoxsa daldir',
       locationName: 'YENI PLACE ',
-      location: const GeoPoint(40,40),
+      location: const GeoPoint(40, 40),
       imageURLs: const [
         'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',
         'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/trip_image.jpg?alt=media&token=a84dfc23-0802-4eb4-9d44-2425d40720ce',
@@ -84,8 +95,9 @@ class PlaceRepository extends BasePlaceRepository {
 }
 
 abstract class BasePlaceRepository {
-  Stream<List<PlaceModel>> getAllPlacesBy(PlaceSorts sortValue, String? categoryId);
+  Stream<List<PlaceModel>> getAllPlacesByCategoryId(String? categoryId);
   void increamentViewCount(String placeId);
+  Future<void> updateReviewCountAndRate(String placeId, double rateValue);
 
   Stream<PlaceModel> getPlaceById(String placeId);
 }

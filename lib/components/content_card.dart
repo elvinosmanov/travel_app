@@ -104,7 +104,7 @@ class ContentCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             SvgPicture.asset(R.star).padding(right: 10),
-            starValue.toString().regularTextStyle(12),
+            starValue.toStringAsFixed(1).regularTextStyle(12),
           ],
         ),
       ),

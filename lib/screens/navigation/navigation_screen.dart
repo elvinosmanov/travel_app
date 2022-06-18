@@ -12,6 +12,12 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
+  final List<PageRouteInfo> routes = const [
+    HomeRouter(),
+    SearchRouter(),
+    ProfileRouter(),
+    SettingsRouter(),
+  ];
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
@@ -20,18 +26,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
           child: child,
         );
       },
-      routes: const [
-        HomeRouter(),
-        SearchRouter(),
-        ProfileRouter(),
-        SettingsRouter(),
-      ],
+      routes: routes,
       bottomNavigationBuilder: (_, tabsRouter) {
         return CustomBottomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
             onItemTapped: (value) {
               if (value == tabsRouter.activeIndex) {
-                context.router.popTop();
+                tabsRouter.navigateNamed(routes[value].path);
               } else {
                 tabsRouter.setActiveIndex(value);
               }

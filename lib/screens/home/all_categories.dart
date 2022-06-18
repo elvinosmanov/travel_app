@@ -39,58 +39,49 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => PlaceRepository(),
-      child: BlocProvider(
-        create: (context) {
-          final placeCubit = PlaceCubit(placeRepository: context.read<PlaceRepository>());
-          placeCubit.getAllPlacesBy(PlaceSorts.all, categoryId: _selectedCategoryId);
-          return placeCubit;
-        },
-        child: BlocBuilder<PlaceCubit, PlaceState>(
-          builder: (context, state) {
-            return Scaffold(
-                body: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomBackButton(
-                    onPressed: () => context.router.pop(),
-                  ).padding(left: 16, top: defaultTopPadding, bottom: 16),
-                  CustomDropDownButton(
-                    selectedValue: state.categoryId,
-                    onChanged: (String? value) {
-                      context.read<PlaceCubit>().getAllPlacesBy(state.sortedValue, categoryId: value);
-                    },
-                  ).padding(left: 16),
-                  const SortList().padding(top: 8, bottom: 8),
-                  Expanded(
-                      child: MasonryGridView.count(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 8,
-                    itemCount: state.places.length,
-                    itemBuilder: (context, index) {
-                      //TODO isLiked
-                      return CategoryCard2(
-                        textSize: 14,
-                        placeModel: state.places[index],
-                        onPressed: () {
-                          context.router.push(
-                            DetailsRoute(placeId: state.places[index].id),
-                          );
-                        },
+    return BlocBuilder<PlaceCubit, PlaceState>(
+      builder: (context, state) {
+        // context.read<PlaceCubit>().changePlaceSortValue(state.sortedValue);
+        return Scaffold(
+            body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomBackButton(
+                onPressed: () => context.router.pop(),
+              ).padding(left: 16, top: defaultTopPadding, bottom: 16),
+              CustomDropDownButton(
+                selectedValue: state.categoryId,
+                onChanged: (String? value) {
+                  context.read<PlaceCubit>().getAllPlacesBy(categoryId: value);
+                },
+              ).padding(left: 16),
+              const SortList().padding(top: 8, bottom: 8),
+              Expanded(
+                  child: MasonryGridView.count(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
+                crossAxisCount: 2,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 8,
+                itemCount: state.places.length,
+                itemBuilder: (context, index) {
+                  //TODO isLiked
+                  return CategoryCard2(
+                    textSize: 14,
+                    placeModel: state.places[index],
+                    onPressed: () {
+                      context.router.push(
+                        DetailsRoute(placeId: state.places[index].id),
                       );
                     },
-                  )),
-                ],
-              ),
-            ));
-          },
-        ),
-      ),
+                  );
+                },
+              )),
+            ],
+          ),
+        ));
+      },
     );
   }
 }

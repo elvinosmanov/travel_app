@@ -37,22 +37,21 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   bool isReadmore = false;
   final _controller = ScrollController();
-  MapController mapController = MapController();
+  late MapController mapController;
   @override
   void initState() {
     super.initState();
     _controller.addListener(() {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);
     });
-    context.read<WillVisitCubit>().getAllUserWillVisits();
     context.read<PlaceCubit>().increamantViewCount(widget.placeId);
     context.read<PlaceCubit>().getPlaceById(widget.placeId);
-    context.read<PlaceCubit>().getAllPlacesBy(PlaceSorts.recommended);
     context.read<CommentCubit>().getAllCommentsByPlaceId(widget.placeId);
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<WillVisitCubit>().getAllUserWillVisits();
     return BlocBuilder<PlaceCubit, PlaceState>(
       builder: (context, state) {
         return Scaffold(
@@ -236,6 +235,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Container _buildMap(PlaceState state) {
     final loc = state.placeModel.location;
+    mapController = MapController();
+    mapController.onReady.then((value) {
+      setState(() {
+        mapController.move(LatLng(loc.latitude, loc.longitude), 8);
+      });
+    });
+
     return Container(
       clipBehavior: Clip.hardEdge,
       width: double.infinity,
@@ -246,18 +252,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
       child: Stack(
         children: [
           FlutterMap(
-            mapController: mapController..center,
+            mapController: mapController,
             options: MapOptions(
               center: LatLng(loc.latitude, loc.longitude),
-              zoom: 16.0,
+              zoom: 8,
             ),
             layers: [
-              // TileLayerOptions(
-              //     urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", subdomains: ['a', 'b', 'c']),
               TileLayerOptions(
-                urlTemplate: "https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey={apikey}",
-                additionalOptions: {"apikey": "c4bce2e5f7b14c28883efe9268d0de1d"},
-              ),
+                  urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", subdomains: ['a', 'b', 'c']),
+              // TileLayerOptions(
+              //   urlTemplate: "https://tile.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey={apikey}",
+              //   additionalOptions: {"apikey": "c4bce2e5f7b14c28883efe9268d0de1d"},
+              // ),
               MarkerLayerOptions(
                 markers: [
                   Marker(

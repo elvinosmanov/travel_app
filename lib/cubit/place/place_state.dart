@@ -3,9 +3,7 @@ part of 'place_cubit.dart';
 enum PlaceStatus { initial, loading, success, error }
 
 enum PlaceSorts {
-  all('All'),
   popular('Popular'),
-  recommended('Recommended'),
   mostRated('Most Rated'),
   newAdded('New Added');
 
@@ -33,7 +31,7 @@ class PlaceState extends Equatable {
   PlaceState.initial()
       : status = PlaceStatus.initial,
         error = '',
-        sortedValue = PlaceSorts.all,
+        sortedValue = PlaceSorts.popular,
         categoryId = kAllCategoryId,
         placeModel = PlaceModel.empty,
         places = [];
