@@ -24,7 +24,6 @@ class LikeCubit extends Cubit<LikeState> {
       });
   }
 
-
   void likeOrNotPlaces(String placeId, bool isLiked) {
     _likeRepository.likeOrNotPlaces(placeId, isLiked);
     emit(state.copyWith(status: LikeStatus.success));

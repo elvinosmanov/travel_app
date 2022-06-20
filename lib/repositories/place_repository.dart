@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_app/cubit/place/place_cubit.dart';
+import 'package:travel_app/models/like.dart';
 import 'package:travel_app/models/place.dart';
+import 'package:travel_app/repositories/like_repository.dart';
 
 class PlaceRepository extends BasePlaceRepository {
   // final _firebase = FirebaseFirestore.instance;
   final _placeRef = FirebaseFirestore.instance.collection('places');
+  final BaseLikeRepository _likeRepository = LikeRepository();
   @override
   Stream<List<PlaceModel>> getAllPlacesByCategoryId(String? categoryId) {
     Stream<List<PlaceModel>> placeList;
@@ -21,15 +23,18 @@ class PlaceRepository extends BasePlaceRepository {
         .map((querySnap) => querySnap.docs.map((snapshot) => PlaceModel.getFromSnapshot(snapshot)).toList());
     return placeList;
   }
+
   @override
-  Stream<List<PlaceModel>> getAllUserFavoritePlaces(String? userId) {
+  Stream<List<PlaceModel>> getAllUserFavoritePlaces(List<LikeModel> likeModelList) {
     Stream<List<PlaceModel>> placeList;
-    Query<Map<String, dynamic>> query;
-      query = _placeRef.where('categories', arrayContains: categoryId);
-    placeList = query
-        .orderBy('view_count', descending: true)
+    placeList = _placeRef
+        .where(FieldPath.documentId, whereIn: likeModelList.map((e) => e.placeId).toList())
         .snapshots()
-        .map((querySnap) => querySnap.docs.map((snapshot) => PlaceModel.getFromSnapshot(snapshot)).toList());
+        .map((querySnap) {
+      return querySnap.docs.map((snapshot) {
+        return PlaceModel.getFromSnapshot(snapshot);
+      }).toList();
+    });
     return placeList;
   }
 
@@ -45,9 +50,6 @@ class PlaceRepository extends BasePlaceRepository {
 
     var placeModel = PlaceModel.getFromSnapshot(doc);
     var dc = _placeRef.doc(placeId);
-    print(placeModel.rateAvgCount);
-    print(placeModel.commentCount);
-    print(placeModel.rateAvgCount * placeModel.commentCount + rateValue);
     dc.update({
       'comment_count': FieldValue.increment(1),
       'rate_avg_count': (placeModel.rateAvgCount * placeModel.commentCount + rateValue) / (placeModel.commentCount + 1)
@@ -98,6 +100,6 @@ abstract class BasePlaceRepository {
   Stream<List<PlaceModel>> getAllPlacesByCategoryId(String? categoryId);
   void increamentViewCount(String placeId);
   Future<void> updateReviewCountAndRate(String placeId, double rateValue);
-
+  Stream<List<PlaceModel>> getAllUserFavoritePlaces(List<LikeModel> likeModelList);
   Stream<PlaceModel> getPlaceById(String placeId);
 }
