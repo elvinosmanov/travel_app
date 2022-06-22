@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_app/models/comment.dart';
 import 'package:travel_app/models/like.dart';
 import 'package:travel_app/models/place.dart';
+import 'package:travel_app/models/will_visit.dart';
 import 'package:travel_app/repositories/like_repository.dart';
 
 class PlaceRepository extends BasePlaceRepository {
@@ -25,17 +27,34 @@ class PlaceRepository extends BasePlaceRepository {
   }
 
   @override
-  Stream<List<PlaceModel>> getAllUserFavoritePlaces(List<LikeModel> likeModelList) {
-    Stream<List<PlaceModel>> placeList;
-    placeList = _placeRef
-        .where(FieldPath.documentId, whereIn: likeModelList.map((e) => e.placeId).toList())
-        .snapshots()
-        .map((querySnap) {
-      return querySnap.docs.map((snapshot) {
-        return PlaceModel.getFromSnapshot(snapshot);
-      }).toList();
-    });
-    return placeList;
+  Future<List<PlaceModel>> getAllUserFavoritePlaces(List<LikeModel> likeModelList) async {
+    
+   var placeList =
+        await _placeRef.where(FieldPath.documentId, whereIn: likeModelList.map((e) => e.placeId).toList()).get();
+    
+    return placeList.docs.map((e) => PlaceModel.getFromSnapshot(e)).toList();
+  }
+   @override
+  Future<List<PlaceModel>> getAllUserWillVisitPlace(List<WillVisitModel> willVisitModelList) async{
+var placeList =
+        await _placeRef.where(FieldPath.documentId, whereIn: willVisitModelList.map((e) => e.placeId).toList()).get();
+    
+    return placeList.docs.map((e) => PlaceModel.getFromSnapshot(e)).toList();
+  }
+
+  Future<List<PlaceModel>> getAllUserWillVisitPlace2(List<WillVisitModel> willVisitModelList) async{
+var placeList =
+        await _placeRef.where(FieldPath.documentId, whereIn: willVisitModelList.map((e) => e.placeId).toList()).get();
+    
+    return placeList.docs.map((e) => PlaceModel.getFromSnapshot(e)).toList();
+  }
+
+  @override
+  Future<List<PlaceModel>> getAllUserReviewPlaces(List<CommentModel> commentModelList)async{
+     var placeList =
+        await _placeRef.where(FieldPath.documentId, whereIn: commentModelList.map((e) => e.placeId).toList()).get();
+    
+    return placeList.docs.map((e) => PlaceModel.getFromSnapshot(e)).toList();
   }
 
   @override
@@ -94,12 +113,16 @@ class PlaceRepository extends BasePlaceRepository {
   Stream<PlaceModel> getPlaceById(String placeId) {
     return _placeRef.doc(placeId).snapshots().map((event) => PlaceModel.getFromSnapshot(event));
   }
+  
+ 
 }
 
 abstract class BasePlaceRepository {
   Stream<List<PlaceModel>> getAllPlacesByCategoryId(String? categoryId);
   void increamentViewCount(String placeId);
   Future<void> updateReviewCountAndRate(String placeId, double rateValue);
-  Stream<List<PlaceModel>> getAllUserFavoritePlaces(List<LikeModel> likeModelList);
+  Future<List<PlaceModel>> getAllUserFavoritePlaces(List<LikeModel> likeModelList);
+  Future<List<PlaceModel>> getAllUserReviewPlaces(List<CommentModel> commentModelList);
+  Future<List<PlaceModel>> getAllUserWillVisitPlace(List<WillVisitModel> willVisitModelList);
   Stream<PlaceModel> getPlaceById(String placeId);
 }

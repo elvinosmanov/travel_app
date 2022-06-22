@@ -7,13 +7,11 @@ import 'package:travel_app/components/category_card2.dart';
 import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/components/sort_list.dart';
 import 'package:travel_app/core/constants.dart';
-import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/home/widgets/custom_drop_down_button.dart';
 
 import '../../models/category.dart';
-import '../../repositories/place_repository.dart';
 import '../../routes/router.gr.dart';
 
 class AllCategoriesScreen extends StatefulWidget {
@@ -27,7 +25,6 @@ class AllCategoriesScreen extends StatefulWidget {
 }
 
 class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
-  // final data = Category2.data;
   String? _selectedCategoryId;
   @override
   void initState() {
@@ -35,13 +32,13 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     if (widget.selectedCategory != null) {
       _selectedCategoryId = widget.selectedCategory!.id;
     }
+    context.read<PlaceCubit>().getAllPlacesBy(categoryId: _selectedCategoryId ?? kAllCategoryId);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlaceCubit, PlaceState>(
       builder: (context, state) {
-        // context.read<PlaceCubit>().changePlaceSortValue(state.sortedValue);
         return Scaffold(
             body: SafeArea(
           child: Column(

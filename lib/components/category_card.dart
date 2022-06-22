@@ -67,9 +67,7 @@ class CategoryCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   gradient: const LinearGradient(
-                      colors: [Colors.black, Colors.transparent],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.center),
+                      colors: [Colors.black, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.center),
                 ),
               ),
               if (hasStar)
@@ -78,14 +76,13 @@ class CategoryCard extends StatelessWidget {
                   right: 2,
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                    decoration: BoxDecoration(
-                        color: kWhiteColor.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(8)),
+                    decoration:
+                        BoxDecoration(color: kWhiteColor.withOpacity(0.8), borderRadius: BorderRadius.circular(8)),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         SvgPicture.asset(R.star).padding(right: 4),
-                        (starValue ?? 0.0).toString().regularTextStyle(10)
+                        (starValue ?? 0.0).toStringAsFixed(1).regularTextStyle(10)
                       ],
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -96,24 +97,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: () => showBottomSheet(ImageType.cover),
       child: Container(
         clipBehavior: Clip.hardEdge,
-        // width: 1000,
-        // height: 200,
+        width: 1000,
+        height: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
         ),
-        // child: AspectRatio(
-        //   aspectRatio: 6 / 2.85,
-        //   child: _croppedCoverImage != null
-        //       ? Image.file(
-        //           File(_croppedCoverImage!.path),
-        //           fit: BoxFit.cover,
-        //         )
-        //       : 
-        //       Image.asset(
-        //           R.museumAndArtImage,
-        //           fit: BoxFit.cover,
-        //         ),
-        // ),
+        child: AspectRatio(
+            aspectRatio: 6 / 2.85,
+            child: _croppedCoverImage != null
+                ? Image.file(
+                    File(_croppedCoverImage!.path),
+                    fit: BoxFit.cover,
+                  )
+                //User Imagei olmalidi
+                : CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl:
+                        'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/login_background.jpg?alt=media&token=7ef2c0b0-b467-4ad5-a0c7-1453430e92ec')),
       ),
     );
   }
@@ -143,12 +143,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           GestureDetector(
             onTap: () => showBottomSheet(ImageType.profile),
             child: Stack(
-              children:  [
+              children: [
                 CircleAvatar(
                   radius: 70,
                   backgroundColor: kLightGreyColor_1,
-                  child: 
-                  CircleAvatar(
+                  child: CircleAvatar(
                       radius: 66,
                       backgroundImage: _croppedProfileImage != null
                           ? FileImage(File(_croppedProfileImage!.path)) as ImageProvider
@@ -209,6 +208,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _croppedProfileImage = croppedImage;
       });
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
   }
 
@@ -223,6 +224,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _croppedCoverImage = croppedImage;
       });
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
   }
 }

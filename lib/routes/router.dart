@@ -25,6 +25,7 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
   AutoRoute(path: 'welcome', page: WelcomeScreen),
   AutoRoute(path: 'all-comments', page: AllCommentsScreen),
   AutoRoute(path: '/', page: NavigationScreen, children: [
+
     AutoRoute(
       path: 'home',
       name: 'HomeRouter',

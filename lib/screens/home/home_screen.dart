@@ -58,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
           categoryName: 'Categories',
           onPressed: () {
             // ignore: avoid_print
-            print('object');
             context.router.push(const CategoriesRoute());
           },
         ),

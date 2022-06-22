@@ -17,6 +17,7 @@ class CategoryCard2 extends StatelessWidget {
     this.width,
     this.height,
     required this.placeModel,
+   this.hasHeartIcon = true,
   }) : super(key: key);
   final double? textSize;
   final double? placeSize;
@@ -24,6 +25,7 @@ class CategoryCard2 extends StatelessWidget {
   final double? width;
   final double? height;
   final PlaceModel placeModel;
+  final bool hasHeartIcon;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -83,30 +85,31 @@ class CategoryCard2 extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 13,
-            right: 12,
-            child: IconButton(
-                iconSize: 30,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                onPressed: () {
-                  context.read<LikeCubit>().likeOrNotPlaces(placeModel.id, isLiked);
-                },
-                splashRadius: 100,
-                icon: BlocSelector<LikeCubit, LikeState, bool>(
-                  selector: (state) {
-                    return state.checkLike(placeModel.id);
+          if (hasHeartIcon)
+            Positioned(
+              top: 13,
+              right: 12,
+              child: IconButton(
+                  iconSize: 30,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () {
+                    context.read<LikeCubit>().likeOrNotPlaces(placeModel.id, isLiked);
                   },
-                  builder: (context, state) {
-                    isLiked = state;
-                    return SvgPicture.asset(
-                      isLiked ? R.heartFilled : R.heartOutlined,
-                      fit: BoxFit.scaleDown,
-                    );
-                  },
-                )),
-          ),
+                  splashRadius: 100,
+                  icon: BlocSelector<LikeCubit, LikeState, bool>(
+                    selector: (state) {
+                      return state.checkLike(placeModel.id);
+                    },
+                    builder: (context, state) {
+                      isLiked = state;
+                      return SvgPicture.asset(
+                        isLiked ? R.heartFilled : R.heartOutlined,
+                        fit: BoxFit.scaleDown,
+                      );
+                    },
+                  )),
+            ),
         ],
       ),
     );

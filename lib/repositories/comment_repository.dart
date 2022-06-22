@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/models/comment.dart';
 
+import '../core/constants.dart';
+
 class CommentRepository extends BaseCommentRepository {
   final _commentRef = FirebaseFirestore.instance.collection('reviews');
 
@@ -8,9 +10,16 @@ class CommentRepository extends BaseCommentRepository {
   Stream<List<CommentModel>> getAllCommentsByPlaceId(String placeId, [int? limit]) {
     var list = _commentRef.where('place_id', isEqualTo: placeId).limit(limit ?? 100).snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
-        print(doc.data());
         return CommentModel.getFromSnapshot(doc);
       }).toList();
+    });
+    return list;
+  }
+
+  @override
+  Stream<List<CommentModel>> getAllUserReviews() {
+    var list = _commentRef.where('user_id', isEqualTo: kTemporaryUserId).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => CommentModel.getFromSnapshot(doc)).toList();
     });
     return list;
   }
@@ -23,6 +32,6 @@ class CommentRepository extends BaseCommentRepository {
 
 abstract class BaseCommentRepository {
   Stream<List<CommentModel>> getAllCommentsByPlaceId(String placeId, [int? limit]);
-
+  Stream<List<CommentModel>> getAllUserReviews();
   Future<void> sendReview(CommentModel commentModel);
 }

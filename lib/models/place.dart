@@ -47,7 +47,6 @@ class PlaceModel extends Equatable {
         id: snapshot.id,
         categories: snapshot['categories'],
         title: snapshot['title'],
-        
         description: snapshot['description'],
         locationName: snapshot['location_name'],
         location: snapshot['location'],

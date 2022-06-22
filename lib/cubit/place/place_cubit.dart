@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:travel_app/core/constants.dart';
-
-import '../../models/like.dart';
+import 'package:travel_app/repositories/like_repository.dart';
 import '../../models/place.dart';
+import '../../repositories/comment_repository.dart';
 import '../../repositories/place_repository.dart';
+import '../../repositories/will_visit_repository.dart';
 
 part 'place_state.dart';
 
@@ -13,6 +14,10 @@ class PlaceCubit extends Cubit<PlaceState> {
   PlaceCubit({BasePlaceRepository? placeRepository})
       : _placeRepository = placeRepository ?? PlaceRepository(),
         super(PlaceState.initial());
+  final BaseLikeRepository _likeRepository = LikeRepository();
+  final BaseCommentRepository _commentRepository = CommentRepository();
+  final BaseWillVisitRepository _willVisitRepository = WillVisitRepository();
+
   getAllPlacesBy({String? categoryId}) async {
     // if (categoryId == state.categoryId) return;
     emit(state.copyWith(status: PlaceStatus.loading, categoryId: categoryId ?? state.categoryId));
@@ -31,21 +36,22 @@ class PlaceCubit extends Cubit<PlaceState> {
       case PlaceSorts.popular:
         var list = state.places;
         list.sort(
-          (a, b) => a.viewCount.compareTo(b.viewCount),
+          (b, a) => a.viewCount.compareTo(b.viewCount),
         );
         emit(state.copyWith(places: list, sortedValue: PlaceSorts.popular));
         break;
       case PlaceSorts.mostRated:
         var list = state.places;
         list.sort(
-          (a, b) => a.rateAvgCount.compareTo(b.rateAvgCount),
+          (b, a) => a.rateAvgCount.compareTo(b.rateAvgCount),
         );
+        print(list.first.rateAvgCount);
         emit(state.copyWith(places: list, sortedValue: PlaceSorts.mostRated));
         break;
       case PlaceSorts.newAdded:
         var list = state.places;
         list.sort(
-          (a, b) => a.createdDate.compareTo(b.createdDate),
+          (b, a) => a.createdDate.compareTo(b.createdDate),
         );
         emit(state.copyWith(places: list, sortedValue: PlaceSorts.newAdded));
         break;
@@ -69,16 +75,42 @@ class PlaceCubit extends Cubit<PlaceState> {
       ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
   }
 
-  getAllLikedPlaces(List<LikeModel> likeModelList) async {
+  getAllLikedPlaces() {
     emit(state.copyWith(status: PlaceStatus.loading));
+    final likeResult = _likeRepository.getAllUserLikes();
+    likeResult.listen((likeModelList) {}).onData((data) async {
+      if (data.isNotEmpty) {
+        final result = await _placeRepository.getAllUserFavoritePlaces(data);
+        emit(state.copyWith(status: PlaceStatus.success, places: result));
+      } else {
+        emit(state.copyWith(status: PlaceStatus.success, places: []));
+      }
+    });
+  }
 
-    final result = _placeRepository.getAllUserFavoritePlaces(likeModelList);
-    result.listen((placeModel) {})
-      ..onData((placeList) {
-        print('placeList.length ${placeList.length}');
-        print('emit etdi');
-        emit(state.copyWith(status: PlaceStatus.success, places: placeList));
-      })
-      ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
+  getAllRatedPlaces() {
+    emit(state.copyWith(status: PlaceStatus.loading));
+    final result = _commentRepository.getAllUserReviews();
+    result.listen((comments) {}).onData((comments) async {
+      if (comments.isNotEmpty) {
+        final result = await _placeRepository.getAllUserReviewPlaces(comments);
+        emit(state.copyWith(status: PlaceStatus.success, places: result));
+      } else {
+        emit(state.copyWith(status: PlaceStatus.success, places: []));
+      }
+    });
+  }
+
+  getAllWillVisitedPlaces() {
+    emit(state.copyWith(status: PlaceStatus.loading));
+    final result = _willVisitRepository.getAllUserWillVisits();
+    result.listen((willVisits) {}).onData((willVisits) async {
+      if (willVisits.isNotEmpty) {
+        final result = await _placeRepository.getAllUserWillVisitPlace(willVisits);
+        emit(state.copyWith(status: PlaceStatus.success, places: result));
+      } else {
+        emit(state.copyWith(status: PlaceStatus.success, places: []));
+      }
+    });
   }
 }
