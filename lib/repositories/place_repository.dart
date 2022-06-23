@@ -3,12 +3,10 @@ import 'package:travel_app/models/comment.dart';
 import 'package:travel_app/models/like.dart';
 import 'package:travel_app/models/place.dart';
 import 'package:travel_app/models/will_visit.dart';
-import 'package:travel_app/repositories/like_repository.dart';
 
 class PlaceRepository extends BasePlaceRepository {
   // final _firebase = FirebaseFirestore.instance;
   final _placeRef = FirebaseFirestore.instance.collection('places');
-  final BaseLikeRepository _likeRepository = LikeRepository();
   @override
   Stream<List<PlaceModel>> getAllPlacesByCategoryId(String? categoryId) {
     Stream<List<PlaceModel>> placeList;

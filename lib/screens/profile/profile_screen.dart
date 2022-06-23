@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/cubit/user/user_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/screens/profile/widgets/modal_bottom_sheet.dart';
@@ -102,18 +104,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
         ),
-        child: AspectRatio(
-            aspectRatio: 6 / 2.85,
-            child: _croppedCoverImage != null
-                ? Image.file(
-                    File(_croppedCoverImage!.path),
-                    fit: BoxFit.cover,
-                  )
-                //User Imagei olmalidi
-                : CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl:
-                        'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/login_background.jpg?alt=media&token=7ef2c0b0-b467-4ad5-a0c7-1453430e92ec')),
+        child: BlocBuilder<UserCubit, UserState>(
+          builder: (context, state) {
+            return AspectRatio(
+                aspectRatio: 6 / 2.85,
+                child: CachedNetworkImage(fit: BoxFit.cover, imageUrl: state.userModel.coverImageUrl));
+          },
+        ),
       ),
     );
   }
@@ -122,7 +119,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        'elvinosmanov'.semiBoldTextStyle(18, kBlueColor),
+        BlocBuilder<UserCubit, UserState>(
+          builder: (context, state) {
+            return state.userModel.username.semiBoldTextStyle(18, kBlueColor);
+          },
+        ),
         IconButton(
           onPressed: () => context.router.pushNamed('/settings/'),
           icon: SvgPicture.asset(
@@ -134,98 +135,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Positioned _buildUserInformation() {
-    return Positioned(
-      bottom: 0,
-      left: 24,
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => showBottomSheet(ImageType.profile),
-            child: Stack(
-              children: [
-                CircleAvatar(
-                  radius: 70,
-                  backgroundColor: kLightGreyColor_1,
-                  child: CircleAvatar(
-                      radius: 66,
-                      backgroundImage: _croppedProfileImage != null
-                          ? FileImage(File(_croppedProfileImage!.path)) as ImageProvider
-                          : const AssetImage(R.flagInterestImage)),
-                ),
-                const Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Material(
-                      shape: CircleBorder(),
-                      elevation: 2,
+  Widget _buildUserInformation() {
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, state) {
+        return Positioned(
+          bottom: 0,
+          left: 24,
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () => showBottomSheet(ImageType.profile),
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundColor: kLightGreyColor_1,
                       child: CircleAvatar(
-                        backgroundColor: kLightGreyColor_1,
-                        radius: 25,
-                        child: Icon(
-                          Icons.camera_alt_sharp,
-                          color: kBlueColor,
-                        ),
-                      ),
-                    ))
-              ],
-            ),
-          ),
-          Column(
-            // mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              'Elvin Osmanov'.semiBoldTextStyle(22),
-              'Baku, Azerbaijan'.mediumTextStyle(13),
+                          radius: 66, backgroundImage: CachedNetworkImageProvider(state.userModel.profileImageUrl)),
+                    ),
+                    const Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Material(
+                          shape: CircleBorder(),
+                          elevation: 2,
+                          child: CircleAvatar(
+                            backgroundColor: kLightGreyColor_1,
+                            radius: 25,
+                            child: Icon(
+                              Icons.camera_alt_sharp,
+                              color: kBlueColor,
+                            ),
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+              Column(
+                // mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  state.userModel.fullName.semiBoldTextStyle(22),
+                  'Baku, Azerbaijan'.mediumTextStyle(13),
+                ],
+              ).padding(top: 20, left: 4),
             ],
-          ).padding(top: 20, left: 4),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 
   void _getFromGallery(ImageType imageType) async {
     ImagePicker imagePicker = ImagePicker();
     XFile? pickedImage = await imagePicker.pickImage(source: ImageSource.gallery, maxHeight: 1080, maxWidth: 1080);
-    if (imageType == ImageType.profile) {
-      _cropProfileImage(pickedImage!.path);
-    } else if (imageType == ImageType.cover) {
-      _cropCoverImage(pickedImage!.path);
+    if (pickedImage != null) {
+      if (imageType == ImageType.profile) {
+        _cropProfileImage(pickedImage);
+      } else if (imageType == ImageType.cover) {
+        _cropCoverImage(pickedImage);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
     context.router.pop();
   }
 
-  void _cropProfileImage(String path) async {
+  void _cropProfileImage(XFile pickedImage) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
-        sourcePath: path,
+        sourcePath: pickedImage.path,
         maxHeight: 1080,
         maxWidth: 1080,
-        compressQuality: 100,
+        compressQuality: 50,
         cropStyle: CropStyle.circle,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1));
     if (croppedImage != null) {
       setState(() {
         _croppedProfileImage = croppedImage;
       });
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
   }
 
-  void _cropCoverImage(String path) async {
+  void _cropCoverImage(XFile pickedImage) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
-        sourcePath: path,
+        sourcePath: pickedImage.path,
         maxHeight: 1080,
         maxWidth: 1080,
-        compressQuality: 100,
+        compressQuality: 50,
         aspectRatio: const CropAspectRatio(ratioX: 6, ratioY: 2.85));
     if (croppedImage != null) {
       setState(() {
         _croppedCoverImage = croppedImage;
       });
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
   }
 }
