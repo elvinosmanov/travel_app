@@ -24,10 +24,8 @@ class UserModel extends Equatable {
       username: '',
       email: '',
       fullName: '',
-      coverImageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/flag_interest_image.jpg?alt=media&token=980696c3-24d2-49b3-a016-11ef138dbf99',
-      profileImageUrl:
-          'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/flag_interest_image.jpg?alt=media&token=980696c3-24d2-49b3-a016-11ef138dbf99',
+      coverImageUrl: '',
+      profileImageUrl: '',
       createdTime: DateTime.now());
 
   @override
@@ -46,13 +44,18 @@ class UserModel extends Equatable {
 
   factory UserModel.fromSnapshot(DocumentSnapshot snap) {
     return UserModel(
-      id: snap['id'] ?? '',
+      id: snap.id,
       username: snap['username'] ?? '',
       email: snap['email'] ?? '',
-      fullName: snap['fullName'] ?? '',
-      coverImageUrl: snap['coverImageUrl'] ?? '',
-      profileImageUrl: snap['profileImageUrl'] ?? '',
-      createdTime: DateTime.parse(snap['created_date'].toDate().toString()),
+      fullName: snap['full_name'] ?? '',
+      coverImageUrl: snap['cover_image_url'] ?? '',
+      profileImageUrl: snap['profile_image_url'] ?? '',
+      createdTime: DateTime.parse(snap['created_time'].toDate().toString()),
     );
+  }
+
+  @override
+  String toString() {
+    return 'UserModel(id: $id, username: $username, email: $email, fullName: $fullName, coverImageUrl: $coverImageUrl, profileImageUrl: $profileImageUrl, createdTime: $createdTime)';
   }
 }

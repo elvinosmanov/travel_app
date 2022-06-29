@@ -160,7 +160,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   return context.router.push(AllCategoriesRoute());
                 },
               ).padding(bottom: 16),
-              _buildCardList()
+              _buildCardList().padding(bottom: 16)
             ],
           ),
         );

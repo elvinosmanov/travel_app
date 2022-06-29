@@ -12,10 +12,15 @@ class UserRepository extends BaseUserRepository {
     _userPlaceRef.doc(kTemporaryUserId).update({'${imageName}_url': downloadUrl});
   }
 
-
   @override
   Stream<UserModel> getUser() {
-    return _userPlaceRef.doc(kTemporaryUserId).snapshots().map((snap) => UserModel.fromSnapshot(snap));
+    return _userPlaceRef.doc(kTemporaryUserId).snapshots().map((snap) {
+      print('girdi');
+
+      print(UserModel.fromSnapshot(snap));
+      print('cixdi');
+      return UserModel.fromSnapshot(snap);
+    });
   }
 }
 

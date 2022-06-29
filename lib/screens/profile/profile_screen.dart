@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         children: <Widget>[
-          _buildCustomAppBar().padding(top: defaultTopPadding, bottom: 16),
+          _buildCustomAppBar().padding(top: defaultTopPadding - 10, bottom: 8),
           SizedBox(
             height: 200 + 90,
             child: Stack(
@@ -103,12 +103,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         height: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
+          boxShadow: const [BoxShadow(color: kBlueColor, spreadRadius: 2)],
         ),
         child: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
             return AspectRatio(
                 aspectRatio: 6 / 2.85,
-                child: CachedNetworkImage(fit: BoxFit.cover, imageUrl: state.userModel.coverImageUrl));
+                child: state.userModel.coverImageUrl.isEmpty ||
+                        (state.imageStatus == ImageStatus.loading && state.imageType == ImageType.cover)
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: state.userModel.coverImageUrl,
+                      ));
           },
         ),
       ),
@@ -150,8 +159,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CircleAvatar(
                       radius: 70,
                       backgroundColor: kLightGreyColor_1,
-                      child: CircleAvatar(
-                          radius: 66, backgroundImage: CachedNetworkImageProvider(state.userModel.profileImageUrl)),
+                      child: Container(
+                        width: 132,
+                        height: 132,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child: state.userModel.coverImageUrl.isEmpty ||
+                                (state.imageStatus == ImageStatus.loading && state.imageType == ImageType.profile)
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: state.userModel.profileImageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     ),
                     const Positioned(
                         bottom: 0,
@@ -211,9 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         cropStyle: CropStyle.circle,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1));
     if (croppedImage != null) {
-      setState(() {
-        _croppedProfileImage = croppedImage;
-      });
+      context.read<UserCubit>().updateUserImage(croppedImage, ImageType.profile);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
@@ -227,9 +247,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         compressQuality: 50,
         aspectRatio: const CropAspectRatio(ratioX: 6, ratioY: 2.85));
     if (croppedImage != null) {
-      setState(() {
-        _croppedCoverImage = croppedImage;
-      });
+      context.read<UserCubit>().updateUserImage(croppedImage, ImageType.cover);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }

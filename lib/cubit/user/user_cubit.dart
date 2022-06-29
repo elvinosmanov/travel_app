@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/repositories/storage_repository.dart';
 import 'package:travel_app/repositories/user_repository.dart';
@@ -14,14 +15,18 @@ class UserCubit extends Cubit<UserState> {
   final BaseUserRepository _userRepository;
   UserCubit({BaseStorageRepository? storageRepository, BaseUserRepository? userRepository})
       : _storageRepository = storageRepository ?? StorageRepository(),
-      _userRepository = userRepository??UserRepository(),
+        _userRepository = userRepository ?? UserRepository(),
         super(UserState.initial());
 
   getUserModel(String userId) {
     emit(state.copyWith(status: UserStatus.loading));
     final result = _userRepository.getUser();
-    result.listen((userModel) {})
+    result.listen((userModel) {
+      print(userModel);
+      emit(state.copyWith(status: UserStatus.success, userModel: userModel));
+    })
       ..onData((userModel) {
+        print(userModel);
         emit(state.copyWith(status: UserStatus.success, userModel: userModel));
       })
       ..onError((e) {
@@ -29,9 +34,9 @@ class UserCubit extends Cubit<UserState> {
       });
   }
 
-  updateUserImage(XFile pickedImage, ImageType imageType) async {
-    emit(state.copyWith(imageStatus: ImageStatus.loading));
+  updateUserImage(CroppedFile pickedImage, ImageType imageType) async {
+    emit(state.copyWith(imageStatus: ImageStatus.loading, imageType: imageType));
     await _storageRepository.uploadImage(pickedImage, imageType);
-    emit(state.copyWith(imageStatus: ImageStatus.success));
+    emit(state.copyWith(imageStatus: ImageStatus.success, imageType: imageType));
   }
 }

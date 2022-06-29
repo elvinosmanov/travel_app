@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/repositories/user_repository.dart';
@@ -17,7 +18,7 @@ class StorageRepository extends BaseStorageRepository {
   }
 
   @override
-  Future<void> uploadImage(XFile pickedImage, ImageType imageType) async {
+  Future<void> uploadImage(CroppedFile pickedImage, ImageType imageType) async {
     String imageName = '';
     switch (imageType) {
       case ImageType.cover:
@@ -39,6 +40,6 @@ class StorageRepository extends BaseStorageRepository {
 }
 
 abstract class BaseStorageRepository {
-  Future<void> uploadImage(XFile pickedImage, ImageType imageType);
+  Future<void> uploadImage(CroppedFile pickedImage, ImageType imageType);
   Future<String> getDownloadUserImageUrl(String imageName);
 }

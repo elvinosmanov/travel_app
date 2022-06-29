@@ -7,6 +7,7 @@ class LikeRepository extends BaseLikeRepository {
   //TODO authentication duzelenden sonra user idini deyis
   @override
   Stream<List<LikeModel>> getAllUserLikes() {
+    
     var list = _likedPlaceRef.where('user_id', isEqualTo: kTemporaryUserId).snapshots().map((snapshot) {
       return snapshot.docs.map((doc) => LikeModel.getFromSnapshot(doc)).toList();
     });
