@@ -10,11 +10,13 @@ class CustomSubmitButton extends StatelessWidget {
     required this.text,
     required this.textColor,
     this.backgroundColor,
+    this.isLoading = false,
   }) : super(key: key);
   final void Function()? onPressed;
   final String text;
   final Color textColor;
   final Color? backgroundColor;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -27,8 +29,12 @@ class CustomSubmitButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all(backgroundColor ?? kGreenColor),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: kRadius8)),
           ),
-          onPressed: () {},
-          child: text.mediumTextStyle(14, textColor)),
+          onPressed: isLoading ? null : onPressed,
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : text.mediumTextStyle(14, textColor)),
     );
   }
 }

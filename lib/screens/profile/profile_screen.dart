@@ -24,8 +24,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  CroppedFile? _croppedProfileImage;
-  CroppedFile? _croppedCoverImage;
 
   void showBottomSheet(ImageType imageType) {
     showModalBottomSheet(
@@ -38,6 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return CustomModalBottomSheet(
           title: imageType == ImageType.cover ? 'Choose background photo' : 'Choose profile photo',
           galleryOnPressed: () => _getFromGallery(imageType),
+          cameraOnPressed: () => _getFromCamera(imageType),
         );
       },
     );
@@ -102,8 +101,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         width: 1000,
         height: 200,
         decoration: BoxDecoration(
+          color: kLightGreyColor_1,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: const [BoxShadow(color: kBlueColor, spreadRadius: 2)],
+          // boxShadow: const [BoxShadow(color: kBlueColor, spreadRadius: 2)],
         ),
         child: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
@@ -117,6 +117,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     : CachedNetworkImage(
                         fit: BoxFit.cover,
                         imageUrl: state.userModel.coverImageUrl,
+                        placeholder: (_, __) {
+                          return const Center(child: CircularProgressIndicator());
+                        },
                       ));
           },
         ),
@@ -172,6 +175,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : CachedNetworkImage(
                                 imageUrl: state.userModel.profileImageUrl,
                                 fit: BoxFit.cover,
+                                placeholder: (_, __) {
+                                  return const Center(child: CircularProgressIndicator());
+                                },
                               ),
                       ),
                     ),
@@ -219,7 +225,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _cropCoverImage(pickedImage);
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+      if (!mounted) return;ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+    }
+    context.router.pop();
+  }
+
+  _getFromCamera(ImageType imageType) async {
+    ImagePicker imagePicker = ImagePicker();
+    XFile? pickedImage = await imagePicker.pickImage(source: ImageSource.camera, maxHeight: 1080, maxWidth: 1080);
+    if (pickedImage != null) {
+      if (imageType == ImageType.profile) {
+        _cropProfileImage(pickedImage);
+      } else if (imageType == ImageType.cover) {
+        _cropCoverImage(pickedImage);
+      }
+    } else {
+      if (!mounted) return;ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
     context.router.pop();
   }
@@ -229,13 +250,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         sourcePath: pickedImage.path,
         maxHeight: 1080,
         maxWidth: 1080,
-        compressQuality: 50,
+        compressQuality: 60,
         cropStyle: CropStyle.circle,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1));
     if (croppedImage != null) {
-      context.read<UserCubit>().updateUserImage(croppedImage, ImageType.profile);
+     if (!mounted) return; context.read<UserCubit>().updateUserImage(croppedImage, ImageType.profile);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+     if (!mounted) return; ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
   }
 
@@ -244,11 +265,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         sourcePath: pickedImage.path,
         maxHeight: 1080,
         maxWidth: 1080,
-        compressQuality: 50,
+        compressQuality: 60,
         aspectRatio: const CropAspectRatio(ratioX: 6, ratioY: 2.85));
     if (croppedImage != null) {
+    if (!mounted) return;
+
       context.read<UserCubit>().updateUserImage(croppedImage, ImageType.cover);
     } else {
+    if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
   }

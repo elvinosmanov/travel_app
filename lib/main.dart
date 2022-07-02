@@ -67,11 +67,11 @@ class MyApp extends StatelessWidget {
 }
 
 PageRouteInfo<dynamic> navigationPage() {
-  bool? isExistingUser = OnboardingPreferences.getOnboarding();
-  if (isExistingUser == null) {
+  bool? isFirstTime = OnboardingPreferences.getOnboarding();
+  if (isFirstTime == null) {
     return const OnboardingRoute();
   } else {
-    return const NavigationRoute();
+    return const WelcomeRoute();
   }
 }
 

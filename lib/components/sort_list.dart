@@ -29,7 +29,7 @@ class _SortListState extends State<SortList> {
     return SizedBox(
       height: 46,
       child: BlocBuilder<PlaceCubit, PlaceState>(
-        buildWhen: (previous, current) => previous.sortedValue != current.sortedValue,
+        // buildWhen: (previous, current) => previous.sortedValue != current.sortedValue,
         builder: (context, state) {
           return ListView.builder(
             controller: widget.controller,

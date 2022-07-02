@@ -18,7 +18,6 @@ class RatingsTabView extends StatelessWidget {
         builder: (context, state) {
           var data = state.places;
           return AlignedGridView.count(
-            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(16),
             crossAxisCount: 3,
             mainAxisSpacing: 16,

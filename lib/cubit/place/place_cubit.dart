@@ -10,6 +10,7 @@ import '../../repositories/will_visit_repository.dart';
 part 'place_state.dart';
 
 class PlaceCubit extends Cubit<PlaceState> {
+  
   final BasePlaceRepository _placeRepository;
   PlaceCubit({BasePlaceRepository? placeRepository})
       : _placeRepository = placeRepository ?? PlaceRepository(),
@@ -18,6 +19,8 @@ class PlaceCubit extends Cubit<PlaceState> {
   final BaseCommentRepository _commentRepository = CommentRepository();
   final BaseWillVisitRepository _willVisitRepository = WillVisitRepository();
 
+
+  
   getAllPlacesBy({String? categoryId}) async {
     // if (categoryId == state.categoryId) return;
     emit(state.copyWith(status: PlaceStatus.loading, categoryId: categoryId ?? state.categoryId));
@@ -25,13 +28,14 @@ class PlaceCubit extends Cubit<PlaceState> {
     result = _placeRepository.getAllPlacesByCategoryId(categoryId ?? state.categoryId);
     result.listen((placeList) {})
       ..onData((placeList) {
-        changePlaceSortValue(state.sortedValue);
         emit(state.copyWith(status: PlaceStatus.success, places: placeList));
+        changePlaceSortValue(state.sortedValue);
       })
       ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
   }
 
-  changePlaceSortValue(PlaceSorts value) {
+  changePlaceSortValue([PlaceSorts? value]) {
+    value ??= state.sortedValue;
     switch (value) {
       case PlaceSorts.popular:
         var list = state.places;
@@ -45,7 +49,6 @@ class PlaceCubit extends Cubit<PlaceState> {
         list.sort(
           (b, a) => a.rateAvgCount.compareTo(b.rateAvgCount),
         );
-        print(list.first.rateAvgCount);
         emit(state.copyWith(places: list, sortedValue: PlaceSorts.mostRated));
         break;
       case PlaceSorts.newAdded:

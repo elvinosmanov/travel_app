@@ -13,18 +13,38 @@ class UserRepository extends BaseUserRepository {
   }
 
   @override
-  Stream<UserModel> getUser() {
-    return _userPlaceRef.doc(kTemporaryUserId).snapshots().map((snap) {
-      print('girdi');
+  Future<void> updateUserInformation({
+    String? fullName,
+    String? username,
+    String? locationName,
+  }) async {
+    await _userPlaceRef.doc(kTemporaryUserId).update({
+      if (fullName != null) 'full_name': fullName,
+      if (username != null) 'username': username,
+      if (locationName != null) 'location_name': locationName,
+    });
+  }
 
-      print(UserModel.fromSnapshot(snap));
-      print('cixdi');
+  @override
+  Stream<UserModel> getUser(String userId) {
+    return _userPlaceRef.doc(userId).snapshots().map((snap) {
       return UserModel.fromSnapshot(snap);
     });
+  }
+  
+  @override
+  Future<void> createUser(UserModel userModel) async {
+   await _userPlaceRef.doc(userModel.id).set(userModel.toMap());
   }
 }
 
 abstract class BaseUserRepository {
+  Future<void> updateUserInformation({
+    String? fullName,
+    String? username,
+    String? locationName,
+  });
   Future<void> updateUserImage(String imageName);
-  Stream<UserModel> getUser();
+  Future<void> createUser(UserModel userModel);
+  Stream<UserModel> getUser(String userId);
 }

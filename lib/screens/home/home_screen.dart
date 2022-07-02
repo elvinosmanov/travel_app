@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<CategoryCubit>().getAllCategories();
     context.read<PlaceCubit>().getAllPlacesBy(categoryId: kAllCategoryId);
     context.read<LikeCubit>().getAllUserLikes();
+    context.read<PlaceCubit>().changePlaceSortValue(PlaceSorts.popular);
 
     _controller.addListener(() {
       if (_controller.position.pixels < 0) _controller.jumpTo(0);

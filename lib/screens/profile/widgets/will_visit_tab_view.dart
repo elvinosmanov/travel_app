@@ -3,12 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:travel_app/data/app_data.dart';
-
 import '../../../components/category_card2.dart';
 import '../../../cubit/place/place_cubit.dart';
-import '../../../models/place.dart';
-import '../../../routes/router.gr.dart';
 
 class WillVisitTabView extends StatefulWidget {
   const WillVisitTabView({Key? key}) : super(key: key);
@@ -26,7 +22,6 @@ class _WillVisitTabViewState extends State<WillVisitTabView> {
         builder: (context, state) {
           var data = state.places;
           return AlignedGridView.count(
-            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(16),
             crossAxisCount: 3,
             mainAxisSpacing: 16,

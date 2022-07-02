@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/repositories/storage_repository.dart';
 import 'package:travel_app/repositories/user_repository.dart';
 
@@ -20,7 +19,7 @@ class UserCubit extends Cubit<UserState> {
 
   getUserModel(String userId) {
     emit(state.copyWith(status: UserStatus.loading));
-    final result = _userRepository.getUser();
+    final result = _userRepository.getUser(userId);
     result.listen((userModel) {
       print(userModel);
       emit(state.copyWith(status: UserStatus.success, userModel: userModel));
@@ -32,6 +31,15 @@ class UserCubit extends Cubit<UserState> {
       ..onError((e) {
         emit(state.copyWith(status: UserStatus.error, errorMessage: 'Error: $e'));
       });
+  }
+
+  updateUserInformation(
+    String? fullName,
+    String? locationName,
+  ) async {
+    emit(state.copyWith(status: UserStatus.loading));
+    await _userRepository.updateUserInformation(fullName: fullName, locationName: locationName);
+    emit(state.copyWith(status: UserStatus.success));
   }
 
   updateUserImage(CroppedFile pickedImage, ImageType imageType) async {

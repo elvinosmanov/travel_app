@@ -23,7 +23,6 @@ class CommentCubit extends Cubit<CommentState> {
         emit(state.copyWith(status: CommentStatus.success, comments: commentList));
       })
       ..onError((e) {
-        print('error var $e');
         emit(state.copyWith(status: CommentStatus.error, error: 'Error: $e'));
       });
   }

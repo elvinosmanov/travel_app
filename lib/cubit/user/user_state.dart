@@ -19,11 +19,11 @@ class UserState extends Equatable {
     required this.errorMessage,
   });
 
-  UserState.initial()
+  const UserState.initial()
       : status = UserStatus.initial,
         imageType = ImageType.profile,
         imageStatus = ImageStatus.initial,
-        userModel = UserModel.empty,
+        userModel = const UserModel(),
         errorMessage = '';
   @override
   List<Object> get props => [status, userModel, errorMessage, imageStatus];

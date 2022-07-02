@@ -2,32 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class UserModel extends Equatable {
-  final String id;
+  final String? id;
   final String username;
   final String email;
   final String fullName;
+  final String locationName;
   final String coverImageUrl;
   final String profileImageUrl;
-  final DateTime createdTime;
+  final DateTime? createdTime; 
   const UserModel({
-    required this.id,
-    required this.username,
-    required this.email,
-    required this.fullName,
-    required this.coverImageUrl,
-    required this.profileImageUrl,
-    required this.createdTime,
+     this.id,
+     this.username= '',
+      this.email= '',
+      this.fullName= '',
+      this.coverImageUrl= '',
+      this.profileImageUrl= '',
+      this.locationName= '',
+     this.createdTime,
   });
 
-  static UserModel get empty => UserModel(
-      id: '',
-      username: '',
-      email: '',
-      fullName: '',
-      coverImageUrl: '',
-      profileImageUrl: '',
-      createdTime: DateTime.now());
-
+  
   @override
   List<Object?> get props => [id, username, email, fullName, coverImageUrl, profileImageUrl, createdTime];
 
@@ -36,9 +30,10 @@ class UserModel extends Equatable {
       'username': username,
       'email': email,
       'fullName': fullName,
+      'location_name': locationName,
       'coverImageUrl': coverImageUrl,
       'profileImageUrl': profileImageUrl,
-      'createdTime': createdTime.millisecondsSinceEpoch,
+      'createdTime': Timestamp.fromDate(createdTime??DateTime.now()),
     };
   }
 
@@ -51,11 +46,34 @@ class UserModel extends Equatable {
       coverImageUrl: snap['cover_image_url'] ?? '',
       profileImageUrl: snap['profile_image_url'] ?? '',
       createdTime: DateTime.parse(snap['created_time'].toDate().toString()),
+      locationName: snap['location_name'] ?? '',
     );
   }
 
   @override
   String toString() {
     return 'UserModel(id: $id, username: $username, email: $email, fullName: $fullName, coverImageUrl: $coverImageUrl, profileImageUrl: $profileImageUrl, createdTime: $createdTime)';
+  }
+
+  UserModel copyWith({
+    String? id,
+    String? username,
+    String? email,
+    String? fullName,
+    String? locationName,
+    String? coverImageUrl,
+    String? profileImageUrl,
+    DateTime? createdTime,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      fullName: fullName ?? this.fullName,
+      locationName: locationName ?? this.locationName,
+      coverImageUrl: coverImageUrl ?? this.coverImageUrl,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      createdTime: createdTime ?? this.createdTime,
+    );
   }
 }
