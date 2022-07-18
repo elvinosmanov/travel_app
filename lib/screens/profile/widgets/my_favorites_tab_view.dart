@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
-import 'package:travel_app/routes/router.gr.dart';
 
+import '../../../bloc/auth/auth_bloc.dart';
 import '../../../components/category_card2.dart';
 
 class MyFavoritesTabView extends StatefulWidget {
@@ -18,8 +18,10 @@ class _MyFavoritesTabViewState extends State<MyFavoritesTabView> {
   bool isLiked = false;
   @override
   Widget build(BuildContext context) {
+    final  user = context.watch<AuthBloc>().state.user;
     return BlocProvider(
-        create: (context) => PlaceCubit()..getAllLikedPlaces(),
+
+        create: (context) => PlaceCubit()..getAllLikedPlaces(user!.id!),
         child: BlocBuilder<PlaceCubit, PlaceState>(
           builder: (context, state) {
             var data = state.places;

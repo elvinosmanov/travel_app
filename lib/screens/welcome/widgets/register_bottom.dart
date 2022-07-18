@@ -8,6 +8,7 @@ import 'package:travel_app/components/custom_checkbox.dart';
 import 'package:travel_app/components/custom_textfield.dart';
 import 'package:travel_app/components/text_between_line.dart';
 import 'package:travel_app/core/styles.dart';
+import 'package:travel_app/cubit/user/user_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/cubit/welcome/welcome_cubit.dart';
 import '../../../core/R.dart';
@@ -68,8 +69,7 @@ class _RegisterBottomContainerState extends State<RegisterBottomContainer> {
           _buildTermAndConditions().padding(top: 16, bottom: 25),
           if (context.select((WelcomeCubit c) => !c.state.isTermsAccepted))
             Center(
-                child:
-                    'Please read and accept Term and Conditions'.regularTextStyle(11, kRedColor).padding(bottom: 5)),
+                child: 'Please read and accept Term and Conditions'.regularTextStyle(11, kRedColor).padding(bottom: 5)),
           _buildSignUpButton(),
           const TextBetweenLine(text: 'Or continue with').padding(top: 55, bottom: 20),
           _buildFacebookGoogleButtons()
@@ -82,7 +82,15 @@ class _RegisterBottomContainerState extends State<RegisterBottomContainer> {
         text: 'Sign Up'.semiBoldTextStyle(15, kWhiteColor),
         color: kBlueColor,
         onPressed: () {
-          context.read<WelcomeCubit>().checkRegisterValidation();
+          final result = context.read<WelcomeCubit>().checkRegisterValidation();
+          if (result) {
+            context.read<UserCubit>().registerWithCredentials(
+                  emailController.text,
+                  passwordController.text,
+                  usernameController.text,
+                  fullNameController.text,
+                );
+          }
         },
       );
 

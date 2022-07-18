@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +8,12 @@ import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/user/user_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/models/user.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/screens/profile/widgets/modal_bottom_sheet.dart';
 import 'package:image_cropper/image_cropper.dart';
+
+import '../../bloc/auth/auth_bloc.dart';
 
 enum ImageType { cover, profile }
 
@@ -24,7 +25,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   void showBottomSheet(ImageType imageType) {
     showModalBottomSheet(
       context: context,
@@ -42,8 +42,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  UserModel? user;
   @override
   Widget build(BuildContext context) {
+    user = context.watch<AuthBloc>().state.user;
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
@@ -225,7 +227,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _cropCoverImage(pickedImage);
       }
     } else {
-      if (!mounted) return;ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
     context.router.pop();
   }
@@ -240,7 +243,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _cropCoverImage(pickedImage);
       }
     } else {
-      if (!mounted) return;ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
     context.router.pop();
   }
@@ -254,9 +258,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         cropStyle: CropStyle.circle,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1));
     if (croppedImage != null) {
-     if (!mounted) return; context.read<UserCubit>().updateUserImage(croppedImage, ImageType.profile);
+      if (!mounted) return;
+      context.read<UserCubit>().updateUserImage(croppedImage, ImageType.profile, user!.id!);
     } else {
-     if (!mounted) return; ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }
   }
 
@@ -268,11 +274,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         compressQuality: 60,
         aspectRatio: const CropAspectRatio(ratioX: 6, ratioY: 2.85));
     if (croppedImage != null) {
-    if (!mounted) return;
+      if (!mounted) return;
 
-      context.read<UserCubit>().updateUserImage(croppedImage, ImageType.cover);
+      context.read<UserCubit>().updateUserImage(croppedImage, ImageType.cover, user!.id!);
     } else {
-    if (!mounted) return;
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 'No Image Selected'.mediumTextStyle(13)));
     }

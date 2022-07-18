@@ -12,9 +12,9 @@ class WillVisitCubit extends Cubit<WillVisitState> {
       : _willVisitRepository = willVisitRepository ?? WillVisitRepository(),
         super(WillVisitState.initial());
 
-  getAllUserWillVisits() {
+  getAllUserWillVisits(String userId) {
     emit(state.copyWith(status: WillVisitStatus.loading));
-    final result = _willVisitRepository.getAllUserWillVisits();
+    final result = _willVisitRepository.getAllUserWillVisits(userId);
     result.listen((willVisitList) {})
       ..onData((willVisitList) {
         emit(state.copyWith(status: WillVisitStatus.success, willVisitList: willVisitList));
@@ -24,8 +24,8 @@ class WillVisitCubit extends Cubit<WillVisitState> {
       });
   }
 
-  void willVisitOrNotPlaces(String placeId, bool isWillVisited) {
-    _willVisitRepository.willVisitOrNotPlaces(placeId, isWillVisited);
+  void willVisitOrNotPlaces(String placeId, bool isWillVisited, String userId) {
+    _willVisitRepository.willVisitOrNotPlaces(placeId, isWillVisited, userId);
     emit(state.copyWith(status: WillVisitStatus.success));
   }
 }

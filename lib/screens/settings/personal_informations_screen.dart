@@ -9,6 +9,8 @@ import 'package:travel_app/cubit/user/user_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/screens/settings/widgets/custom_submit_button.dart';
 
+import '../../bloc/auth/auth_bloc.dart';
+
 class PersonalInformationsScreen extends StatefulWidget {
   const PersonalInformationsScreen({Key? key}) : super(key: key);
 
@@ -53,9 +55,11 @@ class _PersonalInformationsScreenState extends State<PersonalInformationsScreen>
                       text: 'Save Changes',
                       textColor: kWhiteColor,
                       onPressed: () {
+     final user = context.watch<AuthBloc>().state.user;
+
                         context.read<UserCubit>().updateUserInformation(
                             '${nameController.text} ${surnameController.text}',
-                            locationController.text);
+                            locationController.text, user!.id!);
                       },
                     ).padding(top: 32)
                   ],

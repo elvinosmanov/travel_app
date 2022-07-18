@@ -12,9 +12,9 @@ class LikeCubit extends Cubit<LikeState> {
       : _likeRepository = likeRepository ?? LikeRepository(),
         super(LikeState.initial());
 
-  getAllUserLikes() {
+  getAllUserLikes(String userId) {
     emit(state.copyWith(status: LikeStatus.loading));
-    final result = _likeRepository.getAllUserLikes();
+    final result = _likeRepository.getAllUserLikes(userId);
     result.listen((likeList) {})
       ..onData((likeList) {
         emit(state.copyWith(status: LikeStatus.success, likeList: likeList));
@@ -24,8 +24,8 @@ class LikeCubit extends Cubit<LikeState> {
       });
   }
 
-  void likeOrNotPlaces(String placeId, bool isLiked) {
-    _likeRepository.likeOrNotPlaces(placeId, isLiked);
+  void likeOrNotPlaces(String placeId, bool isLiked, String userId) {
+    _likeRepository.likeOrNotPlaces(placeId, isLiked, userId);
     emit(state.copyWith(status: LikeStatus.success));
   }
 }

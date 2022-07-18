@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
+import 'package:travel_app/cubit/user/user_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/routes/router.gr.dart';
 import 'package:travel_app/screens/settings/widgets/settings_bar.dart';
@@ -56,7 +58,13 @@ class SettingsScreen extends StatelessWidget {
                   onPressed: () {
                     context.router.push(const LanguagesRoute());
                   }),
-              SettingsBar(hasIcon: false, title: 'Log out', color: kRedColor, onPressed: () {}),
+              SettingsBar(
+                  hasIcon: false,
+                  title: 'Log out',
+                  color: kRedColor,
+                  onPressed: () {
+                    context.read<UserCubit>().logout();
+                  }),
             ],
           ),
         ),

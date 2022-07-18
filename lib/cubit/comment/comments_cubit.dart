@@ -1,6 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/models/comment.dart';
 import 'package:travel_app/repositories/comment_repository.dart';
 import 'package:travel_app/repositories/place_repository.dart';
@@ -27,11 +28,12 @@ class CommentCubit extends Cubit<CommentState> {
       });
   }
 
-  Future<void> sendReview(String placeId, String review, double givenRate) async {
+  Future<void> sendReview(String placeId, String review, double givenRate, String userId) async {
+    print(userId);
     if (state.status == CommentStatus.loading) return;
     emit(state.copyWith(status: CommentStatus.loading));
     final CommentModel commentModel = CommentModel(
-        userId: kTemporaryUserId,
+        userId: userId,
         placeId: placeId,
         imageUrl:
             'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/flag_interest_image.jpg?alt=media&token=980696c3-24d2-49b3-a016-11ef138dbf99',

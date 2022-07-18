@@ -14,6 +14,8 @@ import '../../../core/R.dart';
 import '../../../core/colors.dart';
 import 'package:auto_route/auto_route.dart';
 
+import '../../../cubit/user/user_cubit.dart';
+
 class LoginBottomContainer extends StatefulWidget {
   const LoginBottomContainer({
     Key? key,
@@ -68,20 +70,24 @@ class _LoginBottomContainerState extends State<LoginBottomContainer> {
   Row _buildForgetPasswordButton() =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>['Forgot Password?'.mediumTextStyle(13)]);
 
-  Widget _buildSignInButton() => BlocConsumer<WelcomeCubit, WelcomeState>(
-    listener: (context, state) {
-      if(state.loginStatus==LoginStatus.success){
-        context.router.push(const NavigationRoute());
-      }
-    },
+  Widget _buildSignInButton() => BlocBuilder<UserCubit, UserState>(
+    // listener: (context, state) {
+    //   if(state.loginStatus==LoginStatus.success){
+    //     context.router.push(const NavigationRoute());
+    //   }
+    // },
         builder: (context, state) {
           return CustomButton.text(
-            isLoading: state.loginStatus == LoginStatus.loading,
+            isLoading: state.status == UserStatus.loading,
             text: 'Sign In'.semiBoldTextStyle(15, kWhiteColor),
             color: kBlueColor,
-            onPressed: () {
-              context.read<WelcomeCubit>().checkLoginValidation();
-              
+            onPressed: () async {
+              final result = context.read<WelcomeCubit>().checkLoginValidation();
+              if(result){
+
+          await context.read<UserCubit>().loginWithCredentials(emailController.text, passwordController.text,);
+
+              }
             },
           );
         },

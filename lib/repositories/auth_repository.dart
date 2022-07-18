@@ -24,14 +24,17 @@ class AuthRepository extends BaseAuthRepository {
 
   @override
   Future<auth.User?> signUp({required String email, required String password}) async {
-    try { 
+    try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
       final user = credential.user;
       return user;
     } catch (_) {}
+    return null;
   }
 
   @override
-  Stream<auth.User?> get user => _firebaseAuth.userChanges();
+  Stream<auth.User?> get user {
+    return _firebaseAuth.userChanges();
+  }
 }

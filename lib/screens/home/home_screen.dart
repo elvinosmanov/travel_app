@@ -13,6 +13,7 @@ import 'package:travel_app/components/mini_card.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/models/place.dart';
 import 'package:travel_app/routes/router.gr.dart';
+import '../../bloc/auth/auth_bloc.dart';
 import '../../components/category_bar.dart';
 import '../../components/sort_list.dart';
 import '../../cubit/like/like_cubit.dart';
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     context.read<CategoryCubit>().getAllCategories();
     context.read<PlaceCubit>().getAllPlacesBy(categoryId: kAllCategoryId);
-    context.read<LikeCubit>().getAllUserLikes();
+
     context.read<PlaceCubit>().changePlaceSortValue(PlaceSorts.popular);
 
     _controller.addListener(() {
@@ -42,6 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //   final user = context.watch<AuthBloc>().state.user;
+    // context.read<LikeCubit>().getAllUserLikes(user!.id!);
     return ListView(
       controller: _controller,
       padding: const EdgeInsets.only(bottom: 20),

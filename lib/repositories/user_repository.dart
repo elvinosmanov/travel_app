@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/repositories/storage_repository.dart';
 
 import '../models/user.dart';
@@ -7,18 +6,18 @@ import '../models/user.dart';
 class UserRepository extends BaseUserRepository {
   final CollectionReference _userPlaceRef = FirebaseFirestore.instance.collection('users');
   @override
-  Future<void> updateUserImage(String imageName) async {
-    String downloadUrl = await StorageRepository().getDownloadUserImageUrl(imageName);
-    _userPlaceRef.doc(kTemporaryUserId).update({'${imageName}_url': downloadUrl});
+  Future<void> updateUserImage(String imageName, String userId) async {
+    String downloadUrl = await StorageRepository().getDownloadUserImageUrl(imageName, userId);
+    _userPlaceRef.doc(userId).update({'${imageName}_url': downloadUrl});
   }
 
   @override
   Future<void> updateUserInformation({
     String? fullName,
     String? username,
-    String? locationName,
+    String? locationName, required String? userId
   }) async {
-    await _userPlaceRef.doc(kTemporaryUserId).update({
+    await _userPlaceRef.doc(userId).update({
       if (fullName != null) 'full_name': fullName,
       if (username != null) 'username': username,
       if (locationName != null) 'location_name': locationName,
@@ -42,9 +41,9 @@ abstract class BaseUserRepository {
   Future<void> updateUserInformation({
     String? fullName,
     String? username,
-    String? locationName,
+    String? locationName, required String? userId
   });
-  Future<void> updateUserImage(String imageName);
+  Future<void> updateUserImage(String imageName, String userId);
   Future<void> createUser(UserModel userModel);
   Stream<UserModel> getUser(String userId);
 }

@@ -39,7 +39,6 @@ class ChangePasswordScreen extends StatelessWidget {
     );
   }
 
-//TODO: String textFieldText for now
   Widget _buildNameTextField({required String name, required String hintText}) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),

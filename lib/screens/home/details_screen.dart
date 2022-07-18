@@ -19,9 +19,11 @@ import 'package:travel_app/cubit/like/like_cubit.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:travel_app/cubit/will_visit/will_visit_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
+import 'package:travel_app/models/user.dart';
 import 'package:travel_app/routes/router.gr.dart';
 // ignore: depend_on_referenced_packages
 import 'package:latlong2/latlong.dart';
+import '../../bloc/auth/auth_bloc.dart';
 import '../../components/custom_rating_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -38,6 +40,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool isReadmore = false;
   final _controller = ScrollController();
   late MapController mapController;
+  UserModel? user;
   @override
   void initState() {
     super.initState();
@@ -51,7 +54,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<WillVisitCubit>().getAllUserWillVisits();
+    user = context.watch<AuthBloc>().state.user;
+    context.watch<WillVisitCubit>().getAllUserWillVisits(user!.id!);
     return BlocBuilder<PlaceCubit, PlaceState>(
       builder: (context, state) {
         return Scaffold(
@@ -331,9 +335,10 @@ class DetailsImageContainer extends StatefulWidget {
 class _DetailsImageContainerState extends State<DetailsImageContainer> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
-
+  UserModel? user;
   @override
   Widget build(BuildContext context) {
+    user = context.watch<AuthBloc>().state.user;
     return Stack(
       children: [
         CarouselSlider(
@@ -424,7 +429,7 @@ class _DetailsImageContainerState extends State<DetailsImageContainer> {
               return CustomOpacityButton(
                 imageName: isLiked ? R.heartFilled : R.heartOutlined,
                 onPressed: () {
-                  context.read<LikeCubit>().likeOrNotPlaces(widget.placeId, isLiked);
+                  context.read<LikeCubit>().likeOrNotPlaces(widget.placeId, isLiked, user!.id!);
                 },
               );
             },
@@ -447,8 +452,10 @@ class CustomVisitButton extends StatefulWidget {
 
 class _CustomVisitButtonState extends State<CustomVisitButton> {
   bool willVisit = false;
+  UserModel? user;
   @override
   Widget build(BuildContext context) {
+    user = context.watch<AuthBloc>().state.user;
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -465,7 +472,7 @@ class _CustomVisitButtonState extends State<CustomVisitButton> {
                 padding: MaterialStateProperty.all(const EdgeInsets.all(5)),
               ),
               onPressed: () {
-                context.read<WillVisitCubit>().willVisitOrNotPlaces(widget.placeId, willVisit);
+                context.read<WillVisitCubit>().willVisitOrNotPlaces(widget.placeId, willVisit, user!.id!);
               },
               child: Row(
                 children: <Widget>[

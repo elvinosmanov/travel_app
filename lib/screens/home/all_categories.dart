@@ -63,7 +63,6 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                 crossAxisSpacing: 8,
                 itemCount: state.places.length,
                 itemBuilder: (context, index) {
-                  //TODO isLiked
                   return CategoryCard2(
                     textSize: 14,
                     placeModel: state.places[index],

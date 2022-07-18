@@ -15,9 +15,9 @@ class UserModel extends Equatable {
      this.username= '',
       this.email= '',
       this.fullName= '',
-      this.coverImageUrl= '',
-      this.profileImageUrl= '',
-      this.locationName= '',
+      this.coverImageUrl= 'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/user_FfEFUaCKXNx5l0DPnLl3%2Fcover_image?alt=media&token=c8b55f12-eba2-47b1-81ab-ef1189b36d54',
+      this.profileImageUrl= 'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/user_FfEFUaCKXNx5l0DPnLl3%2Fcover_image?alt=media&token=c8b55f12-eba2-47b1-81ab-ef1189b36d54',
+      this.locationName= 'Baku, Azerbaijan',
      this.createdTime,
   });
 
@@ -29,11 +29,11 @@ class UserModel extends Equatable {
     return {
       'username': username,
       'email': email,
-      'fullName': fullName,
+      'full_name': fullName,
       'location_name': locationName,
-      'coverImageUrl': coverImageUrl,
-      'profileImageUrl': profileImageUrl,
-      'createdTime': Timestamp.fromDate(createdTime??DateTime.now()),
+      'cover_image_url': coverImageUrl,
+      'profile_image_url': profileImageUrl,
+      'created_time': Timestamp.fromDate(createdTime??DateTime.now()),
     };
   }
 

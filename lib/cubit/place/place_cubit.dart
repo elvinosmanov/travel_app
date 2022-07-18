@@ -78,9 +78,9 @@ class PlaceCubit extends Cubit<PlaceState> {
       ..onError((e) => emit(state.copyWith(status: PlaceStatus.error, error: 'Error: $e')));
   }
 
-  getAllLikedPlaces() {
+  getAllLikedPlaces(String userId) {
     emit(state.copyWith(status: PlaceStatus.loading));
-    final likeResult = _likeRepository.getAllUserLikes();
+    final likeResult = _likeRepository.getAllUserLikes(userId);
     likeResult.listen((likeModelList) {}).onData((data) async {
       if (data.isNotEmpty) {
         final result = await _placeRepository.getAllUserFavoritePlaces(data);
@@ -91,9 +91,9 @@ class PlaceCubit extends Cubit<PlaceState> {
     });
   }
 
-  getAllRatedPlaces() {
+  getAllRatedPlaces(String userId) {
     emit(state.copyWith(status: PlaceStatus.loading));
-    final result = _commentRepository.getAllUserReviews();
+    final result = _commentRepository.getAllUserReviews(userId);
     result.listen((comments) {}).onData((comments) async {
       if (comments.isNotEmpty) {
         final result = await _placeRepository.getAllUserReviewPlaces(comments);
@@ -104,9 +104,9 @@ class PlaceCubit extends Cubit<PlaceState> {
     });
   }
 
-  getAllWillVisitedPlaces() {
+  getAllWillVisitedPlaces(String userId) {
     emit(state.copyWith(status: PlaceStatus.loading));
-    final result = _willVisitRepository.getAllUserWillVisits();
+    final result = _willVisitRepository.getAllUserWillVisits(userId);
     result.listen((willVisits) {}).onData((willVisits) async {
       if (willVisits.isNotEmpty) {
         final result = await _placeRepository.getAllUserWillVisitPlace(willVisits);

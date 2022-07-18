@@ -36,27 +36,29 @@ class WelcomeCubit extends Cubit<WelcomeState> {
     }
   }
 
-  checkRegisterValidation() {
+ bool checkRegisterValidation() {
     bool isVal = registerFormKey.currentState!.validate();
     if (!state.agreeTermsCheckBox) {
       emit(state.copyWith(isTermsAccepted: false));
-      return;
+      return false;
     }
     emit(state.copyWith(isTermsAccepted: true));
     if (isVal) {
-      // ignore: avoid_print
-      print('Everthing is okay');
+      emit(state.copyWith(loginStatus: LoginStatus.success));
       return true;
+    }else {
+      emit(state.copyWith(loginStatus: LoginStatus.noValidation));
+      return false;
     }
   }
 
-  checkLoginValidation() async {
-    if (state.loginStatus == LoginStatus.loading) return;
+  bool  checkLoginValidation() {
+    if (state.loginStatus == LoginStatus.loading) return false;
     emit(state.copyWith(loginStatus: LoginStatus.loading));
     bool isVal = loginFormKey.currentState!.validate();
     if (isVal) {
-      await Future.delayed(const Duration(seconds: 2));
       emit(state.copyWith(loginStatus: LoginStatus.success));
+      return true;
     } else {
       emit(state.copyWith(loginStatus: LoginStatus.noValidation));
       return false;

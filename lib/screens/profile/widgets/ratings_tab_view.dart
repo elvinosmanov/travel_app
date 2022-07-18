@@ -4,16 +4,17 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/cubit/place/place_cubit.dart';
 import 'package:auto_route/auto_route.dart';
 
+import '../../../bloc/auth/auth_bloc.dart';
 import '../../../components/category_card.dart';
-import '../../../routes/router.gr.dart';
 
 class RatingsTabView extends StatelessWidget {
   const RatingsTabView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final  user = context.watch<AuthBloc>().state.user;
     return BlocProvider(
-      create: (context) => PlaceCubit()..getAllRatedPlaces(),
+      create: (context) => PlaceCubit()..getAllRatedPlaces(user!.id!),
       child: BlocBuilder<PlaceCubit, PlaceState>(
         builder: (context, state) {
           var data = state.places;

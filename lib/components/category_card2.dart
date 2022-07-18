@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_app/bloc/auth/auth_bloc.dart';
 
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/like/like_cubit.dart';
@@ -17,7 +18,7 @@ class CategoryCard2 extends StatelessWidget {
     this.width,
     this.height,
     required this.placeModel,
-   this.hasHeartIcon = true,
+    this.hasHeartIcon = true,
   }) : super(key: key);
   final double? textSize;
   final double? placeSize;
@@ -94,7 +95,8 @@ class CategoryCard2 extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () {
-                    context.read<LikeCubit>().likeOrNotPlaces(placeModel.id, isLiked);
+                    final user = context.watch<AuthBloc>().state.user;
+                    context.read<LikeCubit>().likeOrNotPlaces(placeModel.id, isLiked, user!.id!);
                   },
                   splashRadius: 100,
                   icon: BlocSelector<LikeCubit, LikeState, bool>(

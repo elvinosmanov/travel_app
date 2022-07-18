@@ -5,6 +5,7 @@ import 'package:travel_app/repositories/storage_repository.dart';
 import 'package:travel_app/repositories/user_repository.dart';
 
 import '../../models/user.dart';
+import '../../repositories/auth_repository.dart';
 import '../../screens/profile/profile_screen.dart';
 
 part 'user_state.dart';
@@ -12,39 +13,69 @@ part 'user_state.dart';
 class UserCubit extends Cubit<UserState> {
   final BaseStorageRepository _storageRepository;
   final BaseUserRepository _userRepository;
-  UserCubit({BaseStorageRepository? storageRepository, BaseUserRepository? userRepository})
-      : _storageRepository = storageRepository ?? StorageRepository(),
+  final BaseAuthRepository _authRepository;
+  UserCubit({
+    BaseStorageRepository? storageRepository,
+    BaseUserRepository? userRepository,
+    BaseAuthRepository? authRepository,
+  })  : _storageRepository = storageRepository ?? StorageRepository(),
         _userRepository = userRepository ?? UserRepository(),
-        super(UserState.initial());
+        _authRepository = authRepository ?? AuthRepository(),
+        super(const UserState.initial());
 
-  getUserModel(String userId) {
-    emit(state.copyWith(status: UserStatus.loading));
-    final result = _userRepository.getUser(userId);
-    result.listen((userModel) {
-      print(userModel);
-      emit(state.copyWith(status: UserStatus.success, userModel: userModel));
-    })
-      ..onData((userModel) {
-        print(userModel);
-        emit(state.copyWith(status: UserStatus.success, userModel: userModel));
-      })
-      ..onError((e) {
-        emit(state.copyWith(status: UserStatus.error, errorMessage: 'Error: $e'));
-      });
-  }
+  // getUserModel(String userId) {
+  //   emit(state.copyWith(status: UserStatus.loading));
+  //   final result = _userRepository.getUser(userId);
+  //   result.listen((userModel) {
+  //     print(userModel);
+  //     emit(state.copyWith(status: UserStatus.success, userModel: userModel));
+  //   })
+  //     ..onData((userModel) {
+  //       print(userModel);
+  //       emit(state.copyWith(status: UserStatus.success, userModel: userModel));
+  //     })
+  //     ..onError((e) {
+  //       emit(state.copyWith(status: UserStatus.error, errorMessage: 'Error: $e'));
+  //     });
+  // }
 
-  updateUserInformation(
-    String? fullName,
-    String? locationName,
-  ) async {
+  updateUserInformation(String? fullName, String? locationName, String userId) async {
+    if (state.status == UserStatus.loading) return;
     emit(state.copyWith(status: UserStatus.loading));
-    await _userRepository.updateUserInformation(fullName: fullName, locationName: locationName);
+    await _userRepository.updateUserInformation(fullName: fullName, locationName: locationName, userId: userId);
     emit(state.copyWith(status: UserStatus.success));
   }
 
-  updateUserImage(CroppedFile pickedImage, ImageType imageType) async {
+  Future<void> loginWithCredentials(String email, String password) async {
+    if (state.status == UserStatus.loading) return;
+    emit(state.copyWith(status: UserStatus.loading));
+    try {
+      await _authRepository.loginWithEmailAndPassword(email: email, password: password);
+      emit(state.copyWith(status: UserStatus.success));
+    } catch (_) {}
+  }
+
+  Future<void> registerWithCredentials(String email, String password, String username, String fullName) async {
+    if (state.status == UserStatus.loading) return;
+    emit(state.copyWith(status: UserStatus.loading));
+    try {
+      final authUser = await _authRepository.signUp(email: email, password: password);
+      if (authUser != null) {
+        UserModel userModel = UserModel(fullName: fullName, email: email, username: username, id: authUser.uid);
+        await _userRepository.createUser(userModel);
+        emit(state.copyWith(status: UserStatus.success));
+      }
+    } catch (_) {}
+  }
+
+  updateUserImage(CroppedFile pickedImage, ImageType imageType, String userId) async {
+    if (state.status == UserStatus.loading) return;
     emit(state.copyWith(imageStatus: ImageStatus.loading, imageType: imageType));
-    await _storageRepository.uploadImage(pickedImage, imageType);
+    await _storageRepository.uploadImage(pickedImage, imageType, userId);
     emit(state.copyWith(imageStatus: ImageStatus.success, imageType: imageType));
+  }
+
+  Future<void> logout() async {
+    await _authRepository.signOut();
   }
 }

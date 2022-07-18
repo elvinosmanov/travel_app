@@ -6,15 +6,14 @@ import 'package:travel_app/components/custom_back_button.dart';
 import 'package:travel_app/components/custom_divider.dart';
 import 'package:travel_app/components/custom_rating_bar.dart';
 import 'package:travel_app/components/custom_textfield.dart';
-import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
 import 'package:travel_app/cubit/comment/comments_cubit.dart';
 import 'package:travel_app/extensions/extensions.dart';
 import 'package:travel_app/models/comment.dart';
+import '../../bloc/auth/auth_bloc.dart';
 import '../../components/custom_comment.dart';
 
 class AllCommentsScreen extends StatefulWidget {
-  //TODO: commentsListin lengthi olacaq deye bu variable a ehtiyac olmayacaq
   const AllCommentsScreen({
     Key? key,
     required this.placeId,
@@ -57,7 +56,7 @@ class _AllCommentsScreenState extends State<AllCommentsScreen> {
                   ),
                 ),
                 if (!(state.comments.any(
-                  (element) => element.userId == kTemporaryUserId,
+                  (element) => element.userId == context.watch<AuthBloc>().state.user!.id!,
                 )))
                   _buildSendMessage()
               ],
@@ -112,7 +111,10 @@ class _AllCommentsScreenState extends State<AllCommentsScreen> {
                   ),
                   IconButton(
                       onPressed: () {
-                        context.read<CommentCubit>().sendReview(widget.placeId, controller.text, givenRating);
+                        final user = context.read<AuthBloc>().state.user;
+                        context
+                            .read<CommentCubit>()
+                            .sendReview(widget.placeId, controller.text, givenRating, user!.id!);
                       },
                       icon: SvgPicture.asset(
                         R.send,

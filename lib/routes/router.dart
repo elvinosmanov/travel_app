@@ -14,6 +14,7 @@ import 'package:travel_app/screens/settings/personal_informations_screen.dart';
 import 'package:travel_app/screens/settings/privacy_policy_screen.dart';
 import 'package:travel_app/screens/settings/report_bug_screen.dart';
 import 'package:travel_app/screens/settings/settings_screen.dart';
+import 'package:travel_app/screens/splash_screen.dart';
 import 'package:travel_app/screens/welcome/welcome_screen.dart';
 
 import '../screens/profile/widgets/my_favorites_tab_view.dart';
@@ -22,6 +23,7 @@ import '../screens/profile/widgets/will_visit_tab_view.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Screen,Route', routes: [
   AutoRoute(path: 'onboarding', page: OnboardingScreen),
+  AutoRoute(path: 'splash', page: SplashScreen),
   AutoRoute(path: 'welcome', page: WelcomeScreen),
   AutoRoute(path: 'all-comments', page: AllCommentsScreen),
   AutoRoute(path: '/', page: NavigationScreen, children: [
