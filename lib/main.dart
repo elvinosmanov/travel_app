@@ -19,16 +19,10 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+    options: DefaultFirebaseOptions.currentPlatform,);
   await OnboardingPreferences.init();
-  // await FirebaseAppCheck.instance.activate(
-  //   webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-  // );
-
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
   final _appRouter = AppRouter();
@@ -94,8 +88,3 @@ PageRouteInfo<dynamic> welcomePage() {
     return const WelcomeRoute();
   }
 }
-
-// home: BlocProvider(
-//         create: (context) => NavigationCubit(),
-//         child:  CategoriesScreen(),
-//       ),

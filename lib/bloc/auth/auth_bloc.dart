@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       print('Auth user: $authUser');
       if (authUser != null) {
         _userRepository.getUser(authUser.uid).listen((user) {
-
+          print(user);
           add(AuthUserChanged(authUser: authUser, user: user));
         });
       } else {

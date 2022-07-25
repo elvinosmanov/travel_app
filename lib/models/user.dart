@@ -9,19 +9,19 @@ class UserModel extends Equatable {
   final String locationName;
   final String coverImageUrl;
   final String profileImageUrl;
-  final DateTime? createdTime; 
+  final DateTime? createdTime;
   const UserModel({
-     this.id,
-     this.username= '',
-      this.email= '',
-      this.fullName= '',
-      this.coverImageUrl= 'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/user_FfEFUaCKXNx5l0DPnLl3%2Fcover_image?alt=media&token=c8b55f12-eba2-47b1-81ab-ef1189b36d54',
-      this.profileImageUrl= 'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/user_FfEFUaCKXNx5l0DPnLl3%2Fcover_image?alt=media&token=c8b55f12-eba2-47b1-81ab-ef1189b36d54',
-      this.locationName= 'Baku, Azerbaijan',
-     this.createdTime,
+    this.id,
+    this.username = '',
+    this.email = '',
+    this.fullName = '',
+    this.coverImageUrl =
+        'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/user_FfEFUaCKXNx5l0DPnLl3%2Fcover_image?alt=media&token=c8b55f12-eba2-47b1-81ab-ef1189b36d54',
+    this.profileImageUrl = '',
+    this.locationName = 'Baku, Azerbaijan',
+    this.createdTime,
   });
 
-  
   @override
   List<Object?> get props => [id, username, email, fullName, coverImageUrl, profileImageUrl, createdTime];
 
@@ -33,7 +33,7 @@ class UserModel extends Equatable {
       'location_name': locationName,
       'cover_image_url': coverImageUrl,
       'profile_image_url': profileImageUrl,
-      'created_time': Timestamp.fromDate(createdTime??DateTime.now()),
+      'created_time': Timestamp.fromDate(createdTime ?? DateTime.now()),
     };
   }
 
