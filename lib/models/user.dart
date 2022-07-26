@@ -16,7 +16,7 @@ class UserModel extends Equatable {
     this.email = '',
     this.fullName = '',
     this.coverImageUrl =
-        'https://firebasestorage.googleapis.com/v0/b/azerbaijan-travel-app.appspot.com/o/user_FfEFUaCKXNx5l0DPnLl3%2Fcover_image?alt=media&token=c8b55f12-eba2-47b1-81ab-ef1189b36d54',
+        '',
     this.profileImageUrl = '',
     this.locationName = 'Baku, Azerbaijan',
     this.createdTime,

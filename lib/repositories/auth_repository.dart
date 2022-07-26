@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 abstract class BaseAuthRepository {
   Stream<auth.User?> get user;
+  auth.User? get currentUser;
   Future<auth.User?> signUp({required String email, required String password});
   Future<void> loginWithEmailAndPassword({required String email, required String password});
   Future<void> signOut();
@@ -37,4 +38,8 @@ class AuthRepository extends BaseAuthRepository {
   Stream<auth.User?> get user {
     return _firebaseAuth.userChanges();
   }
+  
+  @override
+  // TODO: implement currentUser
+  auth.User? get currentUser => _firebaseAuth.currentUser;
 }

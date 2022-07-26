@@ -132,8 +132,11 @@ class AppRouter extends _i6.RootStackRouter {
           routeData: routeData, child: const _i19.ReportBugScreen());
     },
     ChangePasswordRoute.name: (routeData) {
+      final args = routeData.argsAs<ChangePasswordRouteArgs>(
+          orElse: () => const ChangePasswordRouteArgs());
       return _i6.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i20.ChangePasswordScreen());
+          routeData: routeData,
+          child: _i20.ChangePasswordScreen(key: args.key));
     },
     PrivacyPolicyRoute.name: (routeData) {
       return _i6.MaterialPageX<dynamic>(
@@ -412,11 +415,23 @@ class ReportBugRoute extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i20.ChangePasswordScreen]
-class ChangePasswordRoute extends _i6.PageRouteInfo<void> {
-  const ChangePasswordRoute()
-      : super(ChangePasswordRoute.name, path: 'change-password');
+class ChangePasswordRoute extends _i6.PageRouteInfo<ChangePasswordRouteArgs> {
+  ChangePasswordRoute({_i22.Key? key})
+      : super(ChangePasswordRoute.name,
+            path: 'change-password', args: ChangePasswordRouteArgs(key: key));
 
   static const String name = 'ChangePasswordRoute';
+}
+
+class ChangePasswordRouteArgs {
+  const ChangePasswordRouteArgs({this.key});
+
+  final _i22.Key? key;
+
+  @override
+  String toString() {
+    return 'ChangePasswordRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

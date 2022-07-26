@@ -23,22 +23,6 @@ class UserCubit extends Cubit<UserState> {
         _authRepository = authRepository ?? AuthRepository(),
         super(const UserState.initial());
 
-  // getUserModel(String userId) {
-  //   emit(state.copyWith(status: UserStatus.loading));
-  //   final result = _userRepository.getUser(userId);
-  //   result.listen((userModel) {
-  //     print(userModel);
-  //     emit(state.copyWith(status: UserStatus.success, userModel: userModel));
-  //   })
-  //     ..onData((userModel) {
-  //       print(userModel);
-  //       emit(state.copyWith(status: UserStatus.success, userModel: userModel));
-  //     })
-  //     ..onError((e) {
-  //       emit(state.copyWith(status: UserStatus.error, errorMessage: 'Error: $e'));
-  //     });
-  // }
-
   updateUserInformation(String? fullName, String? locationName, String userId) async {
     if (state.status == UserStatus.loading) return;
     emit(state.copyWith(status: UserStatus.loading));
@@ -69,7 +53,7 @@ class UserCubit extends Cubit<UserState> {
   }
 
   updateUserImage(CroppedFile pickedImage, ImageType imageType, String userId) async {
-    if (state.status == UserStatus.loading) return;
+    if (state.imageStatus == ImageStatus.loading) return;
     emit(state.copyWith(imageStatus: ImageStatus.loading, imageType: imageType));
     await _storageRepository.uploadImage(pickedImage, imageType, userId);
     emit(state.copyWith(imageStatus: ImageStatus.success, imageType: imageType));

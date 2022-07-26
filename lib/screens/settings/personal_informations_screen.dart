@@ -30,7 +30,7 @@ class _PersonalInformationsScreenState extends State<PersonalInformationsScreen>
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16, top: defaultTopPadding),
           child: SingleChildScrollView(
-            child: BlocBuilder<UserCubit, UserState>(
+            child: BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,25 +41,22 @@ class _PersonalInformationsScreenState extends State<PersonalInformationsScreen>
                       },
                     ).padding(bottom: 16),
                     _buildNameTextField(
-                        name: 'Name',
-                        textEditingController: nameController..text = state.userModel.fullName.split(" ")[0]),
+                        name: 'Name', textEditingController: nameController..text = state.user!.fullName.split(" ")[0]),
                     _buildNameTextField(
                         name: 'Surname',
-                        textEditingController: surnameController..text = state.userModel.fullName.split(" ")[1]),
+                        textEditingController: surnameController..text = state.user!.fullName.split(" ")[1]),
                     // _buildNameTextField(
                     //     name: 'Username', textEditingController: usernameController..text = state.userModel.username),
                     _buildNameTextField(
-                        name: 'Location',
-                        textEditingController: locationController..text = state.userModel.locationName),
+                        name: 'Location', textEditingController: locationController..text = state.user!.locationName),
                     CustomSubmitButton(
                       text: 'Save Changes',
                       textColor: kWhiteColor,
                       onPressed: () {
-     final user = context.watch<AuthBloc>().state.user;
+                        final user = context.read<AuthBloc>().state.user;
 
                         context.read<UserCubit>().updateUserInformation(
-                            '${nameController.text} ${surnameController.text}',
-                            locationController.text, user!.id!);
+                            '${nameController.text} ${surnameController.text}', locationController.text, user!.id!);
                       },
                     ).padding(top: 32)
                   ],

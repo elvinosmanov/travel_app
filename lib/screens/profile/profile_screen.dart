@@ -107,22 +107,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(8),
           // boxShadow: const [BoxShadow(color: kBlueColor, spreadRadius: 2)],
         ),
-        child: BlocBuilder<UserCubit, UserState>(
-          builder: (context, state) {
-            return AspectRatio(
-                aspectRatio: 6 / 2.85,
-                child: state.userModel.coverImageUrl.isEmpty ||
-                        (state.imageStatus == ImageStatus.loading && state.imageType == ImageType.cover)
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: state.userModel.coverImageUrl,
-                        placeholder: (_, __) {
-                          return const Center(child: CircularProgressIndicator());
-                        },
-                      ));
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, auth) {
+            return BlocBuilder<UserCubit, UserState>(
+              buildWhen: (previous, current) => previous.imageStatus != current.imageStatus,
+              builder: (context, state) {
+                return AspectRatio(
+                    aspectRatio: 6 / 2.85,
+                    child: auth.user!.coverImageUrl.isEmpty ||
+                            (state.imageStatus == ImageStatus.loading && state.imageType == ImageType.cover)
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: auth.user!.coverImageUrl,
+                            placeholder: (_, __) {
+                              return const Center(child: CircularProgressIndicator());
+                            },
+                          ));
+              },
+            );
           },
         ),
       ),
@@ -133,9 +138,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        BlocBuilder<UserCubit, UserState>(
+        BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            return state.userModel.username.semiBoldTextStyle(18, kBlueColor);
+            return state.user!.username.semiBoldTextStyle(18, kBlueColor);
           },
         ),
         IconButton(
@@ -150,68 +155,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildUserInformation() {
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
-        return Positioned(
-          bottom: 0,
-          left: 24,
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () => showBottomSheet(ImageType.profile),
-                child: Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 70,
-                      backgroundColor: kLightGreyColor_1,
-                      child: Container(
-                        width: 132,
-                        height: 132,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: state.userModel.coverImageUrl.isEmpty ||
-                                (state.imageStatus == ImageStatus.loading && state.imageType == ImageType.profile)
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : CachedNetworkImage(
-                                imageUrl: state.userModel.profileImageUrl,
-                                fit: BoxFit.cover,
-                                placeholder: (_, __) {
-                                  return const Center(child: CircularProgressIndicator());
-                                },
-                              ),
-                      ),
-                    ),
-                    const Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Material(
-                          shape: CircleBorder(),
-                          elevation: 2,
-                          child: CircleAvatar(
-                            backgroundColor: kLightGreyColor_1,
-                            radius: 25,
-                            child: Icon(
-                              Icons.camera_alt_sharp,
-                              color: kBlueColor,
-                            ),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, auth) {
+        return BlocBuilder<UserCubit, UserState>(
+          buildWhen: (previous, current) => previous.imageStatus != current.imageStatus,
+          builder: (context, state) {
+            return Positioned(
+              bottom: 0,
+              left: 24,
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => showBottomSheet(ImageType.profile),
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 70,
+                          backgroundColor: kLightGreyColor_1,
+                          child: Container(
+                            width: 132,
+                            height: 132,
+                            clipBehavior: Clip.hardEdge,
+                            decoration: const BoxDecoration(shape: BoxShape.circle),
+                            child: auth.user!.profileImageUrl.isEmpty ||
+                                    (state.imageStatus == ImageStatus.loading && state.imageType == ImageType.profile)
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl: auth.user!.profileImageUrl,
+                                    fit: BoxFit.cover,
+                                    placeholder: (_, __) {
+                                      return const Center(child: CircularProgressIndicator());
+                                    },
+                                  ),
                           ),
-                        ))
-                  ],
-                ),
-              ),
-              Column(
-                // mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  state.userModel.fullName.semiBoldTextStyle(22),
-                  'Baku, Azerbaijan'.mediumTextStyle(13),
+                        ),
+                        const Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Material(
+                              shape: CircleBorder(),
+                              elevation: 2,
+                              child: CircleAvatar(
+                                backgroundColor: kLightGreyColor_1,
+                                radius: 25,
+                                child: Icon(
+                                  Icons.camera_alt_sharp,
+                                  color: kBlueColor,
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                  Column(
+                    // mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      auth.user!.fullName.semiBoldTextStyle(22),
+                      auth.user!.locationName.mediumTextStyle(13),
+                    ],
+                  ).padding(top: 20, left: 4),
                 ],
-              ).padding(top: 20, left: 4),
-            ],
-          ),
+              ),
+            );
+          },
         );
       },
     );

@@ -23,11 +23,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         super(const AuthState.unknown()) {
     on<AuthUserChanged>(_onAuthUserChanged);
     // on<AuthLogoutRequested>(_onAuthLogoutRequested);
+    
     _authUserSubscriptin = _authRepository.user.listen((authUser) {
+      
       // ignore: avoid_print
       print('Auth user: $authUser');
       if (authUser != null) {
         _userRepository.getUser(authUser.uid).listen((user) {
+        
           print(user);
           add(AuthUserChanged(authUser: authUser, user: user));
         });
@@ -43,10 +46,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         : emit(const AuthState.unauthenticated());
   }
 
-  // Future<void> _onAuthLogoutRequested(AuthUserChanged event, Emitter<AuthState> emit) async {
-  //   await _authRepository.signOut();
+  // void _onAuthLogoutRequested(AuthUserChanged event, Emitter<AuthState> emit) {
+  //    _authRepository.signOut();
   //   emit(const AuthState.unauthenticated());
   // }
+  Future<void> changeCurrentUserPassword(String currentPassword, String newPassword) async {
+    final user = _authRepository.currentUser!;
+    final credential = auth.EmailAuthProvider.credential(email: user.email!, password: currentPassword);
+    try {
+      await user.reauthenticateWithCredential(credential);
+    user.updatePassword(newPassword).then((value) => null);
+    } on auth.FirebaseAuthException catch(e) {
+      print("You can't change the Password" + e.toString());
+    }
+  }
 
   @override
   Future<void> close() {

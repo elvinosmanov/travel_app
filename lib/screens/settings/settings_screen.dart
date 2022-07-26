@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_app/bloc/auth/auth_bloc.dart';
 
 import 'package:travel_app/core/constants.dart';
 import 'package:travel_app/core/cores.dart';
@@ -33,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
               SettingsBar(
                   title: 'Change Password',
                   onPressed: () {
-                    context.router.push(const ChangePasswordRoute());
+                    context.router.push( ChangePasswordRoute());
                   }),
               'Support'.semiBoldTextStyle(18).padding(left: 16, right: 16, top: 14, bottom: 4),
               SettingsBar(
@@ -51,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
                   onPressed: () {
                     context.router.push(const PrivacyPolicyRoute());
                   }),
-              'Support'.semiBoldTextStyle(18).padding(left: 16, right: 16, top: 14, bottom: 4),
+              'Other'.semiBoldTextStyle(18).padding(left: 16, right: 16, top: 14, bottom: 4),
               SettingsBar(
                   title: 'Language',
                   flagIconName: R.usFlag,
@@ -79,12 +80,16 @@ class SettingsScreen extends StatelessWidget {
           backgroundImage: AssetImage(R.mateImage),
           radius: 75 / 2,
         ).padding(right: 24),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            'Elvin Osmanov'.mediumTextStyle(15).padding(bottom: 6),
-            'elvinosmanov@gmail.com'.mediumTextStyle(15, kDarkGreyColor)
-          ],
+        BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                state.user!.fullName.mediumTextStyle(15).padding(bottom: 6),
+                state.user!.email.mediumTextStyle(15, kDarkGreyColor)
+              ],
+            );
+          },
         )
       ],
     );

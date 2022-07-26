@@ -7,7 +7,6 @@ enum ImageStatus { initial, loading, success, error }
 class UserState extends Equatable {
   final UserStatus status;
   final ImageStatus imageStatus;
-  final UserModel userModel;
   final ImageType imageType;
   final String errorMessage;
 
@@ -15,7 +14,6 @@ class UserState extends Equatable {
     this.imageType, {
     required this.status,
     required this.imageStatus,
-    required this.userModel,
     required this.errorMessage,
   });
 
@@ -23,10 +21,9 @@ class UserState extends Equatable {
       : status = UserStatus.initial,
         imageType = ImageType.profile,
         imageStatus = ImageStatus.initial,
-        userModel = const UserModel(),
         errorMessage = '';
   @override
-  List<Object> get props => [status, userModel, errorMessage, imageStatus];
+  List<Object> get props => [status, errorMessage, imageStatus];
 
   UserState copyWith({
     UserStatus? status,
@@ -38,7 +35,6 @@ class UserState extends Equatable {
     return UserState(imageType ?? this.imageType,
         status: status ?? this.status,
         imageStatus: imageStatus ?? this.imageStatus,
-        userModel: userModel ?? this.userModel,
         errorMessage: errorMessage ?? this.errorMessage);
   }
 }
