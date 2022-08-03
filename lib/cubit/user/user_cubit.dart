@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:travel_app/repositories/storage_repository.dart';
 import 'package:travel_app/repositories/user_repository.dart';
@@ -36,7 +37,9 @@ class UserCubit extends Cubit<UserState> {
     try {
       await _authRepository.loginWithEmailAndPassword(email: email, password: password);
       emit(state.copyWith(status: UserStatus.success));
-    } catch (_) {}
+    } on FirebaseAuthException catch (e) {
+      print("message: " + e.message.toString());
+    }
   }
 
   Future<void> registerWithCredentials(String email, String password, String username, String fullName) async {
@@ -59,7 +62,4 @@ class UserCubit extends Cubit<UserState> {
     emit(state.copyWith(imageStatus: ImageStatus.success, imageType: imageType));
   }
 
-  Future<void> logout() async {
-    await _authRepository.signOut();
-  }
 }

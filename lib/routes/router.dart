@@ -14,12 +14,12 @@ import 'package:travel_app/screens/settings/personal_informations_screen.dart';
 import 'package:travel_app/screens/settings/privacy_policy_screen.dart';
 import 'package:travel_app/screens/settings/report_bug_screen.dart';
 import 'package:travel_app/screens/settings/settings_screen.dart';
-import 'package:travel_app/screens/splash_screen.dart';
 import 'package:travel_app/screens/welcome/welcome_screen.dart';
 
 import '../screens/profile/widgets/my_favorites_tab_view.dart';
 import '../screens/profile/widgets/ratings_tab_view.dart';
 import '../screens/profile/widgets/will_visit_tab_view.dart';
+import '../screens/splash/splash_screen.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Screen,Route', routes: [
   AutoRoute(path: 'onboarding', page: OnboardingScreen),

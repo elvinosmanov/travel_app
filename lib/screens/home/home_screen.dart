@@ -43,8 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //   final user = context.watch<AuthBloc>().state.user;
-    // context.read<LikeCubit>().getAllUserLikes(user!.id!);
+    final user = context.watch<AuthBloc>().state.user;
+    if(user!=null) {
+      context.read<LikeCubit>().getAllUserLikes(user.id!);
+    }
     return ListView(
       controller: _controller,
       padding: const EdgeInsets.only(bottom: 20),

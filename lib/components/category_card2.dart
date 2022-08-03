@@ -95,7 +95,7 @@ class CategoryCard2 extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () {
-                    final user = context.watch<AuthBloc>().state.user;
+                    final user = context.read<AuthBloc>().state.user;
                     context.read<LikeCubit>().likeOrNotPlaces(placeModel.id, isLiked, user!.id!);
                   },
                   splashRadius: 100,

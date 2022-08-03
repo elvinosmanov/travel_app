@@ -34,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
               SettingsBar(
                   title: 'Change Password',
                   onPressed: () {
-                    context.router.push( ChangePasswordRoute());
+                    context.router.push(ChangePasswordRoute());
                   }),
               'Support'.semiBoldTextStyle(18).padding(left: 16, right: 16, top: 14, bottom: 4),
               SettingsBar(
@@ -64,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                   title: 'Log out',
                   color: kRedColor,
                   onPressed: () {
-                    context.read<UserCubit>().logout();
+                    context.read<AuthBloc>().logout();
                   }),
             ],
           ),
@@ -82,13 +82,17 @@ class SettingsScreen extends StatelessWidget {
         ).padding(right: 24),
         BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                state.user!.fullName.mediumTextStyle(15).padding(bottom: 6),
-                state.user!.email.mediumTextStyle(15, kDarkGreyColor)
-              ],
-            );
+            return state.user == null
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      state.user!.fullName.mediumTextStyle(15).padding(bottom: 6),
+                      state.user!.email.mediumTextStyle(15, kDarkGreyColor)
+                    ],
+                  );
           },
         )
       ],

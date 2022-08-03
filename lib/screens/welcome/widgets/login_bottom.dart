@@ -71,11 +71,11 @@ class _LoginBottomContainerState extends State<LoginBottomContainer> {
       Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>['Forgot Password?'.mediumTextStyle(13)]);
 
   Widget _buildSignInButton() => BlocBuilder<UserCubit, UserState>(
-    // listener: (context, state) {
-    //   if(state.loginStatus==LoginStatus.success){
-    //     context.router.push(const NavigationRoute());
-    //   }
-    // },
+        // listener: (context, state) {
+        //   if(state.loginStatus==LoginStatus.success){
+        //     context.router.push(const NavigationRoute());
+        //   }
+        // },
         builder: (context, state) {
           return CustomButton.text(
             isLoading: state.status == UserStatus.loading,
@@ -83,10 +83,11 @@ class _LoginBottomContainerState extends State<LoginBottomContainer> {
             color: kBlueColor,
             onPressed: () async {
               final result = context.read<WelcomeCubit>().checkLoginValidation();
-              if(result){
-
-          await context.read<UserCubit>().loginWithCredentials(emailController.text, passwordController.text,);
-
+              if (result) {
+                await context.read<UserCubit>().loginWithCredentials(
+                      emailController.text,
+                      passwordController.text,
+                    );
               }
             },
           );
@@ -146,6 +147,7 @@ class PasswordTextField extends StatelessWidget {
         return CustomTextField(
             label: 'Password',
             controller: controller,
+            keyboardType: TextInputType.visiblePassword,
             isMandatory: true,
             onChanged: (value) {
               context.read<WelcomeCubit>().passwordText(value: value, isRegister: false);
@@ -181,6 +183,7 @@ class EmailTextField extends StatelessWidget {
     return CustomTextField(
       label: 'Email address',
       isMandatory: true,
+      keyboardType: TextInputType.emailAddress,
       controller: controller,
       validator: (String? value) {
         return value?.isValidEmail;

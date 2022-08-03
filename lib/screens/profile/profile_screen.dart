@@ -144,7 +144,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
         IconButton(
-          onPressed: () => context.router.pushNamed('/settings/'),
+          onPressed: () {
+            final router = AutoRouterDelegate.of(context);
+
+            router.controller.navigateNamed('/settings/');
+          },
           icon: SvgPicture.asset(
             R.settings,
             fit: BoxFit.scaleDown,

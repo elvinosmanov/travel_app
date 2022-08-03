@@ -32,7 +32,7 @@ import '../screens/settings/personal_informations_screen.dart' as _i17;
 import '../screens/settings/privacy_policy_screen.dart' as _i21;
 import '../screens/settings/report_bug_screen.dart' as _i19;
 import '../screens/settings/settings_screen.dart' as _i16;
-import '../screens/splash_screen.dart' as _i2;
+import '../screens/splash/splash_screen.dart' as _i2;
 import '../screens/welcome/welcome_screen.dart' as _i3;
 
 class AppRouter extends _i6.RootStackRouter {

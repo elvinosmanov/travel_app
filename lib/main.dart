@@ -19,10 +19,12 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await OnboardingPreferences.init();
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
   final _appRouter = AppRouter();
@@ -53,8 +55,10 @@ class MyApp extends StatelessWidget {
           )
         ],
         child: BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (previous, current) => previous.authUser != current.authUser,
+          // buildWhen: (previous, current) => previous.authUser != current.authUser,
           builder: (context, state) {
+            print(state.status);
+            print(DateTime.now());
             return MaterialApp.router(
                 debugShowCheckedModeBanner: false,
                 title: 'Travel App',
@@ -71,7 +75,10 @@ class MyApp extends StatelessWidget {
                 routeInformationParser: _appRouter.defaultRouteParser(includePrefixMatches: true),
                 routerDelegate: AutoRouterDelegate.declarative(
                   _appRouter,
-                  routes: (handler) => [if (state.authUser != null) const NavigationRoute() else welcomePage()],
+                  routes: (handler) => [
+                    if (state.status == AuthStatus.unknown || state.status == AuthStatus.loading) const SplashRoute(),
+                    if (state.authUser != null) const NavigationRoute() else welcomePage(),
+                  ],
                 ));
           },
         ),

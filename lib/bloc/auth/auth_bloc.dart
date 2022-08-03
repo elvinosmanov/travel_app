@@ -20,17 +20,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required AuthRepository authRepository, required UserRepository userRepository})
       : _authRepository = AuthRepository(),
         _userRepository = UserRepository(),
-        super(const AuthState.unknown()) {
+        super(const AuthState.unknown())  {
+          
     on<AuthUserChanged>(_onAuthUserChanged);
     // on<AuthLogoutRequested>(_onAuthLogoutRequested);
-    
-    _authUserSubscriptin = _authRepository.user.listen((authUser) {
-      
+
+    _authUserSubscriptin = _authRepository.user.listen((authUser) async {
       // ignore: avoid_print
-      print('Auth user: $authUser');
+    // await Future.delayed(const Duration(seconds: 2 )); print('Auth user: $authUser');
       if (authUser != null) {
         _userRepository.getUser(authUser.uid).listen((user) {
-        
           print(user);
           add(AuthUserChanged(authUser: authUser, user: user));
         });
@@ -55,10 +54,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final credential = auth.EmailAuthProvider.credential(email: user.email!, password: currentPassword);
     try {
       await user.reauthenticateWithCredential(credential);
-    user.updatePassword(newPassword).then((value) => null);
-    } on auth.FirebaseAuthException catch(e) {
+      user.updatePassword(newPassword).then((value) => null);
+    } on auth.FirebaseAuthException catch (e) {
       print("You can't change the Password" + e.toString());
     }
+  }
+
+  Future<void> logout() async {
+    emit(const AuthState.loading());
+    await _authRepository.signOut();
   }
 
   @override

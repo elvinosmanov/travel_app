@@ -16,7 +16,7 @@ class WillVisitTabView extends StatefulWidget {
 class _WillVisitTabViewState extends State<WillVisitTabView> {
   @override
   Widget build(BuildContext context) {
-    final  user = context.watch<AuthBloc>().state.user;
+    final user = context.watch<AuthBloc>().state.user;
     return BlocProvider(
       create: (context) => PlaceCubit()..getAllWillVisitedPlaces(user!.id!),
       child: BlocBuilder<PlaceCubit, PlaceState>(
@@ -30,7 +30,10 @@ class _WillVisitTabViewState extends State<WillVisitTabView> {
             itemCount: data.length,
             itemBuilder: (context, index) {
               return CategoryCard2(
-                onPressed: () => context.router.pushNamed('/home/details/${data[index].id}'),
+                onPressed: () {
+                  final router = AutoRouterDelegate.of(context);
+                  router.controller.navigateNamed('/home/details/${data[index].id}');
+                },
                 placeModel: data[index],
                 textSize: 14,
                 placeSize: 10,

@@ -26,7 +26,10 @@ class RatingsTabView extends StatelessWidget {
             itemCount: data.length,
             itemBuilder: (context, index) {
               return CategoryCard.star(
-                onPressed: () => context.router.pushNamed('/home/details/${data[index].id}'),
+                onPressed: () {
+                    final router = AutoRouterDelegate.of(context);
+                    router.controller.navigateNamed('/home/details/${data[index].id}');
+                  },
                 textSize: 12,
                 starValue: data[index].rateAvgCount,
                 image: data[index].imageURLs[0],
